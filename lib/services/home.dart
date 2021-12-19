@@ -20,7 +20,7 @@ class HomeService extends DataHomeService {
 
     try {
       final db = await storageService.getDatabase();
-
+      print(user.toJson());
       int userId = await db
           .insert(
             'users',

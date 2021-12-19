@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:star_metter/blocs/home/home_bloc.dart';
 import 'package:star_metter/config/colors.dart';
 import 'package:star_metter/pages/pages.dart';
-import 'package:star_metter/services/home.dart';
+import 'package:flutter/services.dart';
 import 'package:star_metter/widgets/input.dart';
 import 'package:star_metter/widgets/page_builder.dart';
 import '../models/validators.dart';
@@ -46,25 +46,25 @@ class _IntroState extends State<Intro> {
     super.initState();
     name = TextEditingController(text: '');
     age = TextEditingController(text: '18');
-    height = TextEditingController(text: '175');
-    weight = TextEditingController(text: '95');
-    targetWeight = TextEditingController(text: '85');
+    height = TextEditingController(text: '175.0');
+    weight = TextEditingController(text: '95.0');
+    targetWeight = TextEditingController(text: '85.0');
   }
 
-  double ppmMale(int weight, int height, int age) {
+  double ppmMale(double weight, double height, int age) {
     // Harris-Benedict
     return 66 + (13.7 * weight) + (5 * height) - (6.76 * age);
   }
 
-  double ppmFemale(int weight, int height, int age) {
+  double ppmFemale(double weight, double height, int age) {
     // Harris-Benedict
     return 655 + (9.6 * weight) + (1.8 * height) - (4.7 * age);
   }
 
   int countStars() {
     int _age = int.parse(age.text);
-    int _height = int.parse(height.text);
-    int _weight = int.parse(weight.text);
+    double _height = double.parse(height.text);
+    double _weight = double.parse(weight.text);
     int _activity = _activityLevel.toInt();
 
     double ppm = _sex == Sex.male
@@ -219,21 +219,27 @@ class _IntroState extends State<Intro> {
             ),
             Input(
               controller: height,
-              keyboardType: TextInputType.number,
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               validation: validator.heightValidation,
               labelText: 'Height (cm)',
+              inputFormatters: [validator.digitFormatter],
             ),
             Input(
               controller: weight,
-              keyboardType: TextInputType.number,
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               validation: validator.weightValidation,
               labelText: 'Weight (kg)',
+              inputFormatters: [validator.digitFormatter],
             ),
             Input(
               controller: targetWeight,
-              keyboardType: TextInputType.number,
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               validation: validator.weightValidation,
               labelText: 'Target (kg)',
+              inputFormatters: [validator.digitFormatter],
             ),
             confirmButton(
               isOpacity: false,
@@ -405,11 +411,11 @@ class _IntroState extends State<Intro> {
             onPressed: () {
               if (storageType != null) {
                 User user = User(
-                  name: 'test',
+                  name: name.text,
                   age: int.parse(age.text),
-                  height: int.parse(height.text),
-                  initWeight: int.parse(weight.text),
-                  targetWeight: int.parse(targetWeight.text),
+                  height: double.parse(height.text),
+                  initWeight: double.parse(weight.text),
+                  targetWeight: double.parse(targetWeight.text),
                   stars: result,
                   gender: parseEnum(_sex),
                   activityLevel: parseEnum(_activityLevel),

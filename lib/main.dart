@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:io' show Platform;
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
@@ -101,14 +102,29 @@ class _MyHomePageState extends State<MyHomePage> {
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           body: AnnotatedRegion<SystemUiOverlayStyle>(
-            value: SystemUiOverlayStyle.light.copyWith(
-              systemNavigationBarColor: Colors.white,
-              statusBarBrightness: Brightness.light,
-              statusBarIconBrightness: Brightness.light,
-              systemNavigationBarIconBrightness: Brightness.light,
-              systemNavigationBarDividerColor: Colors.white,
-              statusBarColor: Colors.white,
-            ),
+            value: !isOpen
+                ? SystemUiOverlayStyle.light.copyWith(
+                    systemNavigationBarColor: Colors.white,
+                    statusBarBrightness:
+                        Platform.isIOS ? Brightness.light : Brightness.dark,
+                    statusBarIconBrightness:
+                        Platform.isIOS ? Brightness.light : Brightness.dark,
+                    systemNavigationBarIconBrightness:
+                        Platform.isIOS ? Brightness.light : Brightness.dark,
+                    systemNavigationBarDividerColor: Colors.white,
+                    statusBarColor: Colors.white,
+                  )
+                : SystemUiOverlayStyle.light.copyWith(
+                    systemNavigationBarColor: Colors.white,
+                    statusBarBrightness:
+                        Platform.isIOS ? Brightness.dark : Brightness.light,
+                    statusBarIconBrightness:
+                        Platform.isIOS ? Brightness.dark : Brightness.light,
+                    systemNavigationBarIconBrightness:
+                        Platform.isIOS ? Brightness.dark : Brightness.light,
+                    systemNavigationBarDividerColor: Colors.white,
+                    statusBarColor: CustomColor.primaryAccent,
+                  ),
             child: _blocBuilder(),
           ),
         ),

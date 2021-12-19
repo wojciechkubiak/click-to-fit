@@ -20,10 +20,10 @@ class Menu extends StatelessWidget {
 
   double textSize() {
     int userLen = user.name.length;
-    double baseSize = 64;
-    if (userLen < 6) {
+    double baseSize = 54;
+    if (userLen < 8) {
       return baseSize;
-    } else if (userLen >= 6 && userLen < 10) {
+    } else if (userLen >= 8 && userLen < 10) {
       return 42;
     } else {
       return 30;
@@ -48,7 +48,7 @@ class Menu extends StatelessWidget {
                 ),
               ),
               Text(
-                user.name,
+                '${user.name}!',
                 style: TextStyle(
                   fontSize: textSize(),
                   fontWeight: FontWeight.bold,

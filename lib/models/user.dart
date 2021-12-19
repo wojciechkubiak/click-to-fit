@@ -6,9 +6,9 @@ class User {
   final int? id;
   final String name;
   final int age;
-  final int height;
-  final int initWeight;
-  final int targetWeight;
+  final double height;
+  final double initWeight;
+  final double targetWeight;
   final int stars;
   final String gender;
   final String activityLevel;

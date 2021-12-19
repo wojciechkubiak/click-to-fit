@@ -14,7 +14,7 @@ class Header extends StatelessWidget {
     this.text = 'Star Metter',
     this.showBottomText = true,
     this.isWhite = false,
-    this.fontWeight = FontWeight.w400,
+    this.fontWeight = FontWeight.bold,
     this.padding = EdgeInsets.zero,
   }) : super(key: key);
 
@@ -35,7 +35,7 @@ class Header extends StatelessWidget {
           ),
           if (showBottomText)
             Text(
-              'Lose weight like a star',
+              'LOSE WEIGHT LIKE A STAR',
               style: TextStyle(
                 fontSize: 14,
                 color: isWhite ? Colors.white : CustomColor.primaryAccentLight,

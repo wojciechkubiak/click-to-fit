@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.star_metter">
    <application
-        android:label="star_metter"
+        android:label="Star Metter"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

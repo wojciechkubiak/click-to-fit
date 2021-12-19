@@ -1,5 +1,9 @@
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:star_metter/config/colors.dart';
+import 'package:star_metter/models/validators.dart';
 
 enum NumericOptions { SUBSTRACT, ADD }
 enum ValueTypes { AGE, HEIGHT, WEIGHT, TARGET_WEIGHT }
@@ -10,14 +14,16 @@ class Input extends StatefulWidget {
   final String? Function(String?)? validation;
   final FocusNode? focusNode;
   final String labelText;
+  final List<TextInputFormatter>? inputFormatters;
 
   const Input({
     Key? key,
     required this.controller,
-    required this.validation,
     required this.labelText,
+    this.validation,
     this.keyboardType = TextInputType.text,
     this.focusNode,
+    this.inputFormatters,
   }) : super(key: key);
 
   @override
@@ -28,12 +34,13 @@ class _InputState extends State<Input> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 54.0),
+      padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: TextFormField(
         focusNode: widget.focusNode,
         controller: widget.controller,
         keyboardType: widget.keyboardType,
         cursorColor: CustomColor.primaryAccentLight,
+        inputFormatters: widget.inputFormatters,
         validator: widget.validation,
         textAlign: TextAlign.center,
         style: const TextStyle(
