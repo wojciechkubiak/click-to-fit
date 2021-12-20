@@ -44,7 +44,7 @@ class Menu extends StatelessWidget {
                 style: TextStyle(
                   fontSize: textSize(),
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: Nord.light,
                 ),
               ),
               Text(
@@ -52,7 +52,7 @@ class Menu extends StatelessWidget {
                 style: TextStyle(
                   fontSize: textSize(),
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: Nord.frostDarkened,
                 ),
               ),
             ],
@@ -98,7 +98,7 @@ class Menu extends StatelessWidget {
     return Container(
         height: height,
         width: width,
-        color: CustomColor.primaryAccent,
+        color: Nord.dark,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

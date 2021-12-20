@@ -98,33 +98,21 @@ class _MyHomePageState extends State<MyHomePage> {
         }
       },
       child: MaterialApp(
-        color: Colors.white,
+        color: Nord.darkLight,
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           body: AnnotatedRegion<SystemUiOverlayStyle>(
-            value: !isOpen
-                ? SystemUiOverlayStyle.light.copyWith(
-                    systemNavigationBarColor: Colors.white,
-                    statusBarBrightness:
-                        Platform.isIOS ? Brightness.light : Brightness.dark,
-                    statusBarIconBrightness:
-                        Platform.isIOS ? Brightness.light : Brightness.dark,
-                    systemNavigationBarIconBrightness:
-                        Platform.isIOS ? Brightness.light : Brightness.dark,
-                    systemNavigationBarDividerColor: Colors.white,
-                    statusBarColor: Colors.white,
-                  )
-                : SystemUiOverlayStyle.light.copyWith(
-                    systemNavigationBarColor: Colors.white,
-                    statusBarBrightness:
-                        Platform.isIOS ? Brightness.dark : Brightness.light,
-                    statusBarIconBrightness:
-                        Platform.isIOS ? Brightness.dark : Brightness.light,
-                    systemNavigationBarIconBrightness:
-                        Platform.isIOS ? Brightness.dark : Brightness.light,
-                    systemNavigationBarDividerColor: Colors.white,
-                    statusBarColor: CustomColor.primaryAccent,
-                  ),
+            value: SystemUiOverlayStyle.light.copyWith(
+              systemNavigationBarColor: Colors.white,
+              statusBarBrightness:
+                  Platform.isIOS ? Brightness.dark : Brightness.light,
+              statusBarIconBrightness:
+                  Platform.isIOS ? Brightness.dark : Brightness.light,
+              systemNavigationBarIconBrightness:
+                  Platform.isIOS ? Brightness.dark : Brightness.light,
+              systemNavigationBarDividerColor: Colors.white,
+              statusBarColor: !isOpen ? Nord.darkMedium : Nord.dark,
+            ),
             child: _blocBuilder(),
           ),
         ),

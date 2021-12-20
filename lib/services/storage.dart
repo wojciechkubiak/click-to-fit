@@ -16,7 +16,7 @@ class StorageService extends DataStorageService {
         return db.execute(
             '''CREATE TABLE users (pk INTEGER PRIMARY KEY, name TEXT, age INTEGER, 
           height REAL, initWeight REAL, targetWeight REAL, stars INTEGER, 
-          gender STRING, activityLevel STRING, storageType STRING)''');
+          gender STRING, activityLevel STRING)''');
       },
       version: 1,
     );

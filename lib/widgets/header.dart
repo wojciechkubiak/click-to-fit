@@ -28,18 +28,18 @@ class Header extends StatelessWidget {
             text,
             style: TextStyle(
               fontSize: 46,
-              color: isWhite ? Colors.white : CustomColor.secondaryAccent,
+              color: Nord.light,
               fontFamily: 'Merienda',
               fontWeight: fontWeight,
             ),
           ),
           if (showBottomText)
-            Text(
+            const Text(
               'LOSE WEIGHT LIKE A STAR',
               style: TextStyle(
-                fontSize: 14,
-                color: isWhite ? Colors.white : CustomColor.primaryAccentLight,
-              ),
+                  fontSize: 14,
+                  color: Nord.lightMedium,
+                  fontWeight: FontWeight.bold),
             ),
         ],
       ),

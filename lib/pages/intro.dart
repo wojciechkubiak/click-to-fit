@@ -5,6 +5,7 @@ import 'package:star_metter/blocs/home/home_bloc.dart';
 import 'package:star_metter/config/colors.dart';
 import 'package:star_metter/pages/pages.dart';
 import 'package:flutter/services.dart';
+import 'package:star_metter/widgets/custom_slider.dart';
 import 'package:star_metter/widgets/input.dart';
 import 'package:star_metter/widgets/page_builder.dart';
 import '../models/validators.dart';
@@ -23,7 +24,7 @@ class _IntroState extends State<Intro> {
 
   int _step = 1;
   Sex? _sex;
-  double _activityLevel = 1;
+  double _activityLevel = 3;
   List<String> headers = [
     'Sick / Mostly laying',
     'Low / Office work',
@@ -33,7 +34,6 @@ class _IntroState extends State<Intro> {
   ];
   int stars = 0;
   int result = 0;
-  StorageType? storageType;
 
   late TextEditingController name;
   late TextEditingController age;
@@ -97,7 +97,7 @@ class _IntroState extends State<Intro> {
               fontWeight: FontWeight.bold,
               fontSize: 20,
             ),
-            primary: CustomColor.primaryAccent,
+            primary: Nord.frostDarkened,
             padding: const EdgeInsets.symmetric(
               vertical: 15,
               horizontal: 80,
@@ -120,8 +120,9 @@ class _IntroState extends State<Intro> {
         decoration: BoxDecoration(
           border: Border.all(
             width: 3,
-            color: isActive ? CustomColor.primaryAccent : Colors.black12,
+            color: isActive ? Nord.frostDarkened : Nord.lightDark,
           ),
+          // color: isActive ? Nord.dark : Nord.darkMedium,
           borderRadius: const BorderRadius.all(Radius.circular(20)),
         ),
         width: 150,
@@ -132,12 +133,12 @@ class _IntroState extends State<Intro> {
             Icon(
               icon,
               size: 72,
-              color: isActive ? Colors.black87 : Colors.black54,
+              color: isActive ? Nord.frostDarkened : Nord.lightDark,
             ),
             Text(
               text,
-              style: TextStyle(
-                color: isActive ? Colors.black87 : Colors.black54,
+              style: const TextStyle(
+                color: Nord.lightDark,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
@@ -158,7 +159,11 @@ class _IntroState extends State<Intro> {
         children: [
           const Text(
             'Gender',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 32,
+              color: Nord.light,
+            ),
           ),
           Wrap(
             alignment: WrapAlignment.center,
@@ -204,7 +209,11 @@ class _IntroState extends State<Intro> {
           children: [
             const Text(
               'Personal data',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 32,
+                color: Nord.light,
+              ),
             ),
             Input(
               controller: name,
@@ -265,7 +274,11 @@ class _IntroState extends State<Intro> {
         children: [
           const Text(
             'Activity',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 32,
+              color: Nord.light,
+            ),
           ),
           Lottie.asset(
             'assets/lotties/activity.json',
@@ -274,14 +287,9 @@ class _IntroState extends State<Intro> {
           ),
           Padding(
             padding: const EdgeInsets.all(24),
-            child: Slider(
+            child: CustomSlider(
               value: _activityLevel,
-              min: 1,
-              max: 5,
-              divisions: 4,
-              inactiveColor: Colors.black12,
-              activeColor: CustomColor.primaryAccent,
-              label: headers[_activityLevel.round() - 1],
+              header: headers[_activityLevel.round() - 1],
               onChanged: (double value) {
                 setState(() => _activityLevel = value);
               },
@@ -317,20 +325,24 @@ class _IntroState extends State<Intro> {
         children: [
           const Text(
             'Your plan',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 32,
+              color: Nord.light,
+            ),
           ),
           Column(
             children: [
               const Icon(
                 Icons.star_border,
                 size: 122,
-                color: CustomColor.primaryAccent,
+                color: Nord.frostDarkened,
               ),
               Text(
                 result.toString(),
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.black54,
+                  color: Nord.light,
                   fontSize: 32,
                 ),
               ),
@@ -338,19 +350,17 @@ class _IntroState extends State<Intro> {
           ),
           Padding(
             padding: const EdgeInsets.all(24),
-            child: Slider(
+            child: CustomSlider(
               value: result.toDouble(),
-              min: stars - 10,
-              max: stars + 10,
-              divisions: 20,
-              inactiveColor: Colors.black12,
-              activeColor: CustomColor.primaryAccent,
-              label: '${(result - stars) * 100}g/week',
+              header: '${(result - stars) * 100}g/week',
               onChanged: (double value) {
                 setState(() {
                   result = value.toInt();
                 });
               },
+              min: stars - 10,
+              max: stars + 10,
+              divisions: 20,
             ),
           ),
           const Padding(
@@ -360,56 +370,15 @@ class _IntroState extends State<Intro> {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
-                color: Colors.black54,
+                color: Nord.lightMedium,
               ),
               textAlign: TextAlign.center,
             ),
           ),
           confirmButton(
-            text: 'Confirm',
-            isOpacity: false,
-            onPressed: () {
-              setState(() => _step = 5);
-            },
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget step5() {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.7,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          const Text(
-            'Pick storage',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              tileButton(
-                icon: Icons.storage,
-                onTap: () => setState(() => storageType = StorageType.local),
-                isActive: storageType == StorageType.local,
-                text: "Local",
-              ),
-              tileButton(
-                icon: Icons.cloud,
-                onTap: () => setState(() => storageType = StorageType.cloud),
-                isActive: storageType == StorageType.cloud,
-                text: "Cloud",
-              ),
-            ],
-          ),
-          confirmButton(
-            text: 'Proceed to App',
-            isOpacity: storageType == null,
-            onPressed: () {
-              if (storageType != null) {
+              text: 'Proceed to App',
+              isOpacity: false,
+              onPressed: () {
                 User user = User(
                   name: name.text,
                   age: int.parse(age.text),
@@ -419,14 +388,11 @@ class _IntroState extends State<Intro> {
                   stars: result,
                   gender: parseEnum(_sex),
                   activityLevel: parseEnum(_activityLevel),
-                  storageType: parseEnum(storageType!),
                 );
 
                 BlocProvider.of<HomeBloc>(context)
                     .add(HomeLoadPage(user: user));
-              }
-            },
-          )
+              })
         ],
       ),
     );
@@ -442,8 +408,6 @@ class _IntroState extends State<Intro> {
         return step3();
       case 4:
         return step4();
-      case 5:
-        return step5();
       default:
         return const Loading();
     }

@@ -1,6 +1,5 @@
 enum Sex { female, male }
 enum ActivityLevel { none, low, medium, above, high }
-enum StorageType { local, cloud }
 
 class User {
   final int? id;
@@ -12,7 +11,6 @@ class User {
   final int stars;
   final String gender;
   final String activityLevel;
-  final String storageType;
 
   User({
     this.id,
@@ -24,7 +22,6 @@ class User {
     required this.stars,
     required this.gender,
     required this.activityLevel,
-    required this.storageType,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -38,7 +35,6 @@ class User {
       stars: json['stars'],
       gender: json['gender'].toString(),
       activityLevel: json['activityLevel'].toString(),
-      storageType: json['storageType'].toString(),
     );
     return user;
   }
@@ -54,7 +50,6 @@ class User {
     data['stars'] = stars;
     data['gender'] = gender;
     data['activityLevel'] = activityLevel;
-    data['storageType'] = storageType;
     return data;
   }
 
@@ -68,6 +63,5 @@ class User {
         stars,
         gender,
         activityLevel,
-        storageType,
       ];
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:star_metter/config/colors.dart';
 
 class CustomAppBar extends StatelessWidget {
   final Function? onBack;
@@ -15,7 +16,7 @@ class CustomAppBar extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 80,
-      color: Colors.white,
+      color: Nord.darkMedium,
       child: Row(
         children: [
           Container(
@@ -27,7 +28,7 @@ class CustomAppBar extends StatelessWidget {
               icon: Icon(
                 isBack ? Icons.arrow_back : Icons.menu,
                 size: 32,
-                color: Colors.black54,
+                color: Nord.light,
               ),
             ),
           ),

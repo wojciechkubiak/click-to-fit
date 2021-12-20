@@ -46,29 +46,29 @@ class _InputState extends State<Input> {
         style: const TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 20,
-          color: Colors.black87,
+          color: Nord.light,
         ),
         decoration: InputDecoration(
-          fillColor: const Color(0xFFF5F5F5),
+          fillColor: Nord.darkMedium,
           filled: true,
           contentPadding: const EdgeInsets.all(12),
           label: Text(widget.labelText),
-          labelStyle: const TextStyle(fontSize: 16, color: Colors.black38),
+          labelStyle: const TextStyle(fontSize: 16, color: Nord.lightMedium),
           enabledBorder: const UnderlineInputBorder(
             borderSide: BorderSide(
-              color: CustomColor.primaryAccent,
+              color: Nord.frostDarkened,
               width: 3,
             ),
           ),
           focusedBorder: const UnderlineInputBorder(
             borderSide: BorderSide(
-              color: CustomColor.primaryAccentDark,
+              color: Nord.frostTeal,
               width: 3,
             ),
           ),
           errorBorder: const UnderlineInputBorder(
             borderSide: BorderSide(
-              color: Colors.red,
+              color: Nord.auroraRed,
               width: 3,
             ),
           ),
