@@ -11,6 +11,7 @@ class User {
   final int stars;
   final String gender;
   final String activityLevel;
+  final String initDate;
 
   User({
     this.id,
@@ -22,6 +23,7 @@ class User {
     required this.stars,
     required this.gender,
     required this.activityLevel,
+    required this.initDate,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -35,6 +37,7 @@ class User {
       stars: json['stars'],
       gender: json['gender'].toString(),
       activityLevel: json['activityLevel'].toString(),
+      initDate: json['initDate'].toString(),
     );
     return user;
   }
@@ -50,6 +53,7 @@ class User {
     data['stars'] = stars;
     data['gender'] = gender;
     data['activityLevel'] = activityLevel;
+    data['initDate'] = initDate;
     return data;
   }
 
@@ -63,5 +67,6 @@ class User {
         stars,
         gender,
         activityLevel,
+        initDate,
       ];
 }

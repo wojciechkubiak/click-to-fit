@@ -3,8 +3,10 @@ import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
 import 'package:star_metter/blocs/home/home_bloc.dart';
 import 'package:star_metter/config/colors.dart';
+import 'package:star_metter/models/date_parser.dart';
 import 'package:star_metter/pages/pages.dart';
 import 'package:flutter/services.dart';
+import 'package:star_metter/widgets/custom_button.dart';
 import 'package:star_metter/widgets/custom_slider.dart';
 import 'package:star_metter/widgets/input.dart';
 import 'package:star_metter/widgets/page_builder.dart';
@@ -81,33 +83,6 @@ class _IntroState extends State<Intro> {
     return en.toString().split('.').last;
   }
 
-  Widget confirmButton({
-    required bool isOpacity,
-    required void Function() onPressed,
-    String text = "Next",
-  }) {
-    return Opacity(
-      opacity: isOpacity ? 0.8 : 1,
-      child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(24),
-            ),
-            textStyle: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-            primary: Nord.frostDarkened,
-            padding: const EdgeInsets.symmetric(
-              vertical: 15,
-              horizontal: 80,
-            ),
-          ),
-          onPressed: onPressed,
-          child: Text(text)),
-    );
-  }
-
   Widget tileButton({
     required IconData icon,
     required Function() onTap,
@@ -119,11 +94,11 @@ class _IntroState extends State<Intro> {
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
-            width: 3,
+            width: 2,
             color: isActive ? Nord.frostDarkened : Nord.lightDark,
           ),
           // color: isActive ? Nord.dark : Nord.darkMedium,
-          borderRadius: const BorderRadius.all(Radius.circular(20)),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
         ),
         width: 150,
         height: 150,
@@ -184,8 +159,8 @@ class _IntroState extends State<Intro> {
               ),
             ],
           ),
-          confirmButton(
-            isOpacity: _sex == null,
+          CustomButton(
+            isDisabled: _sex == null,
             onPressed: () {
               if (_sex != null) {
                 setState(() => _step = 2);
@@ -250,8 +225,8 @@ class _IntroState extends State<Intro> {
               labelText: 'Target (kg)',
               inputFormatters: [validator.digitFormatter],
             ),
-            confirmButton(
-              isOpacity: false,
+            CustomButton(
+              isDisabled: false,
               onPressed: () {
                 final FormState? form = _formKey.currentState;
                 if (form!.validate()) {
@@ -295,9 +270,9 @@ class _IntroState extends State<Intro> {
               },
             ),
           ),
-          confirmButton(
+          CustomButton(
             text: 'Go to summary',
-            isOpacity: false,
+            isDisabled: false,
             onPressed: () {
               int _stars = countStars();
               setState(() {
@@ -375,10 +350,13 @@ class _IntroState extends State<Intro> {
               textAlign: TextAlign.center,
             ),
           ),
-          confirmButton(
+          CustomButton(
               text: 'Proceed to App',
-              isOpacity: false,
+              isDisabled: false,
               onPressed: () {
+                DateTime now = DateTime.now();
+                DateParser dateParser = DateParser(date: now);
+
                 User user = User(
                   name: name.text,
                   age: int.parse(age.text),
@@ -388,6 +366,7 @@ class _IntroState extends State<Intro> {
                   stars: result,
                   gender: parseEnum(_sex),
                   activityLevel: parseEnum(_activityLevel),
+                  initDate: dateParser.getDateWithoutTime(),
                 );
 
                 BlocProvider.of<HomeBloc>(context)

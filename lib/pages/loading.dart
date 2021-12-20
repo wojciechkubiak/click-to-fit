@@ -23,8 +23,8 @@ class _LoadingState extends State<Loading> {
           children: [
             Lottie.asset(
               'assets/lotties/loading.json',
-              width: 240,
-              height: 240,
+              width: MediaQuery.of(context).size.width * 0.9,
+              height: MediaQuery.of(context).size.width * 0.9,
             ),
             Column(
               children: const [

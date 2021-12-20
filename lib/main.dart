@@ -148,10 +148,14 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               child: AbsorbPointer(
                 absorbing: isOpen,
-                child: Home(showMenu: () {
-                  zoomController.open!();
-                  setState(() => isOpen = true);
-                }),
+                child: Home(
+                  user: state.user,
+                  progress: state.progress,
+                  showMenu: () {
+                    zoomController.open!();
+                    setState(() => isOpen = true);
+                  },
+                ),
               ),
             ),
             borderRadius: 24.0,

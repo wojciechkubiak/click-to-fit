@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sql.dart';
+import 'package:star_metter/models/date_parser.dart';
+import 'package:star_metter/models/progress.dart';
 
 import '../config/config_service.dart';
 import '../models/user.dart';
@@ -10,6 +12,7 @@ import './storage.dart';
 abstract class DataHomeService extends ConfigService {
   Future<int?> insertUser(User user);
   Future<User?> getUser(int? id);
+  Future<Progress?> getProgress(User? id);
 }
 
 class HomeService extends DataHomeService {
@@ -70,6 +73,53 @@ class HomeService extends DataHomeService {
       }
     } catch (e) {
       print(e);
+      return null;
+    }
+  }
+
+  @override
+  Future<Progress?> getProgress(User? user) async {
+    try {
+      DateParser dateParsed = DateParser(date: DateTime.now());
+      if (user is User) {
+        Map<String, dynamic> temp = {
+          "pk": user.id,
+          "date": dateParsed.getDateWithoutTime(),
+          "stars": 0,
+          "limit": user.stars,
+          "currentWeight": user.initWeight,
+          "starProgress": [
+            {
+              "pk": 1,
+              "date": dateParsed.getDateWithoutTime(),
+              "userId": user.id,
+              "stars": 0,
+            }
+          ],
+          "weightProgress": [
+            {
+              "pk": 1,
+              "date": dateParsed.getDateWithoutTime(),
+              "weight": 85.4,
+            },
+            {
+              "pk": 2,
+              "date": dateParsed.getDateWithoutTime(),
+              "weight": 82.1,
+            },
+          ]
+        };
+        //TODO: ADD WEIGHT ON INIT, SAME PROGRESS - INTO DB
+
+        Progress progress = Progress.fromJson(temp);
+
+        return progress;
+      }
+
+      return null;
+    } catch (e, stackTrace) {
+      print(e);
+      print(stackTrace);
       return null;
     }
   }

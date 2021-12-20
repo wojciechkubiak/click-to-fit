@@ -12,10 +12,14 @@ class HomeIntro extends HomeState {}
 
 class HomePage extends HomeState {
   final User user;
+  final Progress progress;
 
-  HomePage({required this.user});
+  HomePage({
+    required this.user,
+    required this.progress,
+  });
 
-  List<Object> get props => [user];
+  List<Object> get props => [user, progress];
 }
 
 class HomeError extends HomeState {}

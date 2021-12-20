@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:star_metter/models/progress.dart';
 import 'package:star_metter/models/user.dart';
 import './../../services/services.dart';
 
@@ -25,7 +26,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     User? user = await _homeService!.getUser(null);
 
     if (user is User) {
-      emit(HomePage(user: user));
+      Progress? progress = await _homeService!.getProgress(user);
+      if (progress is Progress) {
+        emit(HomePage(user: user, progress: progress));
+      }
     } else {
       emit(HomeIntro());
     }
@@ -48,7 +52,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           User? user = await _homeService!.getUser(userId);
 
           if (user is User) {
-            emit(HomePage(user: user));
+            Progress? progress = await _homeService!.getProgress(user);
+            if (progress is Progress) {
+              emit(HomePage(user: user, progress: progress));
+            }
           }
         }
       }
