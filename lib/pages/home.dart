@@ -4,9 +4,11 @@ import 'package:star_metter/config/colors.dart';
 import 'package:star_metter/models/progress.dart';
 import 'package:star_metter/models/user.dart';
 import 'package:star_metter/models/weight.dart';
+import 'package:star_metter/services/weight.dart';
 import 'package:star_metter/widgets/chart.dart';
 import 'package:star_metter/widgets/counter_button.dart';
 import 'package:star_metter/widgets/custom_button.dart';
+import 'package:star_metter/widgets/custom_dialog.dart';
 import 'package:star_metter/widgets/weight_card.dart';
 
 import '../widgets/page_builder.dart';
@@ -30,21 +32,12 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   late User user;
   late Progress progress;
-  late double? previousWeight;
-  late String? previousDate;
 
   @override
   void initState() {
     super.initState();
     user = widget.user;
     progress = widget.progress;
-
-    List<Weight> weights = widget.progress.weightProgress;
-
-    if (weights.length > 1) {
-      previousWeight = weights[weights.length - 2].weight;
-      previousDate = weights[weights.length - 2].date;
-    }
   }
 
   Widget starCounter() {
@@ -69,9 +62,9 @@ class _HomeState extends State<Home> {
               Icon(
                 Icons.star_border,
                 size: 64,
-                color: stars < progress.limit - 2
+                color: stars < progress.progressLimit - 2
                     ? Nord.light
-                    : stars > progress.limit + 2
+                    : stars > progress.progressLimit + 2
                         ? Nord.auroraRed
                         : Nord.auroraGreen,
               ),
@@ -86,9 +79,9 @@ class _HomeState extends State<Home> {
                       style: TextStyle(
                         fontSize: 42,
                         fontWeight: FontWeight.bold,
-                        color: stars < progress.limit - 2
+                        color: stars < progress.progressLimit - 2
                             ? Nord.light
-                            : stars > progress.limit + 2
+                            : stars > progress.progressLimit + 2
                                 ? Nord.auroraRed
                                 : Nord.auroraGreen,
                       ),
@@ -99,7 +92,7 @@ class _HomeState extends State<Home> {
                       height: 40,
                       width: 40,
                       child: Text(
-                        '/${progress.limit}',
+                        '/${progress.progressLimit}',
                         style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.normal,
@@ -161,17 +154,68 @@ class _HomeState extends State<Home> {
             ),
             WeightCard(
               padding: const EdgeInsets.only(top: 24, bottom: 32),
-              currentWeight: progress.weightProgress.last.weight,
-              date: progress.weightProgress.last.date,
-              previousWeight: previousWeight,
-              previousDate: previousDate,
+              currentWeight: progress.weight.weight,
+              date: progress.weight.date,
+              previousWeight: progress.prevWeight?.weight,
+              previousDate: progress.prevWeight?.date,
             ),
             Center(
-                child: CustomButton(
-              onPressed: () {},
-              text: "Add weight",
-              // color: Nord.auroraGreen,
-            )),
+              child: SizedBox(
+                width: 240,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    textStyle: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                    primary: Nord.auroraGreen,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 15,
+                    ),
+                  ),
+                  onPressed: () async {
+                    String initValue = progress.weight.weight.toString();
+
+                    String? result = await CustomDialog().showTextDialog(
+                      context: context,
+                      header: "New weight",
+                      confirmText: "Confirm",
+                      declineText: "Cancel",
+                      dialogBody: "test",
+                      initValue: initValue,
+                    );
+
+                    if (result != null && result != initValue) {
+                      double value = double.parse(result);
+                      int? id = progress.weight.id;
+
+                      if (id != null) {
+                        setState(
+                          () => progress.weight.weight = value,
+                        );
+
+                        WeightService()
+                            .updateWeight(recordId: id, weight: value);
+                      }
+                    }
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: const [
+                      Text('Update weight'),
+                      Icon(
+                        Icons.add,
+                        size: 32,
+                        color: Nord.light,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),

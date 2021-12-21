@@ -5,19 +5,23 @@ class Progress {
   final int? id;
   final String date;
   final int stars;
-  final int limit;
+  final int progressLimit;
   final double currentWeight;
   final List<Star> starProgress;
-  final List<Weight> weightProgress;
+  Weight weight;
+  Weight? prevWeight;
+  List<Weight> weightProgress;
 
   Progress({
     this.id,
     required this.date,
     required this.stars,
-    required this.limit,
+    required this.progressLimit,
     required this.currentWeight,
     required this.starProgress,
+    required this.weight,
     required this.weightProgress,
+    this.prevWeight,
   });
 
   factory Progress.fromJson(Map<String, dynamic> json) {
@@ -40,8 +44,10 @@ class Progress {
       id: json['pk'],
       date: json['date'],
       stars: json['stars'],
-      limit: json['limit'],
+      progressLimit: json['progressLimit'],
       currentWeight: json['currentWeight'],
+      weight: Weight.fromJson(json['weight']),
+      prevWeight: Weight.fromJson(json['prevWeight']),
       starProgress: _starProgress,
       weightProgress: _weightProgress,
     );
@@ -53,9 +59,11 @@ class Progress {
     data['pk'] = id;
     data['date'] = date;
     data['stars'] = stars;
-    data['limit'] = limit;
+    data['progressLimit'] = progressLimit;
     data['currentWeight'] = currentWeight;
     data['starProgress'] = starProgress;
+    data['weight'] = weight;
+    data['prevWeight'] = prevWeight;
     data['weightProgress'] = weightProgress;
     return data;
   }
@@ -64,9 +72,11 @@ class Progress {
         id,
         date,
         stars,
-        limit,
+        progressLimit,
         currentWeight,
         starProgress,
+        weight,
+        prevWeight,
         weightProgress,
       ];
 }

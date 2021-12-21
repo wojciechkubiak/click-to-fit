@@ -95,7 +95,7 @@ class _IntroState extends State<Intro> {
         decoration: BoxDecoration(
           border: Border.all(
             width: 2,
-            color: isActive ? Nord.frostDarkened : Nord.lightDark,
+            color: isActive ? Nord.auroraGreen : Nord.lightDark,
           ),
           // color: isActive ? Nord.dark : Nord.darkMedium,
           borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -108,7 +108,7 @@ class _IntroState extends State<Intro> {
             Icon(
               icon,
               size: 72,
-              color: isActive ? Nord.frostDarkened : Nord.lightDark,
+              color: isActive ? Nord.auroraGreen : Nord.lightDark,
             ),
             Text(
               text,
@@ -311,7 +311,7 @@ class _IntroState extends State<Intro> {
               const Icon(
                 Icons.star_border,
                 size: 122,
-                color: Nord.frostDarkened,
+                color: Nord.auroraGreen,
               ),
               Text(
                 result.toString(),

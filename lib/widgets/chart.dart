@@ -86,7 +86,7 @@ class ChartState extends State<Chart> {
       barRods: [
         BarChartRodData(
           y: y,
-          colors: isTouched ? [Nord.frostDarkened] : [Nord.lightDark],
+          colors: isTouched ? [Nord.auroraGreen] : [Nord.lightDark],
           width: width,
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
@@ -124,7 +124,7 @@ class ChartState extends State<Chart> {
     return BarChartData(
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
-            tooltipBgColor: Nord.frostDarkened,
+            tooltipBgColor: Nord.auroraGreen,
             getTooltipItem: (group, groupIndex, rod, rodIndex) {
               String weekDay;
               switch (group.x.toInt()) {

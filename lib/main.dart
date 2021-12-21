@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:star_metter/pages/intro.dart';
+import 'package:star_metter/services/weight.dart';
 import './widgets/menu/menu.dart';
 import './blocs/home/home_bloc.dart';
 import './services/services.dart';
@@ -62,6 +63,11 @@ class _MyHomePageState extends State<MyHomePage> {
             return HomeService();
           },
         ),
+        RepositoryProvider<WeightService>(
+          create: (context) {
+            return WeightService();
+          },
+        ),
       ],
       child: _multiBlocProvider(),
     );
@@ -72,7 +78,11 @@ class _MyHomePageState extends State<MyHomePage> {
       BlocProvider<HomeBloc>(
         create: (context) {
           final homeService = RepositoryProvider.of<HomeService>(context);
-          return HomeBloc(homeService)..add(HomeLoadInit());
+          final weightService = RepositoryProvider.of<WeightService>(context);
+          return HomeBloc(
+            homeService,
+            weightService,
+          )..add(HomeLoadInit());
         },
       ),
     ], child: _main());

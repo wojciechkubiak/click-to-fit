@@ -3,12 +3,14 @@ class Star {
   final String date;
   final int userId;
   int stars;
+  int progressLimit;
 
   Star({
     this.id,
     required this.date,
     required this.userId,
     required this.stars,
+    required this.progressLimit,
   });
 
   bool isTodayCheck() {
@@ -30,6 +32,7 @@ class Star {
       date: json['date'],
       userId: json['userId'],
       stars: json['stars'],
+      progressLimit: json['progressLimit'],
     );
     return starProgress;
   }
@@ -40,6 +43,7 @@ class Star {
     data['date'] = date;
     data['userId'] = userId;
     data['stars'] = stars;
+    data['progressLimit'] = progressLimit;
     return data;
   }
 
@@ -48,5 +52,6 @@ class Star {
         date,
         userId,
         stars,
+        progressLimit,
       ];
 }

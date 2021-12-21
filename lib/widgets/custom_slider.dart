@@ -34,7 +34,7 @@ class CustomSlider extends StatelessWidget {
           max: max,
           divisions: divisions,
           inactiveColor: Nord.lightDark,
-          activeColor: Nord.frostGreen,
+          activeColor: Nord.auroraYellow,
           label: header,
           onChanged: onChanged),
     );

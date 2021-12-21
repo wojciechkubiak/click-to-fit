@@ -23,7 +23,7 @@ class WeightCard extends StatelessWidget {
     bool isPrevious = previousWeight != null && previousDate != null;
 
     if (isPrevious) {
-      difference = previousWeight! - currentWeight;
+      difference = currentWeight - previousWeight!;
     }
 
     return Padding(
@@ -62,7 +62,7 @@ class WeightCard extends StatelessWidget {
                       vertical: 24,
                     ),
                     child: Text(
-                      '${difference!.toStringAsFixed(2)} kg',
+                      '${difference! > 0 ? "+" : ""} ${difference.toStringAsFixed(2)} kg',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,

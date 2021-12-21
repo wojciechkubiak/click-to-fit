@@ -35,7 +35,7 @@ class Menu extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 12, top: 32, bottom: 32),
+          padding: const EdgeInsets.only(left: 12, bottom: 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -52,7 +52,7 @@ class Menu extends StatelessWidget {
                 style: TextStyle(
                   fontSize: textSize(),
                   fontWeight: FontWeight.bold,
-                  color: Nord.frostDarkened,
+                  color: Nord.auroraGreen,
                 ),
               ),
             ],
@@ -103,7 +103,7 @@ class Menu extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Header(
-              padding: EdgeInsets.only(top: 112),
+              padding: EdgeInsets.only(top: 92),
               showBottomText: true,
               isWhite: true,
             ),

@@ -12,7 +12,7 @@ class CustomButton extends StatelessWidget {
     required this.onPressed,
     this.isDisabled = false,
     this.text = "Next",
-    this.color = Nord.frostDarkened,
+    this.color = Nord.auroraGreen,
   }) : super(key: key);
 
   @override

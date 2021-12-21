@@ -28,7 +28,7 @@ class Header extends StatelessWidget {
             text,
             style: TextStyle(
               fontSize: 46,
-              color: Nord.light,
+              color: isWhite ? Nord.light : Nord.auroraGreen,
               fontFamily: 'Merienda',
               fontWeight: fontWeight,
             ),
@@ -37,9 +37,7 @@ class Header extends StatelessWidget {
             const Text(
               'LOSE WEIGHT LIKE A STAR',
               style: TextStyle(
-                  fontSize: 14,
-                  color: Nord.lightMedium,
-                  fontWeight: FontWeight.bold),
+                  fontSize: 14, color: Nord.light, fontWeight: FontWeight.bold),
             ),
         ],
       ),

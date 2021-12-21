@@ -4,6 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sql.dart';
 import 'package:star_metter/models/date_parser.dart';
 import 'package:star_metter/models/progress.dart';
+import 'package:star_metter/models/star.dart';
+import 'package:star_metter/models/weight.dart';
 
 import '../config/config_service.dart';
 import '../models/user.dart';
@@ -12,7 +14,13 @@ import './storage.dart';
 abstract class DataHomeService extends ConfigService {
   Future<int?> insertUser(User user);
   Future<User?> getUser(int? id);
-  Future<Progress?> getProgress(User? id);
+  Future<Progress?> getProgress({
+    required User? user,
+    required List<Star>? starProgress,
+    required Weight? weight,
+    required Weight? prevWeight,
+    required List<Weight>? weightProgress,
+  });
 }
 
 class HomeService extends DataHomeService {
@@ -78,45 +86,37 @@ class HomeService extends DataHomeService {
   }
 
   @override
-  Future<Progress?> getProgress(User? user) async {
+  Future<Progress?> getProgress({
+    required User? user,
+    required List<Star>? starProgress,
+    required Weight? weight,
+    required Weight? prevWeight,
+    required List<Weight>? weightProgress,
+  }) async {
     try {
       DateParser dateParsed = DateParser(date: DateTime.now());
-      if (user is User) {
-        Map<String, dynamic> temp = {
-          "pk": user.id,
-          "date": dateParsed.getDateWithoutTime(),
-          "stars": 0,
-          "limit": user.stars,
-          "currentWeight": user.initWeight,
-          "starProgress": [
-            {
-              "pk": 1,
-              "date": dateParsed.getDateWithoutTime(),
-              "userId": user.id,
-              "stars": 0,
-            }
-          ],
-          "weightProgress": [
-            {
-              "pk": 1,
-              "date": dateParsed.getDateWithoutTime(),
-              "weight": 85.4,
-            },
-            {
-              "pk": 2,
-              "date": dateParsed.getDateWithoutTime(),
-              "weight": 82.1,
-            },
-          ]
-        };
-        //TODO: ADD WEIGHT ON INIT, SAME PROGRESS - INTO DB
 
-        Progress progress = Progress.fromJson(temp);
+      //TODO temp
+      Star star = Star(
+        userId: user!.id!,
+        progressLimit: user.stars,
+        date: dateParsed.getDateWithoutTime(),
+        stars: 0,
+      );
+      List<Star> stars = [star];
 
-        return progress;
-      }
+      Progress progress = Progress(
+        date: dateParsed.getDateWithoutTime(),
+        stars: star.stars,
+        progressLimit: star.progressLimit,
+        currentWeight: weight!.weight,
+        starProgress: stars,
+        weight: weight,
+        prevWeight: prevWeight,
+        weightProgress: weightProgress!,
+      );
 
-      return null;
+      return progress;
     } catch (e, stackTrace) {
       print(e);
       print(stackTrace);

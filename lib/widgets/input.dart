@@ -56,13 +56,13 @@ class _InputState extends State<Input> {
           labelStyle: const TextStyle(fontSize: 16, color: Nord.lightMedium),
           enabledBorder: const UnderlineInputBorder(
             borderSide: BorderSide(
-              color: Nord.frostDarkened,
+              color: Nord.auroraGreen,
               width: 3,
             ),
           ),
           focusedBorder: const UnderlineInputBorder(
             borderSide: BorderSide(
-              color: Nord.frostTeal,
+              color: Nord.auroraYellow,
               width: 3,
             ),
           ),

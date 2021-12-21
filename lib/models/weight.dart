@@ -1,11 +1,13 @@
 class Weight {
   final int? id;
+  final int userId;
   final String date;
-  final double weight;
+  double weight;
 
   Weight({
     this.id,
     required this.date,
+    required this.userId,
     required this.weight,
   });
 
@@ -13,6 +15,7 @@ class Weight {
     Weight weight = Weight(
       id: json['pk'],
       date: json['date'],
+      userId: json['userId'],
       weight: json['weight'],
     );
     return weight;
@@ -22,6 +25,7 @@ class Weight {
     final Map<String, dynamic> data = {};
     data['pk'] = id;
     data['date'] = date;
+    data['userId'] = userId;
     data['weight'] = weight;
     return data;
   }
@@ -30,5 +34,6 @@ class Weight {
         id,
         date,
         weight,
+        userId,
       ];
 }
