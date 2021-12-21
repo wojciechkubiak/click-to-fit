@@ -188,10 +188,11 @@ class _HomeState extends State<Home> {
                       initValue: initValue,
                     );
 
+                    print('$result $initValue sdsds');
                     if (result != null && result != initValue) {
                       double value = double.parse(result);
                       int? id = progress.weight.id;
-
+                      print(progress.weight.toJson());
                       if (id != null) {
                         setState(
                           () => progress.weight.weight = value,

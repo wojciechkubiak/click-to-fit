@@ -38,23 +38,32 @@ class WeightService extends DataWeightService {
             "SELECT * FROM weights WHERE userId = $id AND date = '$parsedDate'");
 
         if (weightsList.isEmpty) {
-          Weight weight = Weight(
+          Weight _emptyWeight = Weight(
             date: date.getDateWithoutTime(),
             userId: id,
             weight: initialWeight,
           );
 
-          await db
+          Weight _resultWeight = await db
               .insert(
-                'weights',
-                weight.toJson(),
-                conflictAlgorithm: ConflictAlgorithm.replace,
-              )
+            'weights',
+            _emptyWeight.toJson(),
+            conflictAlgorithm: ConflictAlgorithm.replace,
+          )
               .then(
-                (value) => value,
-              );
+            (value) {
+              int pk = value;
 
-          return weight;
+              return Weight(
+                id: pk,
+                date: _emptyWeight.date,
+                userId: _emptyWeight.userId,
+                weight: _emptyWeight.weight,
+              );
+            }, //TODO pk?
+          );
+
+          return _resultWeight;
         } else {
           print('TODAY WEIGHT ${weightsList.last}');
           Weight weight = Weight.fromJson(weightsList.last);
