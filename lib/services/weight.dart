@@ -11,6 +11,7 @@ abstract class DataWeightService extends ConfigService {
   Future<Weight?> getTodayWeight({required double initialWeight});
   Future<Weight?> getPreviousWeight();
   Future<List<Weight>?> getWeights();
+  Future<Weight?> getLastWeight();
   Future<bool> updateWeight({
     required int recordId,
     required double weight,
@@ -37,23 +38,27 @@ class WeightService extends DataWeightService {
         weightsList = await db.rawQuery(
             "SELECT * FROM weights WHERE userId = $id AND date = '$parsedDate'");
 
+        print('PARSED DATE $parsedDate');
         if (weightsList.isEmpty) {
+          Weight? previous = await getLastWeight();
+
           Weight _emptyWeight = Weight(
-            date: date.getDateWithoutTime(),
+            date: parsedDate,
             userId: id,
-            weight: initialWeight,
+            weight: previous is Weight ? previous.weight : initialWeight,
           );
 
           Weight _resultWeight = await db
               .insert(
             'weights',
             _emptyWeight.toJson(),
-            conflictAlgorithm: ConflictAlgorithm.replace,
           )
               .then(
             (value) {
+              print('INSERTED ${_emptyWeight.toJson()}');
               int pk = value;
 
+              print('PK $pk');
               return Weight(
                 id: pk,
                 date: _emptyWeight.date,
@@ -92,6 +97,33 @@ class WeightService extends DataWeightService {
 
         if (weightList.length > 1) {
           print('PREVIOUS WEIGHT ${weightList.last}');
+          Weight weight = Weight.fromJson(weightList.last);
+          return weight;
+        } else {
+          return null;
+        }
+      } catch (e) {
+        print(e);
+        return null;
+      }
+    }
+  }
+
+  @override
+  Future<Weight?> getLastWeight() async {
+    StorageService storageService = StorageService();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    int? id = prefs.getInt('userId');
+    if (id != null) {
+      try {
+        List<Map<String, dynamic>> weightList = [];
+
+        final db = await storageService.getDatabase();
+        weightList = await db.rawQuery(
+            "SELECT * FROM weights WHERE userId = $id ORDER BY pk DESC LIMIT 1");
+
+        if (weightList.isNotEmpty) {
           Weight weight = Weight.fromJson(weightList.last);
           return weight;
         } else {

@@ -1,7 +1,7 @@
 class Weight {
   final int? id;
   final int userId;
-  final String date;
+  String date;
   double weight;
 
   Weight({

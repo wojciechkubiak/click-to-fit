@@ -83,7 +83,7 @@ class WeightCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    date,
+                    previousDate!,
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
