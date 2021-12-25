@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:star_metter/models/progress.dart';
+import 'package:star_metter/models/star.dart';
 import 'package:star_metter/models/user.dart';
 import 'package:star_metter/models/weight.dart';
 import 'package:star_metter/services/weight.dart';
@@ -12,10 +13,15 @@ part 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final HomeService _homeService;
   final WeightService _weightService;
+  final StarsService _starsService;
 
-  HomeBloc(HomeService homeService, WeightService weightService)
-      : _homeService = homeService,
+  HomeBloc(
+    HomeService homeService,
+    WeightService weightService,
+    StarsService starsService,
+  )   : _homeService = homeService,
         _weightService = weightService,
+        _starsService = starsService,
         super(HomeInitial()) {
     on<HomeLoadInit>(_mapHomeInit);
     on<HomeLoadSplash>(_mapHomeLoadSplash);
@@ -29,14 +35,23 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     await Future.delayed(const Duration(seconds: 5));
     User? user = await _homeService.getUser(null);
     if (user is User) {
-      Weight? weight =
-          await _weightService.getTodayWeight(initialWeight: user.initWeight);
-      Weight? previousWeight = await _weightService.getPreviousWeight();
-      List<Weight>? weightHistory = await _weightService.getWeights();
+      Weight? weight = await _weightService.getTodayWeight(
+          initialWeight: user.initWeight, id: user.id!);
+      Weight? previousWeight =
+          await _weightService.getPreviousWeight(id: user.id!);
+      List<Weight>? weightHistory =
+          await _weightService.getWeights(id: user.id!);
+
+      Star? star = await _starsService.getTodayStars(
+        id: user.id!,
+        progressLimit: user.stars,
+      );
+      List<Star> starProgress = await _starsService.getStars(id: user.id!);
 
       Progress? progress = await _homeService.getProgress(
         user: user,
-        starProgress: [],
+        starProgress: starProgress,
+        star: star!,
         weight: weight,
         prevWeight: previousWeight,
         weightProgress: weightHistory,
@@ -69,13 +84,23 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
           if (user is User) {
             Weight? weight = await _weightService.getTodayWeight(
-                initialWeight: user.initWeight);
-            Weight? previousWeight = await _weightService.getPreviousWeight();
-            List<Weight>? weightHistory = await _weightService.getWeights();
+                id: user.id!, initialWeight: user.initWeight);
+            Weight? previousWeight =
+                await _weightService.getPreviousWeight(id: user.id!);
+            List<Weight>? weightHistory =
+                await _weightService.getWeights(id: user.id!);
+
+            Star? star = await _starsService.getTodayStars(
+              id: user.id!,
+              progressLimit: user.stars,
+            );
+            List<Star> starProgress =
+                await _starsService.getStars(id: user.id!);
 
             Progress? progress = await _homeService.getProgress(
               user: user,
-              starProgress: [],
+              starProgress: starProgress,
+              star: star!,
               weight: weight,
               prevWeight: previousWeight,
               weightProgress: weightHistory,

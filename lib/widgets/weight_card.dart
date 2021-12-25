@@ -7,11 +7,13 @@ class WeightCard extends StatelessWidget {
   final String date;
   final double? previousWeight;
   final String? previousDate;
+  final double bmi;
 
   const WeightCard({
     Key? key,
     required this.currentWeight,
     required this.date,
+    required this.bmi,
     this.previousWeight,
     this.previousDate,
     this.padding = EdgeInsets.zero,
@@ -24,6 +26,22 @@ class WeightCard extends StatelessWidget {
 
     if (isPrevious) {
       difference = currentWeight - previousWeight!;
+    }
+
+    Color getColor({required double value}) {
+      if (value > 40) {
+        return Nord.auroraRed;
+      } else if (value > 30) {
+        return Nord.auroraOrange;
+      } else if (value > 25) {
+        return Nord.auroraYellow;
+      } else if (value > 18.5) {
+        return Nord.auroraGreen;
+      } else if (value > 17) {
+        return Nord.auroraOrange;
+      } else {
+        return Nord.auroraRed;
+      }
     }
 
     return Padding(
@@ -40,6 +58,14 @@ class WeightCard extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Text(
+                  'BMI: ${bmi.toStringAsFixed(2)}',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: getColor(value: bmi),
+                  ),
+                ),
                 Text(
                   '$currentWeight kg',
                   style: const TextStyle(

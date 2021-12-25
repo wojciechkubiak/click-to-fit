@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:star_metter/config/colors.dart';
 import 'package:star_metter/models/progress.dart';
+import 'package:star_metter/models/star.dart';
 import 'package:star_metter/models/user.dart';
 import 'package:star_metter/models/weight.dart';
+import 'package:star_metter/services/stars.dart';
 import 'package:star_metter/services/weight.dart';
 import 'package:star_metter/widgets/chart.dart';
 import 'package:star_metter/widgets/counter_button.dart';
@@ -30,6 +32,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  StarsService starsService = StarsService();
   late User user;
   late Progress progress;
 
@@ -41,7 +44,7 @@ class _HomeState extends State<Home> {
   }
 
   Widget starCounter() {
-    int stars = progress.starProgress.last.stars;
+    Star stars = progress.star;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 42),
@@ -49,22 +52,31 @@ class _HomeState extends State<Home> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           CounterButton(
-            onClick: () => setState(
-              () => {
-                if (stars > 0) {progress.starProgress.last.stars = stars - 1}
-              },
-            ),
+            onClick: () async {
+              if (stars.stars > 0) {
+                bool update = await starsService.updateStars(
+                    recordId: stars.id!, stars: stars.stars - 1);
+                if (update) {
+                  setState(() {
+                    if (progress.starProgress.isNotEmpty) {
+                      progress.starProgress.last.stars = stars.stars - 1;
+                    }
+                    stars.stars = stars.stars - 1;
+                  });
+                }
+              }
+            },
             icon: Icons.remove,
-            isDisabled: stars == 0,
+            isDisabled: stars.stars == 0,
           ),
           Column(
             children: [
               Icon(
                 Icons.star_border,
                 size: 64,
-                color: stars < progress.progressLimit - 2
+                color: stars.stars < stars.progressLimit - 2
                     ? Nord.light
-                    : stars > progress.progressLimit + 2
+                    : stars.stars > stars.progressLimit + 2
                         ? Nord.auroraRed
                         : Nord.auroraGreen,
               ),
@@ -75,13 +87,13 @@ class _HomeState extends State<Home> {
                     height: 60,
                     width: 60,
                     child: Text(
-                      '${stars < 10 ? "0" : ""}$stars',
+                      '${stars.stars < 10 ? "0" : ""}${stars.stars}',
                       style: TextStyle(
                         fontSize: 42,
                         fontWeight: FontWeight.bold,
-                        color: stars < progress.progressLimit - 2
+                        color: stars.stars < stars.progressLimit - 2
                             ? Nord.light
-                            : stars > progress.progressLimit + 2
+                            : stars.stars > stars.progressLimit + 2
                                 ? Nord.auroraRed
                                 : Nord.auroraGreen,
                       ),
@@ -92,7 +104,7 @@ class _HomeState extends State<Home> {
                       height: 40,
                       width: 40,
                       child: Text(
-                        '/${progress.progressLimit}',
+                        '/${stars.progressLimit}',
                         style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.normal,
@@ -104,9 +116,18 @@ class _HomeState extends State<Home> {
             ],
           ),
           CounterButton(
-            onClick: () {
-              if (stars < 99) {
-                setState(() => progress.starProgress.last.stars = stars + 1);
+            onClick: () async {
+              if (stars.stars < 99) {
+                bool update = await starsService.updateStars(
+                    recordId: stars.id!, stars: stars.stars + 1);
+                if (update) {
+                  setState(() {
+                    if (progress.starProgress.isNotEmpty) {
+                      progress.starProgress.last.stars = stars.stars + 1;
+                    }
+                    stars.stars = stars.stars + 1;
+                  });
+                }
               }
             },
             icon: Icons.add,
@@ -139,7 +160,12 @@ class _HomeState extends State<Home> {
               ),
             ),
             starCounter(),
-            const Chart(),
+            Chart(
+              stars: progress.starProgress,
+              initialLimit: progress.starProgress.isNotEmpty
+                  ? progress.starProgress.last.progressLimit
+                  : progress.star.progressLimit,
+            ),
             const Padding(
               padding: EdgeInsets.only(top: 42.0),
               child: Text(
@@ -158,6 +184,8 @@ class _HomeState extends State<Home> {
               date: progress.weight.date,
               previousWeight: progress.prevWeight?.weight,
               previousDate: progress.prevWeight?.date,
+              bmi: (progress.weight.weight /
+                  ((user.height / 100) * (user.height / 100))),
             ),
             Center(
               child: SizedBox(
@@ -188,11 +216,10 @@ class _HomeState extends State<Home> {
                       initValue: initValue,
                     );
 
-                    print('$result $initValue sdsds');
                     if (result != null && result != initValue) {
                       double value = double.parse(result);
                       int? id = progress.weight.id;
-                      print(progress.weight.toJson());
+
                       if (id != null) {
                         setState(
                           () => progress.weight.weight = value,

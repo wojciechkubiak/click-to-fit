@@ -3,18 +3,18 @@ import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:star_metter/config/colors.dart';
+import 'package:star_metter/models/date_parser.dart';
+import 'package:star_metter/models/star.dart';
 
 class Chart extends StatefulWidget {
-  final List<Color> availableColors = const [
-    Colors.purpleAccent,
-    Colors.yellow,
-    Colors.lightBlue,
-    Colors.orange,
-    Colors.pink,
-    Colors.redAccent,
-  ];
+  final List<Star> stars;
+  final int initialLimit;
 
-  const Chart({Key? key}) : super(key: key);
+  const Chart({
+    Key? key,
+    required this.stars,
+    required this.initialLimit,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => ChartState();
@@ -22,6 +22,15 @@ class Chart extends StatefulWidget {
 
 class ChartState extends State<Chart> {
   final Duration animDuration = const Duration(milliseconds: 250);
+  List<Star> _stars = [];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.stars.isNotEmpty) {
+      _stars = widget.stars;
+    }
+  }
 
   int touchedIndex = -1;
 
@@ -45,9 +54,10 @@ class ChartState extends State<Chart> {
                   const Text(
                     'This week',
                     style: TextStyle(
-                        color: Nord.light,
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold),
+                      color: Nord.light,
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(
                     height: 38,
@@ -75,7 +85,8 @@ class ChartState extends State<Chart> {
 
   BarChartGroupData makeGroupData(
     int x,
-    double y, {
+    double y,
+    double limit, {
     bool isTouched = false,
     Color barColor = Nord.light,
     double width = 22,
@@ -85,12 +96,16 @@ class ChartState extends State<Chart> {
       x: x,
       barRods: [
         BarChartRodData(
-          y: y,
-          colors: isTouched ? [Nord.auroraGreen] : [Nord.lightDark],
+          y: y > 0 ? y + 1 : 0,
+          colors: (y + 1) - (limit + 1) > 2
+              ? [Nord.auroraRed]
+              : (limit + 1) - (y + 1) <= 2
+                  ? [Nord.auroraGreen]
+                  : [Nord.lightDark],
           width: width,
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
-            y: 20,
+            y: limit + 1,
             colors: [Nord.darkMedium],
           ),
         ),
@@ -99,26 +114,68 @@ class ChartState extends State<Chart> {
     );
   }
 
-  List<BarChartGroupData> showingGroups() => List.generate(7, (i) {
-        switch (i) {
-          case 0:
-            return makeGroupData(0, 5, isTouched: i == touchedIndex);
-          case 1:
-            return makeGroupData(1, 6.5, isTouched: i == touchedIndex);
-          case 2:
-            return makeGroupData(2, 5, isTouched: i == touchedIndex);
-          case 3:
-            return makeGroupData(3, 7.5, isTouched: i == touchedIndex);
-          case 4:
-            return makeGroupData(4, 9, isTouched: i == touchedIndex);
-          case 5:
-            return makeGroupData(5, 11.5, isTouched: i == touchedIndex);
-          case 6:
-            return makeGroupData(6, 6.5, isTouched: i == touchedIndex);
-          default:
-            return throw Error();
+  List<BarChartGroupData> showingGroups({
+    required List<Star> list,
+  }) {
+    DateTime now = DateTime.now();
+    List<DateTime> dates = [];
+    List<ChartStar> result = [];
+
+    int dayOfWeek = now.weekday;
+
+    for (int i = 7; i > dayOfWeek; i--) {
+      dates.add(now.add(Duration(days: i - dayOfWeek)));
+    }
+    dates.add(now);
+    for (int i = 1; i < dayOfWeek; i++) {
+      dates.add(now.add(Duration(days: i * -1)));
+    }
+
+    for (var date in dates) {
+      DateParser dateParser = DateParser(date: date);
+      String _date = dateParser.getDateWithoutTime();
+
+      ChartStar? chartStar = ChartStar(
+        date: _date,
+        value: 0,
+        limit: widget.initialLimit,
+      ); //
+
+      for (var element in list) {
+        if (element.date == _date) {
+          chartStar.value = element.stars;
+          chartStar.limit = element.progressLimit;
         }
-      });
+      }
+      result.add(chartStar);
+    }
+
+    List<ChartStar> output = result.reversed.toList();
+
+    return List.generate(7, (i) {
+      double value = output[i].value.toDouble();
+      double limit = output[i].limit.toDouble();
+
+      switch (i) {
+        case 0:
+          return makeGroupData(0, value, limit, isTouched: i == touchedIndex);
+        case 1:
+          return makeGroupData(1, value, limit, isTouched: i == touchedIndex);
+        case 2:
+          return makeGroupData(2, value, limit, isTouched: i == touchedIndex);
+        case 3:
+          return makeGroupData(3, value, limit, isTouched: i == touchedIndex);
+        case 4:
+          return makeGroupData(4, value, limit, isTouched: i == touchedIndex);
+        case 5:
+          return makeGroupData(5, value, limit, isTouched: i == touchedIndex);
+        case 6:
+          return makeGroupData(6, value, limit, isTouched: i == touchedIndex);
+        default:
+          return throw Error();
+      }
+    });
+  }
 
   BarChartData mainBarData() {
     return BarChartData(
@@ -209,7 +266,7 @@ class ChartState extends State<Chart> {
       borderData: FlBorderData(
         show: false,
       ),
-      barGroups: showingGroups(),
+      barGroups: showingGroups(list: _stars),
       gridData: FlGridData(show: false),
     );
   }

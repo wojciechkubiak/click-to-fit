@@ -55,3 +55,38 @@ class Star {
         progressLimit,
       ];
 }
+
+class ChartStar {
+  int value;
+  int limit;
+  String date;
+
+  ChartStar({
+    required this.value,
+    required this.limit,
+    required this.date,
+  });
+
+  factory ChartStar.fromJson(Map<String, dynamic> json) {
+    ChartStar starProgress = ChartStar(
+      value: json['value'],
+      limit: json['limit'],
+      date: json['date'],
+    );
+    return starProgress;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['value'] = value;
+    data['limit'] = limit;
+    data['date'] = date;
+    return data;
+  }
+
+  List<dynamic> get props => [
+        value,
+        limit,
+        date,
+      ];
+}

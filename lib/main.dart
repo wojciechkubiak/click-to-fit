@@ -68,6 +68,11 @@ class _MyHomePageState extends State<MyHomePage> {
             return WeightService();
           },
         ),
+        RepositoryProvider<StarsService>(
+          create: (context) {
+            return StarsService();
+          },
+        ),
       ],
       child: _multiBlocProvider(),
     );
@@ -79,9 +84,11 @@ class _MyHomePageState extends State<MyHomePage> {
         create: (context) {
           final homeService = RepositoryProvider.of<HomeService>(context);
           final weightService = RepositoryProvider.of<WeightService>(context);
+          final starsService = RepositoryProvider.of<StarsService>(context);
           return HomeBloc(
             homeService,
             weightService,
+            starsService,
           )..add(HomeLoadInit());
         },
       ),

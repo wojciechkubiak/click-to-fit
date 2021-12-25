@@ -8,6 +8,7 @@ class Progress {
   final int progressLimit;
   final double currentWeight;
   final List<Star> starProgress;
+  Star star;
   Weight weight;
   Weight? prevWeight;
   List<Weight> weightProgress;
@@ -19,6 +20,7 @@ class Progress {
     required this.progressLimit,
     required this.currentWeight,
     required this.starProgress,
+    required this.star,
     required this.weight,
     required this.weightProgress,
     this.prevWeight,
@@ -46,6 +48,7 @@ class Progress {
       stars: json['stars'],
       progressLimit: json['progressLimit'],
       currentWeight: json['currentWeight'],
+      star: Star.fromJson(json['star']),
       weight: Weight.fromJson(json['weight']),
       prevWeight: Weight.fromJson(json['prevWeight']),
       starProgress: _starProgress,
@@ -59,6 +62,7 @@ class Progress {
     data['pk'] = id;
     data['date'] = date;
     data['stars'] = stars;
+    data['star'] = star;
     data['progressLimit'] = progressLimit;
     data['currentWeight'] = currentWeight;
     data['starProgress'] = starProgress;
@@ -72,6 +76,7 @@ class Progress {
         id,
         date,
         stars,
+        star,
         progressLimit,
         currentWeight,
         starProgress,

@@ -17,6 +17,7 @@ abstract class DataHomeService extends ConfigService {
   Future<Progress?> getProgress({
     required User? user,
     required List<Star>? starProgress,
+    required Star star,
     required Weight? weight,
     required Weight? prevWeight,
     required List<Weight>? weightProgress,
@@ -89,6 +90,7 @@ class HomeService extends DataHomeService {
   Future<Progress?> getProgress({
     required User? user,
     required List<Star>? starProgress,
+    required Star star,
     required Weight? weight,
     required Weight? prevWeight,
     required List<Weight>? weightProgress,
@@ -96,21 +98,13 @@ class HomeService extends DataHomeService {
     try {
       DateParser dateParsed = DateParser(date: DateTime.now());
 
-      //TODO temp
-      Star star = Star(
-        userId: user!.id!,
-        progressLimit: user.stars,
-        date: dateParsed.getDateWithoutTime(),
-        stars: 0,
-      );
-      List<Star> stars = [star];
-
       Progress progress = Progress(
         date: dateParsed.getDateWithoutTime(),
         stars: star.stars,
         progressLimit: star.progressLimit,
         currentWeight: weight!.weight,
-        starProgress: stars,
+        star: star,
+        starProgress: starProgress is List<Star> ? starProgress : [],
         weight: weight,
         prevWeight: prevWeight,
         weightProgress: weightProgress!,
