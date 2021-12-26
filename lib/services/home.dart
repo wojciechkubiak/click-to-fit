@@ -102,7 +102,7 @@ class HomeService extends DataHomeService {
         date: dateParsed.getDateWithoutTime(),
         stars: star.stars,
         progressLimit: star.progressLimit,
-        currentWeight: weight!.weight,
+        currentWeight: weight?.weight,
         star: star,
         starProgress: starProgress is List<Star> ? starProgress : [],
         weight: weight,

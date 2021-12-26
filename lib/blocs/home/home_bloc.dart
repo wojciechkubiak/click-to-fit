@@ -77,37 +77,37 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     if (event is HomeLoadPage) {
       if (event.user is User) {
+        User user = event.user!;
         int? userId = await _homeService.insertUser(event.user!);
+        user.id = userId;
 
         if (userId is int) {
-          User? user = await _homeService.getUser(userId);
+          Weight? weight = await _weightService.insertNewRecord(
+            id: userId,
+            weight: user.initWeight,
+          );
+          Weight? previousWeight =
+              await _weightService.getPreviousWeight(id: user.id!);
+          List<Weight>? weightHistory =
+              await _weightService.getWeights(id: user.id!);
 
-          if (user is User) {
-            Weight? weight = await _weightService.getTodayWeight(
-                id: user.id!, initialWeight: user.initWeight);
-            Weight? previousWeight =
-                await _weightService.getPreviousWeight(id: user.id!);
-            List<Weight>? weightHistory =
-                await _weightService.getWeights(id: user.id!);
+          Star? star = await _starsService.getTodayStars(
+            id: user.id!,
+            progressLimit: user.stars,
+          );
+          List<Star> starProgress = await _starsService.getStars(id: user.id!);
 
-            Star? star = await _starsService.getTodayStars(
-              id: user.id!,
-              progressLimit: user.stars,
-            );
-            List<Star> starProgress =
-                await _starsService.getStars(id: user.id!);
-
-            Progress? progress = await _homeService.getProgress(
-              user: user,
-              starProgress: starProgress,
-              star: star!,
-              weight: weight,
-              prevWeight: previousWeight,
-              weightProgress: weightHistory,
-            );
-            if (progress is Progress) {
-              emit(HomePage(user: user, progress: progress));
-            }
+          Progress? progress = await _homeService.getProgress(
+            user: user,
+            starProgress: starProgress,
+            star: star!,
+            weight: weight,
+            prevWeight: previousWeight,
+            weightProgress: weightHistory,
+          );
+          if (progress is Progress) {
+            print('PROGGG ${progress.toJson()}');
+            emit(HomePage(user: user, progress: progress));
           }
         }
       }

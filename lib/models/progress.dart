@@ -6,10 +6,10 @@ class Progress {
   final String date;
   final int stars;
   final int progressLimit;
-  final double currentWeight;
   final List<Star> starProgress;
   Star star;
-  Weight weight;
+  double? currentWeight;
+  Weight? weight;
   Weight? prevWeight;
   List<Weight> weightProgress;
 

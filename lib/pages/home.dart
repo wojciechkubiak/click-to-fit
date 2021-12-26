@@ -43,6 +43,20 @@ class _HomeState extends State<Home> {
     progress = widget.progress;
   }
 
+  double getBMI() {
+    if (progress.weight is Weight) {
+      return (progress.weight!.weight /
+          ((user.height / 100) * (user.height / 100)));
+    } else {
+      if (progress.prevWeight is Weight) {
+        return (progress.prevWeight!.weight /
+            ((user.height / 100) * (user.height / 100)));
+      } else {
+        return 0;
+      }
+    }
+  }
+
   Widget starCounter() {
     Star stars = progress.star;
 
@@ -180,12 +194,11 @@ class _HomeState extends State<Home> {
             ),
             WeightCard(
               padding: const EdgeInsets.only(top: 24, bottom: 32),
-              currentWeight: progress.weight.weight,
-              date: progress.weight.date,
+              currentWeight: progress.weight?.weight,
+              date: progress.weight?.date,
               previousWeight: progress.prevWeight?.weight,
               previousDate: progress.prevWeight?.date,
-              bmi: (progress.weight.weight /
-                  ((user.height / 100) * (user.height / 100))),
+              bmi: getBMI(),
             ),
             Center(
               child: SizedBox(
@@ -205,7 +218,9 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   onPressed: () async {
-                    String initValue = progress.weight.weight.toString();
+                    String initValue = progress.weight is Weight
+                        ? progress.weight!.weight.toString()
+                        : progress.prevWeight!.weight.toString();
 
                     String? result = await CustomDialog().showTextDialog(
                       context: context,
@@ -218,23 +233,34 @@ class _HomeState extends State<Home> {
 
                     if (result != null && result != initValue) {
                       double value = double.parse(result);
-                      int? id = progress.weight.id;
+                      int? id = progress.weight?.id ?? progress.prevWeight?.id;
 
-                      if (id != null) {
-                        setState(
-                          () => progress.weight.weight = value,
-                        );
-
-                        WeightService()
-                            .updateWeight(recordId: id, weight: value);
+                      if (id is int) {
+                        if (progress.weight is Weight) {
+                          setState(
+                            () => progress.weight!.weight = value,
+                          );
+                          WeightService()
+                              .updateWeight(recordId: id, weight: value);
+                        } else {
+                          Weight? weight = await WeightService()
+                              .insertNewRecord(id: id, weight: value);
+                          setState(
+                            () => progress.weight = weight,
+                          );
+                        }
                       }
+
+                      if (id != null) {}
                     }
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: const [
-                      Text('Update weight'),
-                      Icon(
+                    children: [
+                      Text(progress.weight is Weight
+                          ? 'Update weight'
+                          : 'Add weight'),
+                      const Icon(
                         Icons.add,
                         size: 32,
                         color: Nord.light,

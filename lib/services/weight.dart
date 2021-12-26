@@ -8,13 +8,19 @@ import '../config/config_service.dart';
 import './storage.dart';
 
 abstract class DataWeightService extends ConfigService {
-  Future<Weight?> getTodayWeight(
-      {required double initialWeight, required int id});
+  Future<Weight?> getTodayWeight({
+    required double initialWeight,
+    required int id,
+  });
   Future<Weight?> getPreviousWeight({required int id});
   Future<List<Weight>?> getWeights({required int id});
   Future<Weight?> getLastWeight({required int id});
   Future<bool> updateWeight({
     required int recordId,
+    required double weight,
+  });
+  Future<Weight?> insertNewRecord({
+    required int id,
     required double weight,
   });
 }
@@ -40,41 +46,13 @@ class WeightService extends DataWeightService {
           "SELECT * FROM weights WHERE userId = $id AND date = '$parsedDate'");
 
       print('PARSED DATE $parsedDate');
-      if (weightsList.isEmpty) {
-        Weight? previous = await getLastWeight(id: id);
-
-        Weight _emptyWeight = Weight(
-          date: parsedDate,
-          userId: id,
-          weight: previous is Weight ? previous.weight : initialWeight,
-        );
-
-        Weight _resultWeight = await db
-            .insert(
-          'weights',
-          _emptyWeight.toJson(),
-        )
-            .then(
-          (value) {
-            print('INSERTED ${_emptyWeight.toJson()}');
-            int pk = value;
-
-            print('PK $pk');
-            return Weight(
-              id: pk,
-              date: _emptyWeight.date,
-              userId: _emptyWeight.userId,
-              weight: _emptyWeight.weight,
-            );
-          }, //TODO pk?
-        );
-
-        return _resultWeight;
-      } else {
+      if (weightsList.isNotEmpty) {
         print('TODAY WEIGHT ${weightsList.last}');
         Weight weight = Weight.fromJson(weightsList.last);
         return weight;
       }
+
+      return null;
     } catch (e) {
       print(e);
       return null;
@@ -88,11 +66,16 @@ class WeightService extends DataWeightService {
     try {
       List<Map<String, dynamic>> weightList = [];
 
-      final db = await storageService.getDatabase();
-      weightList = await db.rawQuery(
-          "SELECT * FROM weights WHERE userId = $id ORDER BY pk DESC LIMIT 2");
+      DateTime now = DateTime.now();
+      DateParser date = DateParser(date: now);
+      String parsedDate = date.getDateWithoutTime();
 
-      if (weightList.length > 1) {
+      final db = await storageService.getDatabase();
+
+      weightList = await db.rawQuery(
+          "SELECT * FROM weights WHERE userId = $id AND date != '$parsedDate' ORDER BY pk DESC LIMIT 1");
+
+      if (weightList.isNotEmpty) {
         print('PREVIOUS WEIGHT ${weightList.last}');
         Weight weight = Weight.fromJson(weightList.last);
         return weight;
@@ -175,6 +158,53 @@ class WeightService extends DataWeightService {
     } catch (e) {
       print(e);
       return false;
+    }
+  }
+
+  @override
+  Future<Weight?> insertNewRecord({
+    required int id,
+    required double weight,
+  }) async {
+    StorageService storageService = StorageService();
+
+    try {
+      final db = await storageService.getDatabase();
+
+      DateTime now = DateTime.now();
+      DateParser date = DateParser(date: now);
+      String parsedDate = date.getDateWithoutTime();
+
+      Weight _emptyWeight = Weight(
+        date: parsedDate,
+        userId: id,
+        weight: weight,
+      );
+
+      Weight _resultWeight = await db
+          .insert(
+        'weights',
+        _emptyWeight.toJson(),
+      )
+          .then(
+        (value) {
+          print('INSERTED ${_emptyWeight.toJson()}');
+          int pk = value;
+
+          print('PK $pk');
+          return Weight(
+            id: pk,
+            date: _emptyWeight.date,
+            userId: _emptyWeight.userId,
+            weight: _emptyWeight.weight,
+          );
+        }, //TODO pk?
+      );
+
+      return _resultWeight;
+    } catch (e) {
+      print(e);
+      return null;
     }
   }
 }

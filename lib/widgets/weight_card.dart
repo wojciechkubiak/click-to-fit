@@ -3,17 +3,17 @@ import 'package:star_metter/config/colors.dart';
 
 class WeightCard extends StatelessWidget {
   final EdgeInsets padding;
-  final double currentWeight;
-  final String date;
+  final double? currentWeight;
+  final String? date;
   final double? previousWeight;
   final String? previousDate;
   final double bmi;
 
   const WeightCard({
     Key? key,
-    required this.currentWeight,
-    required this.date,
     required this.bmi,
+    this.currentWeight,
+    this.date,
     this.previousWeight,
     this.previousDate,
     this.padding = EdgeInsets.zero,
@@ -22,10 +22,12 @@ class WeightCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double? difference;
-    bool isPrevious = previousWeight != null && previousDate != null;
+    bool isPrevious = previousWeight is double && previousDate is String;
+    bool isCurrent = currentWeight is double && date is String;
+    bool isBoth = isPrevious && isCurrent;
 
-    if (isPrevious) {
-      difference = currentWeight - previousWeight!;
+    if (isBoth) {
+      difference = currentWeight! - previousWeight!;
     }
 
     Color getColor({required double value}) {
@@ -59,30 +61,32 @@ class WeightCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'BMI: ${bmi.toStringAsFixed(2)}',
+                  'BMI: ${bmi > 0 ? bmi.toStringAsFixed(2) : 'N/A'}',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: getColor(value: bmi),
                   ),
                 ),
-                Text(
-                  '$currentWeight kg',
-                  style: const TextStyle(
-                    fontSize: 64,
-                    fontWeight: FontWeight.bold,
-                    color: Nord.light,
+                if (isCurrent) ...[
+                  Text(
+                    '$currentWeight kg',
+                    style: const TextStyle(
+                      fontSize: 64,
+                      fontWeight: FontWeight.bold,
+                      color: Nord.light,
+                    ),
                   ),
-                ),
-                Text(
-                  date,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Nord.light,
+                  Text(
+                    date!,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Nord.light,
+                    ),
                   ),
-                ),
-                if (isPrevious) ...[
+                ],
+                if (isBoth)
                   Padding(
                     padding: const EdgeInsets.symmetric(
                       vertical: 24,
@@ -100,18 +104,19 @@ class WeightCard extends StatelessWidget {
                       ),
                     ),
                   ),
+                if (isPrevious) ...[
                   Text(
                     '$previousWeight kg',
-                    style: const TextStyle(
-                      fontSize: 34,
+                    style: TextStyle(
+                      fontSize: isCurrent ? 34 : 64,
                       fontWeight: FontWeight.bold,
                       color: Nord.light,
                     ),
                   ),
                   Text(
                     previousDate!,
-                    style: const TextStyle(
-                      fontSize: 12,
+                    style: TextStyle(
+                      fontSize: isCurrent ? 12 : 16,
                       fontWeight: FontWeight.bold,
                       color: Nord.light,
                     ),

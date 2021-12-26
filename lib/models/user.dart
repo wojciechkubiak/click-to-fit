@@ -2,7 +2,7 @@ enum Sex { female, male }
 enum ActivityLevel { none, low, medium, above, high }
 
 class User {
-  final int? id;
+  int? id;
   final String name;
   final int age;
   final double height;
