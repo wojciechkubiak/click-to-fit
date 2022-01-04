@@ -11,7 +11,7 @@ import 'blocs/settings/settings_bloc.dart';
 import 'config/colors.dart';
 import 'pages/pages.dart';
 
-enum CurrentPage { HOME, ARTICLES, ABOUT, SETTINGS }
+enum CurrentPage { INTRO, LOADING, HOME, ARTICLES, ABOUT, SETTINGS }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,11 +45,23 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   ZoomDrawerController zoomController = ZoomDrawerController();
   bool isOpen = false;
-  CurrentPage _currentPage = CurrentPage.HOME;
+  CurrentPage _currentPage = CurrentPage.LOADING;
 
   @override
   Widget build(BuildContext context) {
     return _repositoryProvider();
+  }
+
+  void _setDefaultPage({CurrentPage page = CurrentPage.HOME}) {
+    setState(() => _currentPage = page);
+  }
+
+  void _menuButtonHandler(CurrentPage page) {
+    zoomController.close!();
+    setState(() {
+      isOpen = false;
+      _currentPage = page;
+    });
   }
 
   Widget _repositoryProvider() {
@@ -91,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
             homeService,
             weightService,
             starsService,
-          )..add(HomeLoadInit(isInit: true));
+          )..add(HomeLoadInit(isInit: true, handlePage: _setDefaultPage));
         },
       ),
       BlocProvider<SettingsBloc>(
@@ -102,11 +114,6 @@ class _MyHomePageState extends State<MyHomePage> {
         },
       ),
     ], child: _main());
-  }
-
-  void _menuButtonHandler() {
-    zoomController.close!();
-    setState(() => isOpen = false);
   }
 
   Widget _main() {
@@ -144,7 +151,11 @@ class _MyHomePageState extends State<MyHomePage> {
               systemNavigationBarIconBrightness:
                   Platform.isIOS ? Brightness.dark : Brightness.light,
               systemNavigationBarDividerColor: Colors.white,
-              statusBarColor: !isOpen ? Nord.darkMedium : Nord.dark,
+              statusBarColor: isOpen
+                  ? Nord.dark
+                  : _currentPage == CurrentPage.HOME
+                      ? Nord.darker
+                      : Nord.darkMedium,
             ),
             child: _blocBuilder(),
           ),
@@ -205,8 +216,14 @@ class _MyHomePageState extends State<MyHomePage> {
             isHeader: true,
           );
         }
-        if (state is HomeIntro) return const Intro();
-        if (state is HomeSettings) return const Settings();
+        if (state is HomeIntro) {
+          return Intro(
+            handlePage: _setDefaultPage,
+          );
+        }
+        if (state is HomeSettings) {
+          return Settings(handlePage: _setDefaultPage);
+        }
         return const Loading();
       },
     );

@@ -9,7 +9,7 @@ import '../header.dart';
 import './menu_button.dart';
 
 class Menu extends StatefulWidget {
-  final Function() onClick;
+  final Function(CurrentPage) onClick;
   final CurrentPage currentPage;
   final User user;
 
@@ -68,31 +68,33 @@ class _MenuState extends State<Menu> {
         MenuButton(
           text: 'Summary',
           page: CurrentPage.HOME,
-          currentPage: widget.currentPage,
           icon: Icons.home,
-          onClick: widget.onClick,
+          onClick: () {
+            widget.onClick(CurrentPage.HOME);
+          },
         ),
         MenuButton(
           text: 'Stars',
           page: CurrentPage.ARTICLES,
-          currentPage: widget.currentPage,
           icon: Icons.star,
-          onClick: widget.onClick,
+          onClick: () {
+            widget.onClick(CurrentPage.ARTICLES);
+          },
         ),
         MenuButton(
           text: 'Measures',
           page: CurrentPage.ARTICLES,
-          currentPage: widget.currentPage,
           icon: Icons.book,
-          onClick: widget.onClick,
+          onClick: () {
+            widget.onClick(CurrentPage.ARTICLES);
+          },
         ),
         MenuButton(
           text: 'Settings',
           page: CurrentPage.SETTINGS,
-          currentPage: widget.currentPage,
           icon: Icons.settings,
           onClick: () {
-            widget.onClick();
+            widget.onClick(CurrentPage.SETTINGS);
             BlocProvider.of<HomeBloc>(context).add(HomeLoadSettings());
           },
         ),

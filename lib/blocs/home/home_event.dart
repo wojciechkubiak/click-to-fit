@@ -6,8 +6,9 @@ abstract class HomeEvent {
 
 class HomeLoadInit extends HomeEvent {
   final bool isInit;
+  final Function() handlePage;
 
-  HomeLoadInit({this.isInit = false});
+  HomeLoadInit({this.isInit = false, required this.handlePage});
 
   List<Object?> get props => [isInit];
 }

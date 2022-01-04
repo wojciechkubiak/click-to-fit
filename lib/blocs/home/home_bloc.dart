@@ -61,6 +61,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           weightProgress: weightHistory,
         );
         if (progress is Progress) {
+          event.handlePage();
           emit(HomePage(user: user, progress: progress));
         }
       } else {

@@ -10,7 +10,9 @@ import '../../pages/pages.dart';
 import '../../widgets/widgets.dart';
 
 class Intro extends StatefulWidget {
-  const Intro({Key? key}) : super(key: key);
+  final Function() handlePage;
+
+  const Intro({Key? key, required this.handlePage}) : super(key: key);
 
   @override
   _IntroState createState() => _IntroState();
@@ -365,6 +367,7 @@ class _IntroState extends State<Intro> {
                   initDate: dateParser.getDateWithoutTime(),
                 );
 
+                widget.handlePage();
                 BlocProvider.of<HomeBloc>(context)
                     .add(HomeLoadPage(user: user));
               })
