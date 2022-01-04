@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:star_metter/config/colors.dart';
-import 'package:star_metter/models/date_parser.dart';
-import 'package:star_metter/models/star.dart';
+
+import '../config/colors.dart';
+import '../models/models.dart';
 
 class Chart extends StatefulWidget {
   final List<Star> stars;
@@ -181,7 +181,7 @@ class ChartState extends State<Chart> {
     return BarChartData(
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
-            tooltipBgColor: Nord.auroraGreen,
+            tooltipBgColor: Nord.lightDark,
             getTooltipItem: (group, groupIndex, rod, rodIndex) {
               String weekDay;
               switch (group.x.toInt()) {
@@ -212,7 +212,7 @@ class ChartState extends State<Chart> {
               return BarTooltipItem(
                 weekDay + '\n',
                 const TextStyle(
-                  color: Colors.white,
+                  color: Nord.dark,
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 ),
@@ -220,7 +220,7 @@ class ChartState extends State<Chart> {
                   TextSpan(
                     text: (rod.y - 1).toString(),
                     style: const TextStyle(
-                      color: Nord.light,
+                      color: Nord.darker,
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                     ),

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:star_metter/config/colors.dart';
-import 'package:star_metter/models/validators.dart';
-import 'package:star_metter/widgets/input.dart';
+
+import '../config/colors.dart';
+import '../models/models.dart';
+import '../widgets/widgets.dart';
 
 class CustomDialog {
   Future<String?> showTextDialog({

@@ -37,11 +37,11 @@ class _CounterButtonState extends State<CounterButton> {
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 100),
-          height: 48,
-          width: 48,
+          height: 52,
+          width: 52,
           decoration: BoxDecoration(
             border: Border.all(
-              width: isClicked ? 3 : 2,
+              width: isClicked ? 4 : 3,
               color: Nord.lightDark,
             ),
             borderRadius: const BorderRadius.all(Radius.circular(4)),

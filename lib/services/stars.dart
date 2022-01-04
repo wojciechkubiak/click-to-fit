@@ -2,12 +2,9 @@ import 'dart:async';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:star_metter/models/date_parser.dart';
-import 'package:star_metter/models/star.dart';
-import 'package:star_metter/models/user.dart';
-import 'package:star_metter/models/weight.dart';
-import 'package:star_metter/services/home.dart';
 
+import '../../models/models.dart';
+import '../../services/services.dart';
 import '../config/config_service.dart';
 import './storage.dart';
 

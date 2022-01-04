@@ -4,7 +4,13 @@ abstract class HomeEvent {
   const HomeEvent();
 }
 
-class HomeLoadInit extends HomeEvent {}
+class HomeLoadInit extends HomeEvent {
+  final bool isInit;
+
+  HomeLoadInit({this.isInit = false});
+
+  List<Object?> get props => [isInit];
+}
 
 class HomeLoadIntro extends HomeEvent {}
 
@@ -17,3 +23,5 @@ class HomeLoadPage extends HomeEvent {
 
   List<Object?> get props => [user];
 }
+
+class HomeLoadSettings extends HomeEvent {}

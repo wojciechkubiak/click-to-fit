@@ -1,19 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:star_metter/config/colors.dart';
-import 'package:star_metter/models/progress.dart';
-import 'package:star_metter/models/star.dart';
-import 'package:star_metter/models/user.dart';
-import 'package:star_metter/models/weight.dart';
-import 'package:star_metter/services/stars.dart';
-import 'package:star_metter/services/weight.dart';
-import 'package:star_metter/widgets/chart.dart';
-import 'package:star_metter/widgets/counter_button.dart';
-import 'package:star_metter/widgets/custom_button.dart';
-import 'package:star_metter/widgets/custom_dialog.dart';
-import 'package:star_metter/widgets/weight_card.dart';
 
-import '../widgets/page_builder.dart';
+import '../../config/colors.dart';
+import '../../models/models.dart';
+import '../../services/services.dart';
+import '../../widgets/widgets.dart';
 
 class Home extends StatefulWidget {
   final User user;
@@ -154,120 +145,143 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return PageBuilder(
+      margin: const EdgeInsets.only(bottom: 20),
       isAppBar: true,
+      color: Nord.darker,
       onBack: widget.showMenu,
       page: Padding(
         padding: const EdgeInsets.only(top: 82.0, bottom: 32),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
-              padding: EdgeInsets.only(bottom: 14.0),
-              child: Text(
-                'Today:',
-                style: TextStyle(
-                  fontSize: 64,
-                  fontWeight: FontWeight.bold,
-                  color: Nord.light,
+            Container(
+              margin: const EdgeInsets.only(bottom: 48),
+              decoration: const BoxDecoration(
+                color: Nord.darker,
+                // border: Border.all(width: 2, color: Nord.darker),
+                // color: isActive ? Nord.dark : Nord.darkMedium,
+                borderRadius: BorderRadius.only(
+                  bottomRight: Radius.circular(32),
+                  bottomLeft: Radius.circular(32),
                 ),
-                textAlign: TextAlign.start,
               ),
-            ),
-            starCounter(),
-            Chart(
-              stars: progress.starProgress,
-              initialLimit: progress.starProgress.isNotEmpty
-                  ? progress.starProgress.last.progressLimit
-                  : progress.star.progressLimit,
-            ),
-            const Padding(
-              padding: EdgeInsets.only(top: 42.0),
-              child: Text(
-                'Weight:',
-                style: TextStyle(
-                  fontSize: 44,
-                  fontWeight: FontWeight.bold,
-                  color: Nord.light,
-                ),
-                textAlign: TextAlign.start,
-              ),
-            ),
-            WeightCard(
-              padding: const EdgeInsets.only(top: 24, bottom: 32),
-              currentWeight: progress.weight?.weight,
-              date: progress.weight?.date,
-              previousWeight: progress.prevWeight?.weight,
-              previousDate: progress.prevWeight?.date,
-              bmi: getBMI(),
-            ),
-            Center(
-              child: SizedBox(
-                width: 240,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    textStyle: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                    primary: Nord.auroraGreen,
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 15,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 14.0),
+                    child: Text(
+                      'Today:',
+                      style: Theme.of(context).textTheme.headline1,
+                      textAlign: TextAlign.start,
                     ),
                   ),
-                  onPressed: () async {
-                    String initValue = progress.weight is Weight
-                        ? progress.weight!.weight.toString()
-                        : progress.prevWeight!.weight.toString();
-
-                    String? result = await CustomDialog().showTextDialog(
-                      context: context,
-                      header: "New weight",
-                      confirmText: "Confirm",
-                      declineText: "Cancel",
-                      dialogBody: "test",
-                      initValue: initValue,
-                    );
-
-                    if (result != null && result != initValue) {
-                      double value = double.parse(result);
-                      int? id = progress.weight?.id ?? progress.prevWeight?.id;
-
-                      if (id is int) {
-                        if (progress.weight is Weight) {
-                          setState(
-                            () => progress.weight!.weight = value,
-                          );
-                          WeightService()
-                              .updateWeight(recordId: id, weight: value);
-                        } else {
-                          Weight? weight = await WeightService()
-                              .insertNewRecord(id: id, weight: value);
-                          setState(
-                            () => progress.weight = weight,
-                          );
-                        }
-                      }
-
-                      if (id != null) {}
-                    }
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text(progress.weight is Weight
-                          ? 'Update weight'
-                          : 'Add weight'),
-                      const Icon(
-                        Icons.add,
-                        size: 32,
+                  starCounter(),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  Chart(
+                    stars: progress.starProgress,
+                    initialLimit: progress.starProgress.isNotEmpty
+                        ? progress.starProgress.last.progressLimit
+                        : progress.star.progressLimit,
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 42.0),
+                    child: Text(
+                      'Weight:',
+                      style: TextStyle(
+                        fontSize: 44,
+                        fontWeight: FontWeight.bold,
                         color: Nord.light,
                       ),
-                    ],
+                      textAlign: TextAlign.start,
+                    ),
                   ),
-                ),
+                  WeightCard(
+                    padding: const EdgeInsets.only(top: 24, bottom: 32),
+                    currentWeight: progress.weight?.weight,
+                    date: progress.weight?.date,
+                    previousWeight: progress.prevWeight?.weight,
+                    previousDate: progress.prevWeight?.date,
+                    bmi: getBMI(),
+                  ),
+                  Center(
+                    child: SizedBox(
+                      width: 240,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                          textStyle: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                          primary: Nord.auroraGreen,
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 15,
+                          ),
+                        ),
+                        onPressed: () async {
+                          String initValue = progress.weight is Weight
+                              ? progress.weight!.weight.toString()
+                              : progress.prevWeight!.weight.toString();
+
+                          String? result = await CustomDialog().showTextDialog(
+                            context: context,
+                            header: "New weight",
+                            confirmText: "Confirm",
+                            declineText: "Cancel",
+                            dialogBody: "test",
+                            initValue: initValue,
+                          );
+
+                          if (result != null && result != initValue) {
+                            double value = double.parse(result);
+                            int? id =
+                                progress.weight?.id ?? progress.prevWeight?.id;
+
+                            if (id is int) {
+                              if (progress.weight is Weight) {
+                                setState(
+                                  () => progress.weight!.weight = value,
+                                );
+                                WeightService()
+                                    .updateWeight(recordId: id, weight: value);
+                              } else {
+                                Weight? weight = await WeightService()
+                                    .insertNewRecord(
+                                        id: user.id!, weight: value);
+                                setState(
+                                  () => progress.weight = weight,
+                                );
+                              }
+                            }
+
+                            if (id != null) {}
+                          }
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(progress.weight is Weight
+                                ? 'Update weight'
+                                : 'Add weight'),
+                            const Icon(
+                              Icons.add,
+                              size: 32,
+                              color: Nord.light,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
             )
           ],

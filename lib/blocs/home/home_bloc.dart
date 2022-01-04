@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:star_metter/models/progress.dart';
-import 'package:star_metter/models/star.dart';
-import 'package:star_metter/models/user.dart';
-import 'package:star_metter/models/weight.dart';
-import 'package:star_metter/services/weight.dart';
+import '../../models/progress.dart';
+import '../../models/star.dart';
+import '../../models/user.dart';
+import '../../models/weight.dart';
+import '../../services/weight.dart';
 import './../../services/services.dart';
 
 part 'home_event.dart';
@@ -27,40 +27,47 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<HomeLoadSplash>(_mapHomeLoadSplash);
     on<HomeLoadIntro>(_mapHomeLoadIntro);
     on<HomeLoadPage>(_mapHomeLoadHomePage);
+    on<HomeLoadSettings>(_mapHomeLoadSettings);
   }
 
   void _mapHomeInit(HomeEvent event, Emitter<HomeState> emit) async {
-    emit(HomeSplash());
+    if (event is HomeLoadInit) {
+      event.isInit ? emit(HomeSplash()) : emit(HomeLoading());
 
-    await Future.delayed(const Duration(seconds: 5));
-    User? user = await _homeService.getUser(null);
-    if (user is User) {
-      Weight? weight = await _weightService.getTodayWeight(
-          initialWeight: user.initWeight, id: user.id!);
-      Weight? previousWeight =
-          await _weightService.getPreviousWeight(id: user.id!);
-      List<Weight>? weightHistory =
-          await _weightService.getWeights(id: user.id!);
+      await Future.delayed(const Duration(seconds: 5));
 
-      Star? star = await _starsService.getTodayStars(
-        id: user.id!,
-        progressLimit: user.stars,
-      );
-      List<Star> starProgress = await _starsService.getStars(id: user.id!);
+      User? user = await _homeService.getUser(null);
 
-      Progress? progress = await _homeService.getProgress(
-        user: user,
-        starProgress: starProgress,
-        star: star!,
-        weight: weight,
-        prevWeight: previousWeight,
-        weightProgress: weightHistory,
-      );
-      if (progress is Progress) {
-        emit(HomePage(user: user, progress: progress));
+      if (user is User) {
+        Weight? weight = await _weightService.getTodayWeight(
+            initialWeight: user.initWeight, id: user.id!);
+        Weight? previousWeight =
+            await _weightService.getPreviousWeight(id: user.id!);
+        List<Weight>? weightHistory =
+            await _weightService.getWeights(id: user.id!);
+
+        Star? star = await _starsService.getTodayStars(
+          id: user.id!,
+          progressLimit: user.stars,
+        );
+        List<Star> starProgress = await _starsService.getStars(id: user.id!);
+
+        Progress? progress = await _homeService.getProgress(
+          user: user,
+          starProgress: starProgress,
+          star: star!,
+          weight: weight,
+          prevWeight: previousWeight,
+          weightProgress: weightHistory,
+        );
+        if (progress is Progress) {
+          emit(HomePage(user: user, progress: progress));
+        }
+      } else {
+        emit(HomeIntro());
       }
     } else {
-      emit(HomeIntro());
+      emit(HomeSplash());
     }
   }
 
@@ -73,7 +80,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   void _mapHomeLoadHomePage(HomeEvent event, Emitter<HomeState> emit) async {
-    emit(HomeSplash());
+    emit(HomeLoading());
 
     if (event is HomeLoadPage) {
       if (event.user is User) {
@@ -106,11 +113,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             weightProgress: weightHistory,
           );
           if (progress is Progress) {
-            print('PROGGG ${progress.toJson()}');
             emit(HomePage(user: user, progress: progress));
           }
         }
       }
     }
+  }
+
+  void _mapHomeLoadSettings(HomeEvent event, Emitter<HomeState> emit) async {
+    emit(HomeLoading());
+
+    emit(HomeSettings());
   }
 }

@@ -2,13 +2,9 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sql.dart';
-import 'package:star_metter/models/date_parser.dart';
-import 'package:star_metter/models/progress.dart';
-import 'package:star_metter/models/star.dart';
-import 'package:star_metter/models/weight.dart';
 
+import '../../models/models.dart';
 import '../config/config_service.dart';
-import '../models/user.dart';
 import './storage.dart';
 
 abstract class DataHomeService extends ConfigService {

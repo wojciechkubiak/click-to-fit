@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:star_metter/models/user.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../blocs/home/home_bloc.dart';
+import '../../models/models.dart';
 import '../../config/colors.dart';
 import '../../main.dart';
 import '../header.dart';
 import './menu_button.dart';
 
-class Menu extends StatelessWidget {
-  final Function(CurrentPage) onClick;
+class Menu extends StatefulWidget {
+  final Function() onClick;
   final CurrentPage currentPage;
   final User user;
 
@@ -18,8 +20,13 @@ class Menu extends StatelessWidget {
     required this.user,
   }) : super(key: key);
 
+  @override
+  State<Menu> createState() => _MenuState();
+}
+
+class _MenuState extends State<Menu> {
   double textSize() {
-    int userLen = user.name.length;
+    int userLen = widget.user.name.length;
     double baseSize = 54;
     if (userLen < 8) {
       return baseSize;
@@ -48,7 +55,7 @@ class Menu extends StatelessWidget {
                 ),
               ),
               Text(
-                '${user.name}!',
+                '${widget.user.name}!',
                 style: TextStyle(
                   fontSize: textSize(),
                   fontWeight: FontWeight.bold,
@@ -61,30 +68,33 @@ class Menu extends StatelessWidget {
         MenuButton(
           text: 'Summary',
           page: CurrentPage.HOME,
-          currentPage: currentPage,
+          currentPage: widget.currentPage,
           icon: Icons.home,
-          onClick: onClick,
+          onClick: widget.onClick,
         ),
         MenuButton(
           text: 'Stars',
           page: CurrentPage.ARTICLES,
-          currentPage: currentPage,
+          currentPage: widget.currentPage,
           icon: Icons.star,
-          onClick: onClick,
+          onClick: widget.onClick,
         ),
         MenuButton(
           text: 'Measures',
           page: CurrentPage.ARTICLES,
-          currentPage: currentPage,
+          currentPage: widget.currentPage,
           icon: Icons.book,
-          onClick: onClick,
+          onClick: widget.onClick,
         ),
         MenuButton(
           text: 'Settings',
-          page: CurrentPage.ARTICLES,
-          currentPage: currentPage,
+          page: CurrentPage.SETTINGS,
+          currentPage: widget.currentPage,
           icon: Icons.settings,
-          onClick: onClick,
+          onClick: () {
+            widget.onClick();
+            BlocProvider.of<HomeBloc>(context).add(HomeLoadSettings());
+          },
         ),
       ],
     );
@@ -96,20 +106,21 @@ class Menu extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
 
     return Container(
-        height: height,
-        width: width,
-        color: Nord.dark,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Header(
-              padding: EdgeInsets.only(top: 92),
-              showBottomText: true,
-              isWhite: true,
-            ),
-            _menuButtons(),
-            Container(),
-          ],
-        ));
+      height: height,
+      width: width,
+      color: Nord.dark,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Header(
+            padding: EdgeInsets.only(top: 92),
+            showBottomText: true,
+            isWhite: true,
+          ),
+          _menuButtons(),
+          Container(),
+        ],
+      ),
+    );
   }
 }

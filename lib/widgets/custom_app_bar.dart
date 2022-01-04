@@ -4,19 +4,21 @@ import 'package:star_metter/config/colors.dart';
 class CustomAppBar extends StatelessWidget {
   final Function? onBack;
   final bool isBack;
+  final Color? color;
 
   const CustomAppBar({
     Key? key,
     this.onBack,
     this.isBack = false,
+    this.color = Nord.dark,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 80,
-      color: Nord.darkMedium,
+      height: 82,
+      color: color,
       child: Row(
         children: [
           Container(

@@ -3,15 +3,15 @@ import 'dart:io' show Platform;
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
-import 'package:star_metter/pages/intro.dart';
-import 'package:star_metter/services/weight.dart';
-import './widgets/menu/menu.dart';
+
+import './widgets/widgets.dart';
 import './blocs/home/home_bloc.dart';
 import './services/services.dart';
+import 'blocs/settings/settings_bloc.dart';
 import 'config/colors.dart';
 import 'pages/pages.dart';
 
-enum CurrentPage { HOME, ARTICLES, ABOUT }
+enum CurrentPage { HOME, ARTICLES, ABOUT, SETTINGS }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,12 +28,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(),
+      home: MyHomePage(),
     );
   }
 }
@@ -73,6 +70,11 @@ class _MyHomePageState extends State<MyHomePage> {
             return StarsService();
           },
         ),
+        RepositoryProvider<SettingsService>(
+          create: (context) {
+            return SettingsService();
+          },
+        ),
       ],
       child: _multiBlocProvider(),
     );
@@ -89,18 +91,22 @@ class _MyHomePageState extends State<MyHomePage> {
             homeService,
             weightService,
             starsService,
-          )..add(HomeLoadInit());
+          )..add(HomeLoadInit(isInit: true));
+        },
+      ),
+      BlocProvider<SettingsBloc>(
+        create: (context) {
+          final settingsService =
+              RepositoryProvider.of<SettingsService>(context);
+          return SettingsBloc(settingsService)..add(SettingsLoadInit());
         },
       ),
     ], child: _main());
   }
 
-  void _menuButtonHandler(CurrentPage page) {
+  void _menuButtonHandler() {
     zoomController.close!();
-    setState(() {
-      _currentPage = page;
-      isOpen = false;
-    });
+    setState(() => isOpen = false);
   }
 
   Widget _main() {
@@ -115,6 +121,16 @@ class _MyHomePageState extends State<MyHomePage> {
         }
       },
       child: MaterialApp(
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          textTheme: const TextTheme(
+            headline1: TextStyle(
+              fontSize: 64,
+              fontWeight: FontWeight.bold,
+              color: Nord.light,
+            ),
+          ),
+        ),
         color: Nord.darkLight,
         debugShowCheckedModeBanner: false,
         home: Scaffold(
@@ -184,8 +200,13 @@ class _MyHomePageState extends State<MyHomePage> {
             closeCurve: Curves.bounceIn,
           );
         }
-        if (state is HomeSplash) return const Loading();
+        if (state is HomeSplash) {
+          return const Loading(
+            isHeader: true,
+          );
+        }
         if (state is HomeIntro) return const Intro();
+        if (state is HomeSettings) return const Settings();
         return const Loading();
       },
     );

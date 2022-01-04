@@ -1,5 +1,5 @@
-import 'package:star_metter/models/weight.dart';
-import 'package:star_metter/models/star.dart';
+import 'weight.dart';
+import 'star.dart';
 
 class Progress {
   final int? id;

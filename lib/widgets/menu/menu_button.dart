@@ -8,7 +8,7 @@ class MenuButton extends StatelessWidget {
   final CurrentPage page;
   final CurrentPage currentPage;
   final IconData icon;
-  final Function(CurrentPage) onClick;
+  final Function() onClick;
 
   const MenuButton({
     Key? key,
@@ -25,11 +25,11 @@ class MenuButton extends StatelessWidget {
         width: MediaQuery.of(context).size.width - 16,
         margin: const EdgeInsets.only(left: 16),
         child: GestureDetector(
-            onTap: () => onClick(page),
+            onTap: onClick,
             child: Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                  color: page == currentPage ? Colors.white : Nord.darkLight,
+                  color: page == currentPage ? Colors.white : Nord.dark,
                   borderRadius: const BorderRadius.all(Radius.circular(24))),
               child: Row(
                 children: [

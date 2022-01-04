@@ -1,17 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
-import 'package:flutter/material.dart';
-import 'package:star_metter/blocs/home/home_bloc.dart';
-import 'package:star_metter/config/colors.dart';
-import 'package:star_metter/models/date_parser.dart';
-import 'package:star_metter/pages/pages.dart';
 import 'package:flutter/services.dart';
-import 'package:star_metter/widgets/custom_button.dart';
-import 'package:star_metter/widgets/custom_slider.dart';
-import 'package:star_metter/widgets/input.dart';
-import 'package:star_metter/widgets/page_builder.dart';
-import '../models/validators.dart';
-import '../models/user.dart';
+import 'package:flutter/material.dart';
+
+import '../../blocs/home/home_bloc.dart';
+import '../../config/colors.dart';
+import '../../models/models.dart';
+import '../../pages/pages.dart';
+import '../../widgets/widgets.dart';
 
 class Intro extends StatefulWidget {
   const Intro({Key? key}) : super(key: key);

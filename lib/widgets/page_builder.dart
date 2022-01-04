@@ -3,12 +3,13 @@ import 'package:cupertino_will_pop_scope/cupertino_will_pop_scope.dart';
 
 import './custom_app_bar.dart';
 import '../config/colors.dart';
-import 'widgets.dart';
+import './widgets.dart';
 
 class PageBuilder extends StatefulWidget {
   final bool isAppBar;
   final bool isBack;
   final Widget page;
+  final Color? color;
   final EdgeInsets margin;
   final ScrollController? controller;
   final Function? onBack;
@@ -18,6 +19,7 @@ class PageBuilder extends StatefulWidget {
     required this.page,
     required this.onBack,
     this.controller,
+    this.color,
     this.isAppBar = false,
     this.isBack = false,
     this.margin = const EdgeInsets.only(left: 16, right: 16, bottom: 20),
@@ -49,6 +51,7 @@ class _PageBuilderState extends State<PageBuilder> {
               ) {
                 return Center(
                   child: SingleChildScrollView(
+                    physics: const ClampingScrollPhysics(),
                     controller: widget.controller,
                     child: Container(
                       margin: widget.margin,
@@ -62,6 +65,7 @@ class _PageBuilderState extends State<PageBuilder> {
               CustomAppBar(
                 onBack: widget.onBack,
                 isBack: widget.isBack,
+                color: widget.color,
               ),
           ],
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:star_metter/config/colors.dart';
+
+import '../config/colors.dart';
 
 class WeightCard extends StatelessWidget {
   final EdgeInsets padding;
@@ -92,7 +93,7 @@ class WeightCard extends StatelessWidget {
                       vertical: 24,
                     ),
                     child: Text(
-                      '${difference! > 0 ? "+" : ""} ${difference.toStringAsFixed(2)} kg',
+                      '${difference! > 0 ? "+" : ""} ${difference.toStringAsFixed(1)} kg',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,

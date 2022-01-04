@@ -10,6 +10,8 @@ class HomeLoading extends HomeState {}
 
 class HomeIntro extends HomeState {}
 
+class HomeSettings extends HomeState {}
+
 class HomePage extends HomeState {
   final User user;
   final Progress progress;

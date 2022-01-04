@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:star_metter/models/date_parser.dart';
-import 'package:star_metter/models/weight.dart';
 
+import '../models/models.dart';
 import '../config/config_service.dart';
 import './storage.dart';
 
