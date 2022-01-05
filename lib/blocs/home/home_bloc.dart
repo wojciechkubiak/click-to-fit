@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:star_metter/models/intro.dart';
 import '../../models/progress.dart';
 import '../../models/star.dart';
 import '../../models/user.dart';
@@ -65,7 +66,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           emit(HomePage(user: user, progress: progress));
         }
       } else {
-        emit(HomeIntro(isInit: true));
+        emit(HomeIntro(introMode: IntroMode.init));
       }
     } else {
       emit(HomeSplash());
@@ -78,7 +79,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   void _mapHomeLoadIntro(HomeEvent event, Emitter<HomeState> emit) async {
     if (event is HomeLoadIntro) {
-      emit(HomeIntro(isInit: event.isInit));
+      emit(HomeIntro(introMode: event.introMode));
     }
   }
 

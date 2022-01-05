@@ -183,7 +183,7 @@ class _SettingsState extends State<Settings> {
               text: 'Add user',
               onClick: () {
                 BlocProvider.of<HomeBloc>(context).add(
-                  HomeLoadIntro(isInit: false),
+                  HomeLoadIntro(introMode: IntroMode.create),
                 );
               },
               margin: const EdgeInsets.symmetric(vertical: 6),

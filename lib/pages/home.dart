@@ -220,11 +220,11 @@ class _HomeState extends State<Home> {
                           ? 'Update weight'
                           : 'Add weight',
                       onClick: () async {
-                        String initValue = progress.weight is Weight
-                            ? progress.weight!.weight.toString()
-                            : progress.prevWeight!.weight.toString();
+                        double initValue = progress.weight is Weight
+                            ? progress.weight!.weight
+                            : progress.prevWeight!.weight;
 
-                        String? result = await CustomDialog().showTextDialog(
+                        double? result = await CustomDialog().showNumericDialog(
                           context: context,
                           header: "New weight",
                           confirmText: "Confirm",
@@ -234,7 +234,7 @@ class _HomeState extends State<Home> {
                         );
 
                         if (result != null && result != initValue) {
-                          double value = double.parse(result);
+                          double value = result;
                           int? id =
                               progress.weight?.id ?? progress.prevWeight?.id;
 

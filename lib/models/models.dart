@@ -4,3 +4,4 @@ export 'star.dart';
 export 'user.dart';
 export 'validators.dart';
 export 'weight.dart';
+export 'intro.dart';

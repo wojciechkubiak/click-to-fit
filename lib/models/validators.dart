@@ -74,6 +74,7 @@ class Validator {
         if (weight.isEmpty) {
           return "Enter your weight";
         }
+        print('WEIGHT $weight');
         if (double.parse(weight) < 31 || double.parse(weight) > 400) {
           return "Enter proper weight";
         }
@@ -92,6 +93,7 @@ class Validator {
       TextInputFormatter.withFunction((oldValue, newValue) {
     try {
       final text = newValue.text;
+
       if (text.isNotEmpty) {
         double parsed = double.parse(text);
         if (parsed > 999 || parsed < 0) {
@@ -101,7 +103,6 @@ class Validator {
         if (splitted.length > 1) {
           String digits = splitted.last;
 
-          print(splitted);
           if (digits.length > 1) {
             return oldValue;
           }
@@ -109,9 +110,12 @@ class Validator {
           return newValue;
         }
         return newValue;
-      } else {
-        return const TextEditingValue(text: '');
       }
+
+      return newValue;
+      // else {
+      // return const TextEditingValue(text: '0');
+      // }
     } catch (e) {
       print(e);
       return oldValue;

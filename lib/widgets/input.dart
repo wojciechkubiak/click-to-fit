@@ -14,13 +14,13 @@ class Input extends StatefulWidget {
   final TextInputType keyboardType;
   final String? Function(String?)? validation;
   final FocusNode? focusNode;
-  final String labelText;
+  final String? labelText;
   final List<TextInputFormatter>? inputFormatters;
 
   const Input({
     Key? key,
     required this.controller,
-    required this.labelText,
+    this.labelText,
     this.validation,
     this.keyboardType = TextInputType.text,
     this.focusNode,
@@ -53,7 +53,7 @@ class _InputState extends State<Input> {
           fillColor: Nord.darkMedium,
           filled: true,
           contentPadding: const EdgeInsets.all(12),
-          label: Text(widget.labelText),
+          label: widget.labelText is String ? Text(widget.labelText!) : null,
           labelStyle: const TextStyle(fontSize: 16, color: Nord.lightMedium),
           enabledBorder: const UnderlineInputBorder(
             borderSide: BorderSide(

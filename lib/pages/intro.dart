@@ -2,6 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:numberpicker/numberpicker.dart';
+import 'package:star_metter/widgets/number_value_picker.dart';
 
 import '../../blocs/home/home_bloc.dart';
 import '../../config/colors.dart';
@@ -11,12 +13,12 @@ import '../../widgets/widgets.dart';
 
 class Intro extends StatefulWidget {
   final Function() handlePage;
-  final bool isInit;
+  final IntroMode introMode;
 
   const Intro({
     Key? key,
     required this.handlePage,
-    required this.isInit,
+    required this.introMode,
   }) : super(key: key);
 
   @override
@@ -39,6 +41,14 @@ class _IntroState extends State<Intro> {
   ];
   int stars = 0;
   int result = 0;
+
+  int _age = 18;
+  int _heightCm = 175;
+  int _heightMm = 5;
+  int _weightKg = 85;
+  int _weightDec = 5;
+  int _targetWeightKg = 75;
+  int _targetWeightDec = 5;
 
   late TextEditingController name;
   late TextEditingController age;
@@ -127,6 +137,179 @@ class _IntroState extends State<Intro> {
     );
   }
 
+  Widget agePicker() {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Nord.auroraGreen,
+            width: 4,
+          ),
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 32.0),
+      margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 62),
+      child: Column(
+        children: [
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 12.0),
+            child: Text(
+              'Age:',
+              style: TextStyle(
+                fontWeight: FontWeight.w300,
+                fontSize: 36,
+                color: Nord.light,
+              ),
+            ),
+          ),
+          NumberValuePicker(
+            value: _age,
+            min: 1,
+            max: 100,
+            onChanged: (value) => setState(() => _age = value),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget heightPicker() {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Nord.auroraGreen,
+            width: 3,
+          ),
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 32.0),
+      margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 62),
+      child: Column(
+        children: [
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 22.0),
+            child: Text(
+              'Height:',
+              style: TextStyle(
+                fontWeight: FontWeight.w300,
+                fontSize: 36,
+                color: Nord.light,
+              ),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              NumberValuePicker(
+                value: _heightCm,
+                min: 65,
+                max: 235,
+                onChanged: (value) => setState(() => _heightCm = value),
+              ),
+              NumberValuePicker(
+                value: _heightMm,
+                min: 0,
+                max: 10,
+                onChanged: (value) => setState(() => _heightMm = value),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget weightPicker() {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Nord.auroraGreen,
+            width: 2,
+          ),
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 32.0),
+      margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 62),
+      child: Column(
+        children: [
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 12.0),
+            child: Text(
+              'Weight:',
+              style: TextStyle(
+                fontWeight: FontWeight.w300,
+                fontSize: 36,
+                color: Nord.light,
+              ),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              NumberValuePicker(
+                value: _weightKg,
+                min: 65,
+                max: 235,
+                onChanged: (value) => setState(() => _weightKg = value),
+              ),
+              NumberValuePicker(
+                value: _weightDec,
+                min: 0,
+                max: 10,
+                onChanged: (value) => setState(() => _weightDec = value),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget targetWeightPicker() {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      padding: const EdgeInsets.symmetric(vertical: 32.0),
+      margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 42),
+      child: Column(
+        children: [
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 12.0),
+            child: Text(
+              'Target weight:',
+              style: TextStyle(
+                fontWeight: FontWeight.w300,
+                fontSize: 36,
+                color: Nord.light,
+              ),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              NumberValuePicker(
+                value: _targetWeightKg,
+                min: 65,
+                max: 235,
+                onChanged: (value) => setState(() => _targetWeightKg = value),
+              ),
+              NumberValuePicker(
+                value: _targetWeightDec,
+                min: 0,
+                max: 10,
+                onChanged: (value) => setState(() => _targetWeightDec = value),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget step1() {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
@@ -179,65 +362,62 @@ class _IntroState extends State<Intro> {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.9,
-      margin: const EdgeInsets.only(top: 54),
+      margin: const EdgeInsets.only(top: 84),
       child: Form(
         key: _formKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text(
-              'Your data:',
-              style: Theme.of(context)
-                  .textTheme
-                  .headline1!
-                  .copyWith(fontWeight: FontWeight.w200),
-              textAlign: TextAlign.center,
-            ),
-            Input(
-              controller: name,
-              validation: validator.nameValidation,
-              labelText: 'Name',
-            ),
-            Input(
-              controller: age,
-              keyboardType: TextInputType.number,
-              validation: validator.ageValidation,
-              labelText: 'Age',
-            ),
-            Input(
-              controller: height,
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
-              validation: validator.heightValidation,
-              labelText: 'Height (cm)',
-              inputFormatters: [validator.digitFormatter],
-            ),
-            Input(
-              controller: weight,
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
-              validation: validator.weightValidation,
-              labelText: 'Weight (kg)',
-              inputFormatters: [validator.digitFormatter],
-            ),
-            Input(
-              controller: targetWeight,
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
-              validation: validator.weightValidation,
-              labelText: 'Target (kg)',
-              inputFormatters: [validator.digitFormatter],
-            ),
-            CustomButton(
-              isDisabled: false,
-              onPressed: () {
-                final FormState? form = _formKey.currentState;
-                if (form!.validate()) {
-                  setState(() => _step = 3);
-                }
-              },
-            )
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                'Your data:',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline1!
+                    .copyWith(fontWeight: FontWeight.w200),
+                textAlign: TextAlign.center,
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 24.0),
+                child: Icon(
+                  Icons.assignment_ind,
+                  size: 152,
+                  color: Nord.light,
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 12.0),
+                child: Text(
+                  'Name:',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w300,
+                    fontSize: 36,
+                    color: Nord.light,
+                  ),
+                ),
+              ),
+              Input(
+                controller: name,
+                validation: validator.nameValidation,
+              ),
+              agePicker(),
+              heightPicker(),
+              weightPicker(),
+              targetWeightPicker(),
+              Padding(
+                padding: const EdgeInsets.only(top: 32.0, bottom: 82),
+                child: CustomButton(
+                  isDisabled: false,
+                  onPressed: () {
+                    final FormState? form = _formKey.currentState;
+                    if (form!.validate()) {
+                      setState(() => _step = 3);
+                    }
+                  },
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -362,10 +542,11 @@ class _IntroState extends State<Intro> {
 
                 User user = User(
                   name: name.text,
-                  age: int.parse(age.text),
-                  height: double.parse(height.text),
-                  initWeight: double.parse(weight.text),
-                  targetWeight: double.parse(targetWeight.text),
+                  age: _age,
+                  height: double.parse('$_heightCm.$_heightMm'),
+                  initWeight: double.parse('$_weightKg.$_weightDec'),
+                  targetWeight:
+                      double.parse('$_targetWeightKg.$_targetWeightDec'),
                   stars: result,
                   gender: parseEnum(_sex),
                   activityLevel: parseEnum(_activityLevel),
@@ -400,17 +581,21 @@ class _IntroState extends State<Intro> {
   Widget build(BuildContext context) {
     return PageBuilder(
       page: _question(_step),
-      isAppBar: _step > 1 || !widget.isInit,
+      isAppBar: _step > 1 || widget.introMode != IntroMode.init,
       isBack: true,
       onBack: () {
-        if (widget.isInit) {
+        if (widget.introMode == IntroMode.init) {
           setState(() => _step = _step - 1);
         } else {
-          BlocProvider.of<HomeBloc>(context).add(
-            HomeLoadInit(
-              handlePage: widget.handlePage,
-            ),
-          );
+          if (_step == 1) {
+            BlocProvider.of<HomeBloc>(context).add(
+              HomeLoadInit(
+                handlePage: widget.handlePage,
+              ),
+            );
+          } else {
+            setState(() => _step = _step - 1);
+          }
         }
       },
     );

@@ -59,7 +59,7 @@ class ChartState extends State<Chart> {
                       border: Border(
                         left: BorderSide(
                           width: 5,
-                          color: Colors.white30,
+                          color: Nord.auroraOrange,
                         ),
                       ),
                     ),
@@ -249,7 +249,10 @@ class ChartState extends State<Chart> {
         bottomTitles: SideTitles(
           showTitles: true,
           getTextStyles: (context, value) => const TextStyle(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+            color: Nord.auroraYellow,
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+          ),
           margin: 16,
           getTitles: (double value) {
             switch (value.toInt()) {

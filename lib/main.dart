@@ -219,7 +219,7 @@ class _MyHomePageState extends State<MyHomePage> {
         if (state is HomeIntro) {
           return Intro(
             handlePage: _setDefaultPage,
-            isInit: state.isInit,
+            introMode: state.introMode,
           );
         }
         if (state is HomeSettings) {

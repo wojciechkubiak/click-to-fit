@@ -9,13 +9,13 @@ class HomeSplash extends HomeState {}
 class HomeLoading extends HomeState {}
 
 class HomeIntro extends HomeState {
-  final bool isInit;
+  final IntroMode introMode;
 
   HomeIntro({
-    required this.isInit,
+    required this.introMode,
   });
 
-  List<Object> get props => [isInit];
+  List<Object> get props => [introMode];
 }
 
 class HomeSettings extends HomeState {

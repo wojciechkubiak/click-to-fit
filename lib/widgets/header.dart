@@ -30,7 +30,7 @@ class Header extends StatelessWidget {
             isHeader ? text : "Loading",
             style: TextStyle(
               fontSize: 46,
-              color: isWhite ? Nord.light : Nord.auroraGreen,
+              color: Nord.light,
               fontFamily: 'Merienda',
               fontWeight: fontWeight,
             ),
