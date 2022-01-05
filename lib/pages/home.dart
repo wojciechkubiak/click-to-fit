@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:star_metter/widgets/custom_icon_button.dart';
+import 'package:star_metter/widgets/shadow_wrapper.dart';
 
 import '../../config/colors.dart';
 import '../../models/models.dart';
@@ -154,25 +156,28 @@ class _HomeState extends State<Home> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              margin: const EdgeInsets.only(bottom: 48),
-              decoration: const BoxDecoration(
-                color: Nord.darker,
-                // border: Border.all(width: 2, color: Nord.darker),
-                // color: isActive ? Nord.dark : Nord.darkMedium,
-                borderRadius: BorderRadius.only(
-                  bottomRight: Radius.circular(32),
-                  bottomLeft: Radius.circular(32),
-                ),
-              ),
+            ShadowWrapper(
               child: Column(
                 children: [
-                  Padding(
+                  Container(
                     padding: const EdgeInsets.only(bottom: 14.0),
+                    width: MediaQuery.of(context).size.width,
+                    margin: const EdgeInsets.symmetric(horizontal: 42),
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          width: 2,
+                          color: Colors.white30,
+                        ),
+                      ),
+                    ),
                     child: Text(
                       'Today:',
-                      style: Theme.of(context).textTheme.headline1,
-                      textAlign: TextAlign.start,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline1!
+                          .copyWith(fontWeight: FontWeight.w200),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                   starCounter(),
@@ -195,7 +200,7 @@ class _HomeState extends State<Home> {
                       'Weight:',
                       style: TextStyle(
                         fontSize: 44,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w300,
                         color: Nord.light,
                       ),
                       textAlign: TextAlign.start,
@@ -210,75 +215,52 @@ class _HomeState extends State<Home> {
                     bmi: getBMI(),
                   ),
                   Center(
-                    child: SizedBox(
-                      width: 240,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                          textStyle: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                          primary: Nord.auroraGreen,
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 15,
-                          ),
-                        ),
-                        onPressed: () async {
-                          String initValue = progress.weight is Weight
-                              ? progress.weight!.weight.toString()
-                              : progress.prevWeight!.weight.toString();
+                    child: CustomIconButton(
+                      text: progress.weight is Weight
+                          ? 'Update weight'
+                          : 'Add weight',
+                      onClick: () async {
+                        String initValue = progress.weight is Weight
+                            ? progress.weight!.weight.toString()
+                            : progress.prevWeight!.weight.toString();
 
-                          String? result = await CustomDialog().showTextDialog(
-                            context: context,
-                            header: "New weight",
-                            confirmText: "Confirm",
-                            declineText: "Cancel",
-                            dialogBody: "test",
-                            initValue: initValue,
-                          );
+                        String? result = await CustomDialog().showTextDialog(
+                          context: context,
+                          header: "New weight",
+                          confirmText: "Confirm",
+                          declineText: "Cancel",
+                          dialogBody: "test",
+                          initValue: initValue,
+                        );
 
-                          if (result != null && result != initValue) {
-                            double value = double.parse(result);
-                            int? id =
-                                progress.weight?.id ?? progress.prevWeight?.id;
+                        if (result != null && result != initValue) {
+                          double value = double.parse(result);
+                          int? id =
+                              progress.weight?.id ?? progress.prevWeight?.id;
 
-                            if (id is int) {
-                              if (progress.weight is Weight) {
-                                setState(
-                                  () => progress.weight!.weight = value,
-                                );
-                                WeightService()
-                                    .updateWeight(recordId: id, weight: value);
-                              } else {
-                                Weight? weight = await WeightService()
-                                    .insertNewRecord(
-                                        id: user.id!, weight: value);
-                                setState(
-                                  () => progress.weight = weight,
-                                );
-                              }
+                          if (id is int) {
+                            if (progress.weight is Weight) {
+                              setState(
+                                () => progress.weight!.weight = value,
+                              );
+                              WeightService()
+                                  .updateWeight(recordId: id, weight: value);
+                            } else {
+                              Weight? weight =
+                                  await WeightService().insertNewRecord(
+                                id: user.id!,
+                                weight: value,
+                              );
+                              setState(
+                                () => progress.weight = weight,
+                              );
                             }
-
-                            if (id != null) {}
                           }
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text(progress.weight is Weight
-                                ? 'Update weight'
-                                : 'Add weight'),
-                            const Icon(
-                              Icons.add,
-                              size: 32,
-                              color: Nord.light,
-                            ),
-                          ],
-                        ),
-                      ),
+
+                          if (id != null) {}
+                        }
+                      },
+                      icon: Icons.add,
                     ),
                   )
                 ],

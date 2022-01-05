@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:star_metter/widgets/shadow_wrapper.dart';
 
 import '../config/colors.dart';
 
@@ -51,11 +52,9 @@ class WeightCard extends StatelessWidget {
       padding: padding,
       child: AspectRatio(
         aspectRatio: isPrevious ? 1 : 2,
-        child: Card(
-          elevation: 5,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18),
-          ),
+        child: ShadowWrapper(
+          margin: EdgeInsets.zero,
+          borderRadius: BorderRadius.circular(18),
           color: Nord.darker,
           child: Center(
             child: Column(

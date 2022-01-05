@@ -8,9 +8,27 @@ class HomeSplash extends HomeState {}
 
 class HomeLoading extends HomeState {}
 
-class HomeIntro extends HomeState {}
+class HomeIntro extends HomeState {
+  final bool isInit;
 
-class HomeSettings extends HomeState {}
+  HomeIntro({
+    required this.isInit,
+  });
+
+  List<Object> get props => [isInit];
+}
+
+class HomeSettings extends HomeState {
+  final List<User> users;
+  final int userId;
+
+  HomeSettings({
+    required this.users,
+    required this.userId,
+  });
+
+  List<Object> get props => [users, userId];
+}
 
 class HomePage extends HomeState {
   final User user;

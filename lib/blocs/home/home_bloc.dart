@@ -34,9 +34,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (event is HomeLoadInit) {
       event.isInit ? emit(HomeSplash()) : emit(HomeLoading());
 
-      await Future.delayed(const Duration(seconds: 5));
+      if (event.isInit) await Future.delayed(const Duration(seconds: 5));
 
-      User? user = await _homeService.getUser(null);
+      User? user = await _homeService.getUser(event.userId);
 
       if (user is User) {
         Weight? weight = await _weightService.getTodayWeight(
@@ -65,7 +65,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           emit(HomePage(user: user, progress: progress));
         }
       } else {
-        emit(HomeIntro());
+        emit(HomeIntro(isInit: true));
       }
     } else {
       emit(HomeSplash());
@@ -77,7 +77,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   void _mapHomeLoadIntro(HomeEvent event, Emitter<HomeState> emit) async {
-    emit(HomeIntro());
+    if (event is HomeLoadIntro) {
+      emit(HomeIntro(isInit: event.isInit));
+    }
   }
 
   void _mapHomeLoadHomePage(HomeEvent event, Emitter<HomeState> emit) async {
@@ -124,6 +126,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   void _mapHomeLoadSettings(HomeEvent event, Emitter<HomeState> emit) async {
     emit(HomeLoading());
 
-    emit(HomeSettings());
+    List<User> users = await _homeService.getUsers();
+    int userId = await _homeService.getUserId();
+
+    emit(HomeSettings(
+      users: users,
+      userId: userId,
+    ));
   }
 }

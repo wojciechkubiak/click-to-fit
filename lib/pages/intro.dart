@@ -11,8 +11,13 @@ import '../../widgets/widgets.dart';
 
 class Intro extends StatefulWidget {
   final Function() handlePage;
+  final bool isInit;
 
-  const Intro({Key? key, required this.handlePage}) : super(key: key);
+  const Intro({
+    Key? key,
+    required this.handlePage,
+    required this.isInit,
+  }) : super(key: key);
 
   @override
   _IntroState createState() => _IntroState();
@@ -130,13 +135,13 @@ class _IntroState extends State<Intro> {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
-            'Gender',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 32,
-              color: Nord.light,
-            ),
+          Text(
+            'Gender:',
+            style: Theme.of(context)
+                .textTheme
+                .headline1!
+                .copyWith(fontWeight: FontWeight.w200),
+            textAlign: TextAlign.center,
           ),
           Wrap(
             alignment: WrapAlignment.center,
@@ -180,13 +185,13 @@ class _IntroState extends State<Intro> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            const Text(
-              'Personal data',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 32,
-                color: Nord.light,
-              ),
+            Text(
+              'Your data:',
+              style: Theme.of(context)
+                  .textTheme
+                  .headline1!
+                  .copyWith(fontWeight: FontWeight.w200),
+              textAlign: TextAlign.center,
             ),
             Input(
               controller: name,
@@ -245,13 +250,13 @@ class _IntroState extends State<Intro> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          const Text(
-            'Activity',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 32,
-              color: Nord.light,
-            ),
+          Text(
+            'Activity:',
+            style: Theme.of(context)
+                .textTheme
+                .headline1!
+                .copyWith(fontWeight: FontWeight.w200),
+            textAlign: TextAlign.center,
           ),
           Lottie.asset(
             'assets/lotties/activity.json',
@@ -296,13 +301,13 @@ class _IntroState extends State<Intro> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          const Text(
-            'Your plan',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 32,
-              color: Nord.light,
-            ),
+          Text(
+            'Your plan:',
+            style: Theme.of(context)
+                .textTheme
+                .headline1!
+                .copyWith(fontWeight: FontWeight.w200),
+            textAlign: TextAlign.center,
           ),
           Column(
             children: [
@@ -395,9 +400,19 @@ class _IntroState extends State<Intro> {
   Widget build(BuildContext context) {
     return PageBuilder(
       page: _question(_step),
-      isAppBar: _step > 1,
+      isAppBar: _step > 1 || !widget.isInit,
       isBack: true,
-      onBack: () => setState(() => _step = _step - 1),
+      onBack: () {
+        if (widget.isInit) {
+          setState(() => _step = _step - 1);
+        } else {
+          BlocProvider.of<HomeBloc>(context).add(
+            HomeLoadInit(
+              handlePage: widget.handlePage,
+            ),
+          );
+        }
+      },
     );
   }
 }

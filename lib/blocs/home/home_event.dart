@@ -7,13 +7,26 @@ abstract class HomeEvent {
 class HomeLoadInit extends HomeEvent {
   final bool isInit;
   final Function() handlePage;
+  final int? userId;
 
-  HomeLoadInit({this.isInit = false, required this.handlePage});
+  HomeLoadInit({
+    this.isInit = false,
+    required this.handlePage,
+    this.userId,
+  });
 
   List<Object?> get props => [isInit];
 }
 
-class HomeLoadIntro extends HomeEvent {}
+class HomeLoadIntro extends HomeEvent {
+  final bool isInit;
+
+  HomeLoadIntro({
+    this.isInit = true,
+  });
+
+  List<Object?> get props => [isInit];
+}
 
 class HomeLoadSplash extends HomeEvent {}
 

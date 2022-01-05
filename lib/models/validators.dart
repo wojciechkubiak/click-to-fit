@@ -94,13 +94,14 @@ class Validator {
       final text = newValue.text;
       if (text.isNotEmpty) {
         double parsed = double.parse(text);
-        if (parsed > 999 || parsed < 1) {
+        if (parsed > 999 || parsed < 0) {
           return oldValue;
         }
         List<String> splitted = text.split('.');
         if (splitted.length > 1) {
           String digits = splitted.last;
 
+          print(splitted);
           if (digits.length > 1) {
             return oldValue;
           }
@@ -108,8 +109,12 @@ class Validator {
           return newValue;
         }
         return newValue;
+      } else {
+        return const TextEditingValue(text: '');
       }
-    } catch (e) {}
-    return oldValue;
+    } catch (e) {
+      print(e);
+      return oldValue;
+    }
   });
 }

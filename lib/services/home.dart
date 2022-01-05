@@ -18,6 +18,8 @@ abstract class DataHomeService extends ConfigService {
     required Weight? prevWeight,
     required List<Weight>? weightProgress,
   });
+  Future<List<User>> getUsers();
+  Future<int> getUserId();
 }
 
 class HomeService extends DataHomeService {
@@ -53,6 +55,8 @@ class HomeService extends DataHomeService {
     try {
       final db = await storageService.getDatabase();
       List<Map<String, dynamic>> userList = [];
+
+      if (id is int) prefs.setInt('userId', id);
 
       id ??= prefs.getInt('userId');
 
@@ -112,5 +116,30 @@ class HomeService extends DataHomeService {
       print(stackTrace);
       return null;
     }
+  }
+
+  @override
+  Future<List<User>> getUsers() async {
+    StorageService storageService = StorageService();
+
+    final db = await storageService.getDatabase();
+    List<Map<String, dynamic>> userList = await db.query(
+      'users',
+    );
+    List<User> users = [];
+
+    for (var element in userList) {
+      users.add(User.fromJson(element));
+    }
+
+    return users;
+  }
+
+  @override
+  Future<int> getUserId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int? id = prefs.getInt('userId');
+
+    return id ?? 0;
   }
 }

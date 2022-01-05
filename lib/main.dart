@@ -219,10 +219,15 @@ class _MyHomePageState extends State<MyHomePage> {
         if (state is HomeIntro) {
           return Intro(
             handlePage: _setDefaultPage,
+            isInit: state.isInit,
           );
         }
         if (state is HomeSettings) {
-          return Settings(handlePage: _setDefaultPage);
+          return Settings(
+            handlePage: _setDefaultPage,
+            users: state.users,
+            userId: state.userId,
+          );
         }
         return const Loading();
       },

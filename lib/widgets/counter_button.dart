@@ -36,19 +36,19 @@ class _CounterButtonState extends State<CounterButton> {
           });
         },
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 100),
-          height: 52,
-          width: 52,
-          decoration: BoxDecoration(
-            border: Border.all(
-              width: isClicked ? 4 : 3,
-              color: Nord.lightDark,
-            ),
-            borderRadius: const BorderRadius.all(Radius.circular(4)),
-          ),
+          duration: const Duration(milliseconds: 200),
+          height: 58,
+          width: 58,
+          // decoration: BoxDecoration(
+          //   border: Border.all(
+          //     width: isClicked ? 4 : 3,
+          //     color: Nord.lightDark,
+          //   ),
+          //   borderRadius: const BorderRadius.all(Radius.circular(4)),
+          // ),
           child: Icon(
             widget.icon,
-            size: 24,
+            size: isClicked ? 52 : 48,
             color: Nord.light,
           ),
         ),

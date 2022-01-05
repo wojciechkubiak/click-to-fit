@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:star_metter/widgets/shadow_wrapper.dart';
 
 import '../config/colors.dart';
 import '../models/models.dart';
@@ -38,25 +39,37 @@ class ChartState extends State<Chart> {
   Widget build(BuildContext context) {
     return AspectRatio(
       aspectRatio: 1,
-      child: Card(
-        elevation: 5,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+      child: ShadowWrapper(
+        margin: EdgeInsets.zero,
+        borderRadius: BorderRadius.circular(18),
         color: Nord.darker,
         child: Stack(
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
-                  const Text(
-                    'This week',
-                    style: TextStyle(
-                      color: Nord.light,
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 2, horizontal: 16),
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        left: BorderSide(
+                          width: 5,
+                          color: Colors.white30,
+                        ),
+                      ),
+                    ),
+                    child: const Text(
+                      'This week',
+                      style: TextStyle(
+                        color: Nord.light,
+                        fontSize: 32,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                   ),
                   const SizedBox(

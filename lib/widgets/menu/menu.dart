@@ -118,6 +118,7 @@ class _MenuState extends State<Menu> {
             padding: EdgeInsets.only(top: 92),
             showBottomText: true,
             isWhite: true,
+            isHeader: true,
           ),
           _menuButtons(),
           Container(),
