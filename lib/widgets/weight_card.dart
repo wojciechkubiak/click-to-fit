@@ -52,10 +52,11 @@ class WeightCard extends StatelessWidget {
       padding: padding,
       child: AspectRatio(
         aspectRatio: isPrevious ? 1 : 2,
-        child: ShadowWrapper(
-          margin: EdgeInsets.zero,
-          borderRadius: BorderRadius.circular(18),
-          color: Nord.darker,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Nord.darker,
+            borderRadius: BorderRadius.circular(18),
+          ),
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

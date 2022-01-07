@@ -156,7 +156,15 @@ class _HomeState extends State<Home> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ShadowWrapper(
+            Container(
+              margin: const EdgeInsets.only(bottom: 48),
+              decoration: const BoxDecoration(
+                color: Nord.darker,
+                borderRadius: BorderRadius.only(
+                  bottomRight: Radius.circular(32),
+                  bottomLeft: Radius.circular(32),
+                ),
+              ),
               child: Column(
                 children: [
                   Container(

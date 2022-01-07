@@ -39,10 +39,11 @@ class ChartState extends State<Chart> {
   Widget build(BuildContext context) {
     return AspectRatio(
       aspectRatio: 1,
-      child: ShadowWrapper(
-        margin: EdgeInsets.zero,
-        borderRadius: BorderRadius.circular(18),
-        color: Nord.darker,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Nord.darker,
+          borderRadius: BorderRadius.circular(18),
+        ),
         child: Stack(
           children: <Widget>[
             Padding(
