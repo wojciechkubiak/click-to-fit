@@ -18,7 +18,16 @@ class CustomAppBar extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 82,
-      color: color,
+      decoration: const BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black26,
+            offset: Offset(0.0, 1.0), //(x,y)
+            blurRadius: 6.0,
+          ),
+        ],
+        color: Colors.white,
+      ),
       child: Row(
         children: [
           Container(
@@ -30,7 +39,7 @@ class CustomAppBar extends StatelessWidget {
               icon: Icon(
                 isBack ? Icons.arrow_back : Icons.menu,
                 size: 32,
-                color: Nord.light,
+                color: CustomColor.primaryAccent,
               ),
             ),
           ),

@@ -24,20 +24,21 @@ class CustomSlider extends StatelessWidget {
     return SliderTheme(
       data: const SliderThemeData(
         valueIndicatorTextStyle: TextStyle(
-          color: Nord.dark,
+          color: Colors.black87,
           letterSpacing: 1.0,
         ),
-        valueIndicatorColor: Nord.light,
+        valueIndicatorColor: Color(0xFFF1F1F1),
       ),
       child: Slider(
-          value: value,
-          min: min,
-          max: max,
-          divisions: divisions,
-          inactiveColor: Nord.lightDark,
-          activeColor: Nord.auroraYellow,
-          label: header,
-          onChanged: onChanged),
+        value: value,
+        min: min,
+        max: max,
+        divisions: divisions,
+        inactiveColor: CustomColor.primaryAccentLight,
+        activeColor: CustomColor.primaryAccent,
+        label: header,
+        onChanged: onChanged,
+      ),
     );
   }
 }

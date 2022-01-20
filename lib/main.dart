@@ -132,9 +132,34 @@ class _MyHomePageState extends State<MyHomePage> {
           primarySwatch: Colors.blue,
           textTheme: const TextTheme(
             headline1: TextStyle(
-              fontSize: 64,
+              fontSize: 52,
               fontWeight: FontWeight.bold,
-              color: Nord.light,
+              color: CustomColor.primaryAccent,
+              fontFamily: 'Merienda',
+            ),
+            headline2: TextStyle(
+              fontSize: 70,
+              fontWeight: FontWeight.w200,
+              color: Colors.black,
+              fontFamily: 'Roboto',
+            ),
+            headline3: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.w400,
+              color: Colors.black87,
+              fontFamily: 'Roboto',
+            ),
+            headline4: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w400,
+              color: Colors.black87,
+              fontFamily: 'Roboto',
+            ),
+            bodyText1: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w300,
+              color: Colors.black87,
+              fontFamily: 'Roboto',
             ),
           ),
         ),
@@ -145,17 +170,14 @@ class _MyHomePageState extends State<MyHomePage> {
             value: SystemUiOverlayStyle.light.copyWith(
               systemNavigationBarColor: Colors.white,
               statusBarBrightness:
-                  Platform.isIOS ? Brightness.dark : Brightness.light,
+                  Platform.isIOS ? Brightness.light : Brightness.dark,
               statusBarIconBrightness:
-                  Platform.isIOS ? Brightness.dark : Brightness.light,
+                  Platform.isIOS ? Brightness.light : Brightness.dark,
               systemNavigationBarIconBrightness:
-                  Platform.isIOS ? Brightness.dark : Brightness.light,
+                  Platform.isIOS ? Brightness.light : Brightness.dark,
               systemNavigationBarDividerColor: Colors.white,
-              statusBarColor: isOpen
-                  ? Nord.dark
-                  : _currentPage == CurrentPage.HOME
-                      ? Nord.darker
-                      : Nord.darkMedium,
+              statusBarColor:
+                  isOpen ? CustomColor.primaryAccentLight : Colors.white,
             ),
             child: _blocBuilder(),
           ),

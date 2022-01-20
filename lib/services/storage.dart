@@ -16,11 +16,11 @@ class StorageService extends DataStorageService {
       onCreate: (db, version) async {
         await db.execute(
             '''CREATE TABLE users (pk INTEGER PRIMARY KEY, name TEXT, age INTEGER, 
-          height REAL, initWeight REAL, targetWeight REAL, stars INTEGER, 
+          height REAL, heightUnit TEXT, initWeight REAL, initWeightUnit TEXT, targetWeight REAL, targetWeightUnit TEXT, stars INTEGER, 
           gender STRING, activityLevel STRING, initDate TEXT)''');
         await db.execute(
             '''CREATE TABLE weights (pk INTEGER PRIMARY KEY, date TEXT, userId INTEGER,
-            weight REAL)''');
+            weight REAL, unit TEXT)''');
         await db
             .execute('''CREATE TABLE stars (pk INTEGER PRIMARY KEY, date TEXT, 
             userId INTEGER, stars INT, progressLimit INT)''');

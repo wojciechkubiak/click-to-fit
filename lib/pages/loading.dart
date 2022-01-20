@@ -19,9 +19,9 @@ class _LoadingState extends State<Loading> {
   Widget build(BuildContext context) {
     return Material(
       child: Container(
-        color: Nord.darkMedium,
+        color: Colors.white,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Lottie.asset(
@@ -34,26 +34,6 @@ class _LoadingState extends State<Loading> {
                 Header(isHeader: widget.isHeader),
               ],
             ),
-            Column(
-              children: [
-                Container(),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 50,
-                  color: Nord.auroraYellow,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 50,
-                  color: Nord.auroraGreen,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 50,
-                  color: Nord.auroraRed,
-                ),
-              ],
-            )
           ],
         ),
       ),

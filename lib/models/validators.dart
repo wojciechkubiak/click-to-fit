@@ -5,7 +5,7 @@ class Validator {
     try {
       if (name != null) {
         if (name.isEmpty) {
-          return "Enter your age";
+          return "Enter your name";
         }
 
         if (name.length > 20) {

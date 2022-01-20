@@ -13,7 +13,7 @@ class CustomButton extends StatelessWidget {
     required this.onPressed,
     this.isDisabled = false,
     this.text = "Next",
-    this.color = Nord.auroraGreen,
+    this.color = CustomColor.primaryAccent,
   }) : super(key: key);
 
   @override
@@ -25,16 +25,13 @@ class CustomButton extends StatelessWidget {
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(24),
+              borderRadius: BorderRadius.circular(32),
             ),
-            textStyle: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
+            textStyle: Theme.of(context).textTheme.headline4,
             primary: color,
             padding: const EdgeInsets.symmetric(
               vertical: 15,
-              horizontal: 80,
+              horizontal: 72,
             ),
           ),
           onPressed: onPressed,

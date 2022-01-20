@@ -28,18 +28,12 @@ class Header extends StatelessWidget {
         children: [
           Text(
             isHeader ? text : "Loading",
-            style: TextStyle(
-              fontSize: 46,
-              color: Nord.light,
-              fontFamily: 'Merienda',
-              fontWeight: fontWeight,
-            ),
+            style: Theme.of(context).textTheme.headline1,
           ),
           if (showBottomText && isHeader)
-            const Text(
+            Text(
               'LOSE WEIGHT LIKE A STAR',
-              style: TextStyle(
-                  fontSize: 14, color: Nord.light, fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.bodyText1,
             ),
         ],
       ),

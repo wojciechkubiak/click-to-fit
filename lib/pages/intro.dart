@@ -29,6 +29,11 @@ class _IntroState extends State<Intro> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final validator = Validator();
 
+  final double imperialHeightMultiplier = 3.35; // 1m = 3.35ft
+  final double imperialWeightMultiplier = 2.21; // 1kg = 2.21lb
+  final double feet = 30.48;
+  final double inch = 2.54;
+
   int _step = 1;
   Sex? _sex;
   double _activityLevel = 3;
@@ -43,12 +48,22 @@ class _IntroState extends State<Intro> {
   int result = 0;
 
   int _age = 18;
+
   int _heightCm = 175;
   int _heightMm = 5;
+  int _heightFeet = 5;
+  int _heightInch = 8;
+  Unit _heightUnit = Unit.metric;
+
   int _weightKg = 85;
   int _weightDec = 5;
+  int _weightLb = 187;
+  int _weightOz = 4;
+  Unit _weightUnit = Unit.metric;
+
   int _targetWeightKg = 75;
   int _targetWeightDec = 5;
+  Unit _targetWeightUnit = Unit.metric;
 
   late TextEditingController name;
   late TextEditingController age;
@@ -92,6 +107,30 @@ class _IntroState extends State<Intro> {
     return (cpm / 100).ceil();
   }
 
+  void parseHeight(Unit unit, int beforeDecimal, int afterDecimal) async {
+    if (unit == Unit.imperial) {
+      double initial = double.tryParse('$beforeDecimal.$afterDecimal') ?? 5;
+      int _feet = (initial / feet).floor();
+      double rest = initial - (_feet * feet);
+      int _inch = (rest / inch).floor();
+
+      setState(() {
+        _heightFeet = _feet;
+        _heightInch = _inch;
+      });
+    } else {
+      String _cm =
+          ((beforeDecimal * feet) + (afterDecimal * inch)).toStringAsFixed(1);
+      List<String> _arr = _cm.split('.');
+
+      setState(() {
+        _heightCm = int.tryParse(_arr[0]) ?? 100;
+        _heightMm = int.tryParse(_arr[1]) ?? 0;
+      });
+    }
+    // return unit == Unit.imperial ? value * imperialHeightMultiplier : ;
+  }
+
   String parseEnum(dynamic en) {
     return en.toString().split('.').last;
   }
@@ -104,15 +143,7 @@ class _IntroState extends State<Intro> {
   }) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            width: 2,
-            color: isActive ? Nord.auroraGreen : Nord.lightDark,
-          ),
-          // color: isActive ? Nord.dark : Nord.darkMedium,
-          borderRadius: const BorderRadius.all(Radius.circular(8)),
-        ),
+      child: SizedBox(
         width: 150,
         height: 150,
         child: Column(
@@ -120,16 +151,18 @@ class _IntroState extends State<Intro> {
           children: [
             Icon(
               icon,
-              size: 72,
-              color: isActive ? Nord.auroraGreen : Nord.lightDark,
+              size: 122,
+              color: isActive ? CustomColor.primaryAccentLight : Colors.grey,
             ),
             Text(
               text,
-              style: const TextStyle(
-                color: Nord.lightDark,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                    color: isActive
+                        ? CustomColor.primaryAccentLight
+                        : Colors.black54,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w400,
+                  ),
             ),
           ],
         ),
@@ -140,33 +173,34 @@ class _IntroState extends State<Intro> {
   Widget agePicker() {
     return Container(
       width: MediaQuery.of(context).size.width,
-      decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: Nord.auroraGreen,
-            width: 4,
-          ),
-        ),
-      ),
-      padding: const EdgeInsets.symmetric(vertical: 32.0),
-      margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 62),
+      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      margin: const EdgeInsets.symmetric(vertical: 62, horizontal: 32),
       child: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 12.0),
-            child: Text(
-              'Age:',
-              style: TextStyle(
-                fontWeight: FontWeight.w300,
-                fontSize: 36,
-                color: Nord.light,
-              ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12.0),
+            child: Column(
+              children: [
+                Text(
+                  'How young are you?',
+                  style: Theme.of(context).textTheme.headline3,
+                  textAlign: TextAlign.start,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12.0),
+                  child: Text(
+                    "We need it for our calculations",
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                )
+              ],
             ),
           ),
           NumberValuePicker(
             value: _age,
             min: 1,
             max: 100,
+            axis: Axis.horizontal,
             onChanged: (value) => setState(() => _age = value),
           ),
         ],
@@ -174,49 +208,90 @@ class _IntroState extends State<Intro> {
     );
   }
 
+  Widget unitPicker({
+    required String text,
+    required void Function() onTap,
+    required bool isActive,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: isActive ? CustomColor.primaryAccent : Colors.white,
+              width: 3,
+            ),
+          ),
+        ),
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          text,
+          style: Theme.of(context).textTheme.headline3!.copyWith(fontSize: 18),
+        ),
+      ),
+    );
+  }
+
   Widget heightPicker() {
     return Container(
       width: MediaQuery.of(context).size.width,
-      decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: Nord.auroraGreen,
-            width: 3,
-          ),
-        ),
-      ),
-      padding: const EdgeInsets.symmetric(vertical: 32.0),
-      margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 62),
+      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      margin: const EdgeInsets.symmetric(horizontal: 42),
       child: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 22.0),
-            child: Text(
-              'Height:',
-              style: TextStyle(
-                fontWeight: FontWeight.w300,
-                fontSize: 36,
-                color: Nord.light,
-              ),
-            ),
-          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               NumberValuePicker(
-                value: _heightCm,
-                min: 65,
-                max: 235,
-                onChanged: (value) => setState(() => _heightCm = value),
+                value: _heightUnit == Unit.metric ? _heightCm : _heightFeet,
+                min: _heightUnit == Unit.metric ? 110 : 4,
+                max: _heightUnit == Unit.metric ? 245 : 8,
+                onChanged: (value) => setState(() => _heightUnit == Unit.metric
+                    ? _heightCm = value
+                    : _heightFeet = value),
+              ),
+              const Text(
+                ',',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               NumberValuePicker(
-                value: _heightMm,
+                value: _heightUnit == Unit.metric ? _heightMm : _heightInch,
                 min: 0,
-                max: 10,
-                onChanged: (value) => setState(() => _heightMm = value),
+                max: _heightUnit == Unit.metric ? 10 : 11,
+                onChanged: (value) => setState(
+                  () => _heightUnit == Unit.metric
+                      ? _heightMm = value
+                      : _heightInch = value,
+                ),
               ),
             ],
           ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                unitPicker(
+                  text: 'Metric (m)',
+                  onTap: () {
+                    parseHeight(Unit.metric, _heightFeet, _heightInch);
+                    setState(() => _heightUnit = Unit.metric);
+                  },
+                  isActive: _heightUnit == Unit.metric,
+                ),
+                unitPicker(
+                  text: 'Imperial (lb)',
+                  onTap: () {
+                    parseHeight(Unit.imperial, _heightCm, _heightMm);
+                    setState(() => _heightUnit = Unit.imperial);
+                  },
+                  isActive: _heightUnit == Unit.imperial,
+                )
+              ],
+            ),
+          )
         ],
       ),
     );
@@ -225,45 +300,26 @@ class _IntroState extends State<Intro> {
   Widget weightPicker() {
     return Container(
       width: MediaQuery.of(context).size.width,
-      decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: Nord.auroraGreen,
-            width: 2,
-          ),
-        ),
-      ),
       padding: const EdgeInsets.symmetric(vertical: 32.0),
-      margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 62),
-      child: Column(
+      margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 42),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 12.0),
-            child: Text(
-              'Weight:',
-              style: TextStyle(
-                fontWeight: FontWeight.w300,
-                fontSize: 36,
-                color: Nord.light,
-              ),
-            ),
+          NumberValuePicker(
+            value: _weightKg,
+            min: 65,
+            max: 235,
+            onChanged: (value) => setState(() => _weightKg = value),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              NumberValuePicker(
-                value: _weightKg,
-                min: 65,
-                max: 235,
-                onChanged: (value) => setState(() => _weightKg = value),
-              ),
-              NumberValuePicker(
-                value: _weightDec,
-                min: 0,
-                max: 10,
-                onChanged: (value) => setState(() => _weightDec = value),
-              ),
-            ],
+          const Text(
+            ',',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          NumberValuePicker(
+            value: _weightDec,
+            min: 0,
+            max: 10,
+            onChanged: (value) => setState(() => _weightDec = value),
           ),
         ],
       ),
@@ -275,35 +331,24 @@ class _IntroState extends State<Intro> {
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.symmetric(vertical: 32.0),
       margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 42),
-      child: Column(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 12.0),
-            child: Text(
-              'Target weight:',
-              style: TextStyle(
-                fontWeight: FontWeight.w300,
-                fontSize: 36,
-                color: Nord.light,
-              ),
-            ),
+          NumberValuePicker(
+            value: _targetWeightKg,
+            min: 65,
+            max: 235,
+            onChanged: (value) => setState(() => _targetWeightKg = value),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              NumberValuePicker(
-                value: _targetWeightKg,
-                min: 65,
-                max: 235,
-                onChanged: (value) => setState(() => _targetWeightKg = value),
-              ),
-              NumberValuePicker(
-                value: _targetWeightDec,
-                min: 0,
-                max: 10,
-                onChanged: (value) => setState(() => _targetWeightDec = value),
-              ),
-            ],
+          const Text(
+            ',',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          NumberValuePicker(
+            value: _targetWeightDec,
+            min: 0,
+            max: 10,
+            onChanged: (value) => setState(() => _targetWeightDec = value),
           ),
         ],
       ),
@@ -318,13 +363,22 @@ class _IntroState extends State<Intro> {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            'Gender:',
-            style: Theme.of(context)
-                .textTheme
-                .headline1!
-                .copyWith(fontWeight: FontWeight.w200),
-            textAlign: TextAlign.center,
+          Column(
+            children: [
+              Text(
+                'Gender:',
+                style: Theme.of(context).textTheme.headline2,
+                textAlign: TextAlign.center,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12.0, horizontal: 42),
+                child: Text(
+                  "Pick your biological sex, so we can calculate your diet",
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+              ),
+            ],
           ),
           Wrap(
             alignment: WrapAlignment.center,
@@ -369,41 +423,40 @@ class _IntroState extends State<Intro> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text(
-                'Your data:',
-                style: Theme.of(context)
-                    .textTheme
-                    .headline1!
-                    .copyWith(fontWeight: FontWeight.w200),
-                textAlign: TextAlign.center,
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 24.0),
-                child: Icon(
-                  Icons.assignment_ind,
-                  size: 152,
-                  color: Nord.light,
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 12.0),
+              Padding(
+                padding: const EdgeInsets.only(top: 32.0),
                 child: Text(
-                  'Name:',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w300,
-                    fontSize: 36,
-                    color: Nord.light,
-                  ),
+                  'Your data:',
+                  style: Theme.of(context).textTheme.headline2,
+                  textAlign: TextAlign.center,
                 ),
               ),
-              Input(
-                controller: name,
-                validation: validator.nameValidation,
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 42.0),
+                child: Column(
+                  children: [
+                    Text(
+                      'What is your name?',
+                      style: Theme.of(context).textTheme.headline3,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 12.0),
+                      child: Text(
+                        "This is how we will address you",
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                child: Input(
+                  controller: name,
+                  validation: validator.nameValidation,
+                ),
               ),
               agePicker(),
-              heightPicker(),
-              weightPicker(),
-              targetWeightPicker(),
               Padding(
                 padding: const EdgeInsets.only(top: 32.0, bottom: 82),
                 child: CustomButton(
@@ -430,13 +483,127 @@ class _IntroState extends State<Intro> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Text(
-            'Activity:',
-            style: Theme.of(context)
-                .textTheme
-                .headline1!
-                .copyWith(fontWeight: FontWeight.w200),
-            textAlign: TextAlign.center,
+          Column(
+            children: [
+              Text(
+                'Height:',
+                style: Theme.of(context).textTheme.headline2,
+                textAlign: TextAlign.center,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12.0, horizontal: 62),
+                child: Text(
+                  "Pick the one that you feel that fits you the best.",
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+              )
+            ],
+          ),
+          heightPicker(),
+          CustomButton(
+            text: 'Next',
+            isDisabled: false,
+            onPressed: () => setState(() => _step = 4),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget step4() {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height * 0.7,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Column(
+            children: [
+              Text(
+                'Weight:',
+                style: Theme.of(context).textTheme.headline2,
+                textAlign: TextAlign.center,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12.0, horizontal: 62),
+                child: Text(
+                  "Pick the one that you feel that fits you the best.",
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+              )
+            ],
+          ),
+          weightPicker(),
+          CustomButton(
+            text: 'Next',
+            isDisabled: false,
+            onPressed: () => setState(() => _step = 5),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget step5() {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height * 0.7,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Column(
+            children: [
+              Text(
+                'Target:',
+                style: Theme.of(context).textTheme.headline2,
+                textAlign: TextAlign.center,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12.0, horizontal: 62),
+                child: Text(
+                  "Pick the one that you feel that fits you the best.",
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+              )
+            ],
+          ),
+          targetWeightPicker(),
+          CustomButton(
+            text: 'Next',
+            isDisabled: false,
+            onPressed: () => setState(() => _step = 6),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget step6() {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height * 0.7,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Column(
+            children: [
+              Text(
+                'Activity:',
+                style: Theme.of(context).textTheme.headline2,
+                textAlign: TextAlign.center,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12.0, horizontal: 62),
+                child: Text(
+                  "Pick the one that you feel that fits you the best.",
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+              )
+            ],
           ),
           Lottie.asset(
             'assets/lotties/activity.json',
@@ -465,7 +632,7 @@ class _IntroState extends State<Intro> {
 
               Future.delayed(
                 const Duration(milliseconds: 500),
-                () => setState(() => _step = 4),
+                () => setState(() => _step = 7),
               );
             },
           )
@@ -474,90 +641,108 @@ class _IntroState extends State<Intro> {
     );
   }
 
-  Widget step4() {
-    return SizedBox(
+  Widget step7() {
+    return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.7,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Text(
-            'Your plan:',
-            style: Theme.of(context)
-                .textTheme
-                .headline1!
-                .copyWith(fontWeight: FontWeight.w200),
-            textAlign: TextAlign.center,
-          ),
-          Column(
-            children: [
-              const Icon(
-                Icons.star_border,
-                size: 122,
-                color: Nord.auroraGreen,
+      height: MediaQuery.of(context).size.height * 1,
+      padding: const EdgeInsets.only(top: 82),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 40.0),
+              child: Column(
+                children: [
+                  Text(
+                    'Your plan:',
+                    style: Theme.of(context).textTheme.headline2,
+                    textAlign: TextAlign.center,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12.0, horizontal: 52),
+                    child: Text(
+                      "We have counted out that you need $stars stars to keep your weight. Use slider in case you want to lose or gain some weight.",
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  )
+                ],
               ),
-              Text(
-                result.toString(),
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Nord.light,
-                  fontSize: 32,
+            ),
+            Column(
+              children: [
+                Lottie.asset(
+                  'assets/lotties/star.json',
+                  width: 220,
+                  height: 220,
+                  repeat: false,
                 ),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(24),
-            child: CustomSlider(
-              value: result.toDouble(),
-              header: '${(result - stars) * 100}g/week',
-              onChanged: (double value) {
-                setState(() {
-                  result = value.toInt();
-                });
-              },
-              min: stars - 10,
-              max: stars + 10,
-              divisions: 20,
+                Text(
+                  result.toString(),
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline2!
+                      .copyWith(fontSize: 52),
+                ),
+              ],
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.all(24.0),
-            child: Text(
-              'Reminder: Each star equals to 100 kcal. Remember about your healt! Do not rush - diet should not be a suffering!',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: Nord.lightMedium,
+            Padding(
+              padding: const EdgeInsets.all(24),
+              child: CustomSlider(
+                value: result.toDouble(),
+                header: '${(result - stars) * 100}g/week',
+                onChanged: (double value) {
+                  setState(() {
+                    result = value.toInt();
+                  });
+                },
+                min: stars - 10,
+                max: stars + 10,
+                divisions: 20,
               ),
-              textAlign: TextAlign.center,
             ),
-          ),
-          CustomButton(
-              text: 'Proceed to App',
-              isDisabled: false,
-              onPressed: () {
-                DateTime now = DateTime.now();
-                DateParser dateParser = DateParser(date: now);
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 24.0, horizontal: 52),
+              child: Text(
+                'Reminder: Each star equals to 100 kcal. Remember about your healt! Do not rush - diet should not be a suffering!',
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 70.0),
+              child: CustomButton(
+                  text: 'Proceed to App',
+                  isDisabled: false,
+                  onPressed: () {
+                    DateTime now = DateTime.now();
+                    DateParser dateParser = DateParser(date: now);
 
-                User user = User(
-                  name: name.text,
-                  age: _age,
-                  height: double.parse('$_heightCm.$_heightMm'),
-                  initWeight: double.parse('$_weightKg.$_weightDec'),
-                  targetWeight:
-                      double.parse('$_targetWeightKg.$_targetWeightDec'),
-                  stars: result,
-                  gender: parseEnum(_sex),
-                  activityLevel: parseEnum(_activityLevel),
-                  initDate: dateParser.getDateWithoutTime(),
-                );
+                    User user = User(
+                      name: name.text,
+                      age: _age,
+                      height: double.parse('$_heightCm.$_heightMm'),
+                      heightUnit: _heightUnit.toString(),
+                      initWeight: double.parse('$_weightKg.$_weightDec'),
+                      initWeightUnit: _weightUnit.toString(),
+                      targetWeight:
+                          double.parse('$_targetWeightKg.$_targetWeightDec'),
+                      targetWeightUnit: _targetWeightUnit.toString(),
+                      stars: result,
+                      gender: parseEnum(_sex),
+                      activityLevel: parseEnum(_activityLevel),
+                      initDate: dateParser.getDateWithoutTime(),
+                    );
 
-                widget.handlePage();
-                BlocProvider.of<HomeBloc>(context)
-                    .add(HomeLoadPage(user: user));
-              })
-        ],
+                    print('USER ${user.toJson()}');
+                    // widget.handlePage();
+                    // BlocProvider.of<HomeBloc>(context)
+                    //     .add(HomeLoadPage(user: user));
+                  }),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -572,6 +757,12 @@ class _IntroState extends State<Intro> {
         return step3();
       case 4:
         return step4();
+      case 5:
+        return step5();
+      case 6:
+        return step6();
+      case 7:
+        return step7();
       default:
         return const Loading();
     }
@@ -582,6 +773,7 @@ class _IntroState extends State<Intro> {
     return PageBuilder(
       page: _question(_step),
       isAppBar: _step > 1 || widget.introMode != IntroMode.init,
+      margin: const EdgeInsets.only(bottom: 20),
       isBack: true,
       onBack: () {
         if (widget.introMode == IntroMode.init) {

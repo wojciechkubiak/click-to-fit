@@ -7,6 +7,7 @@ class NumberValuePicker extends StatelessWidget {
   final int min;
   final int max;
   final Function(int) onChanged;
+  final Axis axis;
 
   const NumberValuePicker({
     Key? key,
@@ -14,25 +15,32 @@ class NumberValuePicker extends StatelessWidget {
     required this.min,
     required this.max,
     required this.onChanged,
+    this.axis = Axis.vertical,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return NumberPicker(
-      value: value,
-      minValue: min,
-      maxValue: max,
-      step: 1,
-      itemHeight: 32,
-      axis: Axis.vertical,
-      onChanged: onChanged,
-      textStyle: const TextStyle(
+    return Container(
+      decoration: BoxDecoration(
         color: Colors.white,
-        fontSize: 20,
+        borderRadius: BorderRadius.circular(20),
       ),
-      selectedTextStyle: const TextStyle(
-        color: Nord.auroraGreen,
-        fontSize: 32,
+      child: NumberPicker(
+        value: value,
+        minValue: min,
+        maxValue: max,
+        step: 1,
+        itemHeight: axis == Axis.horizontal ? 42 : 32,
+        axis: axis,
+        onChanged: onChanged,
+        textStyle: const TextStyle(
+          color: Colors.black26,
+          fontSize: 20,
+        ),
+        selectedTextStyle: TextStyle(
+          color: Colors.black,
+          fontSize: axis == Axis.horizontal ? 36 : 28,
+        ),
       ),
     );
   }

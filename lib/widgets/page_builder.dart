@@ -39,7 +39,7 @@ class _PageBuilderState extends State<PageBuilder> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         decoration: const BoxDecoration(
-          color: Nord.darkMedium,
+          color: Colors.white,
         ),
         child: Stack(
           children: [
