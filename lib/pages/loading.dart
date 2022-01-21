@@ -19,7 +19,7 @@ class _LoadingState extends State<Loading> {
   Widget build(BuildContext context) {
     return Material(
       child: Container(
-        color: Colors.white,
+        color: CustomColor.primaryAccent,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.stretch,

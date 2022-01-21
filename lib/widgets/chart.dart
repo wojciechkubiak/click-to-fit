@@ -41,54 +41,16 @@ class ChartState extends State<Chart> {
       aspectRatio: 1,
       child: Container(
         decoration: BoxDecoration(
-          color: Nord.darker,
+          color: CustomColor.primaryAccentLight,
           borderRadius: BorderRadius.circular(18),
         ),
         child: Stack(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 2, horizontal: 16),
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        left: BorderSide(
-                          width: 5,
-                          color: Nord.auroraOrange,
-                        ),
-                      ),
-                    ),
-                    child: const Text(
-                      'This week',
-                      style: TextStyle(
-                        color: Nord.light,
-                        fontSize: 32,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 38,
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: BarChart(
-                        mainBarData(),
-                        swapAnimationDuration: animDuration,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                ],
+              padding: const EdgeInsets.all(32.0),
+              child: BarChart(
+                mainBarData(),
+                swapAnimationDuration: animDuration,
               ),
             ),
           ],
@@ -102,7 +64,7 @@ class ChartState extends State<Chart> {
     double y,
     double limit, {
     bool isTouched = false,
-    Color barColor = Nord.light,
+    Color barColor = CustomColor.primaryAccent,
     double width = 22,
     List<int> showTooltips = const [],
   }) {
@@ -111,16 +73,12 @@ class ChartState extends State<Chart> {
       barRods: [
         BarChartRodData(
           y: y > 0 ? y + 1 : 0,
-          colors: (y + 1) - (limit + 1) > 2
-              ? [Nord.auroraRed]
-              : (limit + 1) - (y + 1) <= 2
-                  ? [Nord.auroraGreen]
-                  : [Nord.lightDark],
+          colors: [CustomColor.primaryAccentDark],
           width: width,
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
             y: limit + 1,
-            colors: [Nord.darkMedium],
+            colors: [CustomColor.primaryAccentSemiLight],
           ),
         ),
       ],
@@ -195,7 +153,7 @@ class ChartState extends State<Chart> {
     return BarChartData(
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
-            tooltipBgColor: Nord.lightDark,
+            tooltipBgColor: CustomColor.primaryAccent,
             getTooltipItem: (group, groupIndex, rod, rodIndex) {
               String weekDay;
               switch (group.x.toInt()) {
@@ -226,7 +184,7 @@ class ChartState extends State<Chart> {
               return BarTooltipItem(
                 weekDay + '\n',
                 const TextStyle(
-                  color: Nord.dark,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 ),
@@ -234,7 +192,7 @@ class ChartState extends State<Chart> {
                   TextSpan(
                     text: (rod.y - 1).toString(),
                     style: const TextStyle(
-                      color: Nord.darker,
+                      color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                     ),
@@ -250,7 +208,7 @@ class ChartState extends State<Chart> {
         bottomTitles: SideTitles(
           showTitles: true,
           getTextStyles: (context, value) => const TextStyle(
-            color: Nord.auroraYellow,
+            color: CustomColor.primaryAccent,
             fontWeight: FontWeight.bold,
             fontSize: 14,
           ),

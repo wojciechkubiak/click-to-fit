@@ -78,14 +78,10 @@ class _HomeState extends State<Home> {
           ),
           Column(
             children: [
-              Icon(
+              const Icon(
                 Icons.star_border,
                 size: 64,
-                color: stars.stars < stars.progressLimit - 2
-                    ? Nord.light
-                    : stars.stars > stars.progressLimit + 2
-                        ? Nord.auroraRed
-                        : Nord.auroraGreen,
+                color: Colors.white,
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -95,14 +91,10 @@ class _HomeState extends State<Home> {
                     width: 60,
                     child: Text(
                       '${stars.stars < 10 ? "0" : ""}${stars.stars}',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 42,
                         fontWeight: FontWeight.bold,
-                        color: stars.stars < stars.progressLimit - 2
-                            ? Nord.light
-                            : stars.stars > stars.progressLimit + 2
-                                ? Nord.auroraRed
-                                : Nord.auroraGreen,
+                        color: Colors.white,
                       ),
                       textAlign: TextAlign.end,
                     ),
@@ -147,19 +139,22 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return PageBuilder(
-      margin: const EdgeInsets.only(bottom: 20),
+      margin: EdgeInsets.zero,
       isAppBar: true,
-      color: Nord.darker,
+      color: CustomColor.primaryAccent,
+      isDarkIcon: false,
       onBack: widget.showMenu,
+      backgroundColor: CustomColor.primaryAccent,
       page: Padding(
-        padding: const EdgeInsets.only(top: 82.0, bottom: 32),
+        padding: const EdgeInsets.only(
+          top: 82.0,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              margin: const EdgeInsets.only(bottom: 48),
+              margin: const EdgeInsets.only(bottom: 28),
               decoration: const BoxDecoration(
-                color: Nord.darker,
                 borderRadius: BorderRadius.only(
                   bottomRight: Radius.circular(32),
                   bottomLeft: Radius.circular(32),
@@ -181,10 +176,7 @@ class _HomeState extends State<Home> {
                     ),
                     child: Text(
                       'Today:',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline1!
-                          .copyWith(fontWeight: FontWeight.w200),
+                      style: Theme.of(context).textTheme.headline2!,
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -192,7 +184,21 @@ class _HomeState extends State<Home> {
                 ],
               ),
             ),
-            Padding(
+            Container(
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(32),
+                  topLeft: Radius.circular(32),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black38,
+                    offset: Offset(0.0, 1.0), //(x,y)
+                    blurRadius: 6.0,
+                  ),
+                ],
+                color: CustomColor.primaryAccentLight,
+              ),
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 children: [

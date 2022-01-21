@@ -63,10 +63,12 @@ class _SettingsState extends State<Settings> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 48),
         decoration: BoxDecoration(
-          color: isActive ? Nord.darker : Nord.dark,
+          color: isActive
+              ? CustomColor.primaryAccentLight
+              : CustomColor.primaryAccentSemiLight,
           border: const Border(
             bottom: BorderSide(
-              color: Colors.white30,
+              color: CustomColor.primaryAccentLight,
               width: 1,
             ),
           ),
@@ -78,17 +80,21 @@ class _SettingsState extends State<Settings> {
           children: [
             Text(
               name,
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: isActive
+                    ? CustomColor.primaryAccent
+                    : CustomColor.primaryAccentLight,
                 fontSize: 26,
-                fontWeight: FontWeight.w400,
+                fontWeight: FontWeight.w600,
               ),
             ),
             if (isActive)
               Icon(
                 Icons.favorite_border,
                 size: 26,
-                color: isActive ? Nord.auroraGreen : Colors.white,
+                color: isActive
+                    ? CustomColor.primaryAccent
+                    : CustomColor.primaryAccentSemiLight,
               ),
           ],
         ),
@@ -101,7 +107,9 @@ class _SettingsState extends State<Settings> {
     return PageBuilder(
       margin: const EdgeInsets.only(bottom: 20),
       isAppBar: true,
-      color: Nord.darkMedium,
+      color: CustomColor.primaryAccent,
+      backgroundColor: CustomColor.primaryAccent,
+      isDarkIcon: false,
       onBack: () {
         BlocProvider.of<HomeBloc>(context).add(
           HomeLoadInit(
@@ -116,13 +124,25 @@ class _SettingsState extends State<Settings> {
           children: [
             Padding(
               padding: const EdgeInsets.only(bottom: 22),
-              child: Text(
-                'Settings:',
-                style: Theme.of(context)
-                    .textTheme
-                    .headline1!
-                    .copyWith(fontWeight: FontWeight.w200),
-                textAlign: TextAlign.center,
+              child: Column(
+                children: [
+                  Text(
+                    'Settings:',
+                    style: Theme.of(context).textTheme.headline1!.copyWith(
+                          fontWeight: FontWeight.w200,
+                          color: Colors.white,
+                        ),
+                    textAlign: TextAlign.center,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12.0, horizontal: 62),
+                    child: Text(
+                      "Be careful. Some changes cannot be undone.",
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  )
+                ],
               ),
             ),
             GestureDetector(
@@ -134,8 +154,8 @@ class _SettingsState extends State<Settings> {
                     if (!isListVisible)
                       Text(
                         'Show list of users',
-                        style: Theme.of(context).textTheme.headline1!.copyWith(
-                              fontWeight: FontWeight.w500,
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                              fontWeight: FontWeight.w600,
                               fontSize: 16,
                             ),
                       ),
@@ -161,7 +181,7 @@ class _SettingsState extends State<Settings> {
                   color: Nord.darkLight,
                   border: Border(
                     bottom: BorderSide(
-                      color: Colors.white30,
+                      color: CustomColor.primaryAccentLight,
                       width: 3,
                     ),
                   ),
@@ -180,7 +200,7 @@ class _SettingsState extends State<Settings> {
                 ),
               ),
             CustomIconButton(
-              text: 'Add user',
+              text: 'Add User',
               onClick: () {
                 BlocProvider.of<HomeBloc>(context).add(
                   HomeLoadIntro(introMode: IntroMode.create),
@@ -190,21 +210,17 @@ class _SettingsState extends State<Settings> {
               width: 320,
             ),
             CustomIconButton(
-              text: 'Update initial data',
+              text: 'Update Initial Data',
               onClick: () {
                 BlocProvider.of<HomeBloc>(context).add(HomeLoadIntro());
               },
               margin: const EdgeInsets.symmetric(vertical: 6),
-              color: Nord.auroraYellow,
-              textColor: Nord.darker,
               width: 320,
             ),
             CustomIconButton(
-              text: 'Clear your data',
+              text: 'Clear Your Data',
               onClick: () {},
               margin: const EdgeInsets.symmetric(vertical: 6),
-              color: Nord.auroraRed,
-              textColor: Nord.light,
               width: 320,
             )
           ],

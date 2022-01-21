@@ -21,6 +21,7 @@ class NumberValuePicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -30,16 +31,16 @@ class NumberValuePicker extends StatelessWidget {
         minValue: min,
         maxValue: max,
         step: 1,
-        itemHeight: axis == Axis.horizontal ? 42 : 32,
+        itemHeight: axis == Axis.horizontal ? 36 : 32,
         axis: axis,
         onChanged: onChanged,
         textStyle: const TextStyle(
-          color: Colors.black26,
-          fontSize: 20,
+          color: CustomColor.primaryAccent,
+          fontSize: 18,
         ),
         selectedTextStyle: TextStyle(
-          color: Colors.black,
-          fontSize: axis == Axis.horizontal ? 36 : 28,
+          color: CustomColor.primaryAccentDark,
+          fontSize: axis == Axis.horizontal ? 34 : 24,
         ),
       ),
     );

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CustomColor {
-  static const primaryAccent = Color(0xFFef5350);
-  static const primaryAccentDark = Color(0xFFb61827);
-  static const primaryAccentLight = Color(0xFFff867c);
+  static const primaryAccentLight = Color(0xFFf6f4fa);
+  static const primaryAccentSemiLight = Color(0xFF88769b);
+  static const primaryAccent = Color(0xFF624a7b);
+  static const primaryAccentDark = Color(0xFF3b3d5e);
 
   static const secondaryAccent = Color(0xFF303f9f);
   static const secondaryAccentDark = Color(0xFF00227b);

@@ -51,7 +51,7 @@ class _MenuState extends State<Menu> {
                 style: TextStyle(
                   fontSize: textSize(),
                   fontWeight: FontWeight.bold,
-                  color: Nord.light,
+                  color: Colors.white70,
                 ),
               ),
               Text(
@@ -59,7 +59,7 @@ class _MenuState extends State<Menu> {
                 style: TextStyle(
                   fontSize: textSize(),
                   fontWeight: FontWeight.bold,
-                  color: Nord.auroraGreen,
+                  color: Colors.white,
                 ),
               ),
             ],
@@ -110,7 +110,7 @@ class _MenuState extends State<Menu> {
     return Container(
       height: height,
       width: width,
-      color: Nord.dark,
+      color: CustomColor.primaryAccentSemiLight,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

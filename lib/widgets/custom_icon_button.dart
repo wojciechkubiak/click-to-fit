@@ -14,8 +14,8 @@ class CustomIconButton extends StatelessWidget {
     Key? key,
     this.icon,
     this.margin = EdgeInsets.zero,
-    this.color = Nord.auroraGreen,
-    this.textColor = Colors.white,
+    this.color = CustomColor.primaryAccentSemiLight,
+    this.textColor = CustomColor.primaryAccentLight,
     this.width = 240,
     required this.text,
     required this.onClick,
@@ -29,12 +29,9 @@ class CustomIconButton extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(12),
           ),
-          textStyle: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
+          textStyle: Theme.of(context).textTheme.headline4,
           primary: color,
           padding: const EdgeInsets.symmetric(
             vertical: 15,

@@ -143,14 +143,16 @@ class _IntroState extends State<Intro> {
             Icon(
               icon,
               size: 122,
-              color: isActive ? CustomColor.primaryAccentLight : Colors.grey,
+              color: isActive
+                  ? CustomColor.primaryAccentLight
+                  : CustomColor.primaryAccentSemiLight,
             ),
             Text(
               text,
               style: Theme.of(context).textTheme.bodyText1!.copyWith(
                     color: isActive
                         ? CustomColor.primaryAccentLight
-                        : Colors.black54,
+                        : CustomColor.primaryAccentSemiLight,
                     fontSize: 22,
                     fontWeight: FontWeight.w400,
                   ),
@@ -165,7 +167,7 @@ class _IntroState extends State<Intro> {
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.symmetric(vertical: 12.0),
-      margin: const EdgeInsets.symmetric(vertical: 62, horizontal: 32),
+      margin: const EdgeInsets.symmetric(vertical: 32),
       child: Column(
         children: [
           Padding(
@@ -213,7 +215,9 @@ class _IntroState extends State<Intro> {
         margin: const EdgeInsets.only(top: 24),
         height: 120,
         decoration: BoxDecoration(
-          color: isActive ? CustomColor.primaryAccent : const Color(0xFFF5F5F5),
+          color: isActive
+              ? CustomColor.primaryAccentDark
+              : CustomColor.primaryAccent,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
@@ -221,22 +225,23 @@ class _IntroState extends State<Intro> {
           children: [
             Text(
               text,
-              style: Theme.of(context).textTheme.headline3!.copyWith(
-                    color: isActive ? Colors.white : Colors.black87,
-                  ),
+              style: Theme.of(context)
+                  .textTheme
+                  .headline3!
+                  .copyWith(color: Colors.white),
               textAlign: TextAlign.start,
             ),
             Text(
               textHeight,
               style: Theme.of(context).textTheme.headline3!.copyWith(
-                    color: isActive ? Colors.white70 : Colors.black54,
+                    color: Colors.white70,
                     fontSize: 18,
                   ),
             ),
             Text(
               textWeight,
               style: Theme.of(context).textTheme.headline3!.copyWith(
-                    color: isActive ? Colors.white70 : Colors.black54,
+                    color: Colors.white70,
                     fontSize: 18,
                   ),
             ),
@@ -262,9 +267,16 @@ class _IntroState extends State<Intro> {
                 max: _unit == Unit.metric ? 245 : 8,
                 onChanged: (value) => setState(() => _heightCm = value),
               ),
-              const Text(
-                ',',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12.0),
+                child: Text(
+                  ',',
+                  style: TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
               ),
               NumberValuePicker(
                 value: _heightMm,
@@ -289,18 +301,25 @@ class _IntroState extends State<Intro> {
         children: [
           NumberValuePicker(
             value: _weightKg,
-            min: _unit == Unit.metric ? 65 : 110,
-            max: _unit == Unit.metric ? 235 : 700,
+            min: _unit == Unit.metric ? 42 : 85,
+            max: _unit == Unit.metric ? 400 : 900,
             onChanged: (value) => setState(() => _weightKg = value),
           ),
-          const Text(
-            ',',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 12.0),
+            child: Text(
+              ',',
+              style: TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
           ),
           NumberValuePicker(
             value: _weightDec,
             min: 0,
-            max: 10,
+            max: 9,
             onChanged: (value) => setState(() => _weightDec = value),
           ),
         ],
@@ -318,13 +337,20 @@ class _IntroState extends State<Intro> {
         children: [
           NumberValuePicker(
             value: _targetWeightKg,
-            min: 65,
-            max: 235,
+            min: 42,
+            max: 300,
             onChanged: (value) => setState(() => _targetWeightKg = value),
           ),
-          const Text(
-            ',',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 12.0),
+            child: Text(
+              ',',
+              style: TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
           ),
           NumberValuePicker(
             value: _targetWeightDec,
@@ -432,7 +458,7 @@ class _IntroState extends State<Intro> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                padding: const EdgeInsets.symmetric(horizontal: 22.0),
                 child: Input(
                   controller: name,
                   validation: validator.nameValidation,
@@ -622,7 +648,7 @@ class _IntroState extends State<Intro> {
           Column(
             children: [
               Text(
-                'Target (${_unit == Unit.metric ? 'm' : 'ft'}):',
+                'Target (${_unit == Unit.metric ? 'kg' : 'lb'}):',
                 style: Theme.of(context).textTheme.headline2,
                 textAlign: TextAlign.center,
               ),
@@ -648,33 +674,36 @@ class _IntroState extends State<Intro> {
   }
 
   Widget step7() {
-    return SizedBox(
+    return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.7,
+      height: MediaQuery.of(context).size.height * 0.9,
+      margin: const EdgeInsets.only(top: 82),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Column(
-            children: [
-              Text(
-                'Activity:',
-                style: Theme.of(context).textTheme.headline2,
-                textAlign: TextAlign.center,
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 12.0, horizontal: 62),
-                child: Text(
-                  "Pick the one that you feel that fits you the best.",
-                  style: Theme.of(context).textTheme.bodyText1,
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                Text(
+                  'Activity:',
+                  style: Theme.of(context).textTheme.headline2,
+                  textAlign: TextAlign.center,
                 ),
-              )
-            ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 12.0, horizontal: 62),
+                  child: Text(
+                    "Pick the one that you feel that fits you the best.",
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                )
+              ],
+            ),
           ),
           Lottie.asset(
             'assets/lotties/activity.json',
-            width: 150,
-            height: 150,
+            width: 200,
+            height: 200,
           ),
           Padding(
             padding: const EdgeInsets.all(24),
@@ -687,7 +716,7 @@ class _IntroState extends State<Intro> {
             ),
           ),
           CustomButton(
-            text: 'Go to summary',
+            text: 'Next',
             isDisabled: false,
             onPressed: () {
               int? _stars = countStars();
@@ -743,11 +772,10 @@ class _IntroState extends State<Intro> {
             ),
             Column(
               children: [
-                Lottie.asset(
-                  'assets/lotties/star.json',
-                  width: 220,
-                  height: 220,
-                  repeat: false,
+                const Icon(
+                  Icons.star_border,
+                  size: 82,
+                  color: CustomColor.primaryAccentLight,
                 ),
                 Text(
                   result.toString(),
@@ -762,7 +790,8 @@ class _IntroState extends State<Intro> {
               padding: const EdgeInsets.all(24),
               child: CustomSlider(
                 value: result.toDouble(),
-                header: '${(result - stars) * 100}g/week',
+                header:
+                    '${_unit == Unit.metric ? '${(result - stars) * 100}g' : '${((result - stars) * 100 * 0.035).toStringAsPrecision(1)}oz'}/week',
                 onChanged: (double value) {
                   setState(() {
                     result = value.toInt();
@@ -777,14 +806,14 @@ class _IntroState extends State<Intro> {
               padding:
                   const EdgeInsets.symmetric(vertical: 24.0, horizontal: 52),
               child: Text(
-                'Reminder: Each star equals to 100 kcal. Remember about your healt! Do not rush - diet should not be a suffering!',
+                'Reminder: Each star equals to 100 kcal. Remember about your health! Do not rush - diet should not be a suffering!',
                 style: Theme.of(context).textTheme.bodyText1,
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 70.0),
               child: CustomButton(
-                  text: 'Proceed to App',
+                  text: 'Submit Plan',
                   isDisabled: false,
                   onPressed: () {
                     DateTime now = DateTime.now();
@@ -845,6 +874,9 @@ class _IntroState extends State<Intro> {
       isAppBar: _step > 1 || widget.introMode != IntroMode.init,
       margin: const EdgeInsets.only(bottom: 20),
       isBack: true,
+      backgroundColor: CustomColor.primaryAccent,
+      color: CustomColor.primaryAccent,
+      isDarkIcon: false,
       onBack: () {
         if (widget.introMode == IntroMode.init) {
           setState(() => _step = _step - 1);

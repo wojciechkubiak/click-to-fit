@@ -45,17 +45,6 @@ class _CustomDialogWrapperState extends State<CustomDialogWrapper> {
       margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 42),
       child: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 12.0),
-            child: Text(
-              'Weight:',
-              style: TextStyle(
-                fontWeight: FontWeight.w300,
-                fontSize: 36,
-                color: Nord.light,
-              ),
-            ),
-          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -64,6 +53,17 @@ class _CustomDialogWrapperState extends State<CustomDialogWrapper> {
                 min: 65,
                 max: 235,
                 onChanged: (value) => setState(() => _weightKg = value),
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12.0),
+                child: Text(
+                  ',',
+                  style: TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
               ),
               NumberValuePicker(
                 value: _weightDec,
@@ -81,7 +81,7 @@ class _CustomDialogWrapperState extends State<CustomDialogWrapper> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: Nord.darker,
+      backgroundColor: CustomColor.primaryAccent,
       insetPadding: const EdgeInsets.all(24.0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
@@ -93,42 +93,40 @@ class _CustomDialogWrapperState extends State<CustomDialogWrapper> {
             Text(
               widget.header!,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 32,
-                color: Nord.light,
-                fontWeight: FontWeight.bold,
-              ),
+              style:
+                  Theme.of(context).textTheme.headline2!.copyWith(fontSize: 42),
             ),
             weightPicker(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                  child: Text(
-                    widget.declineText!,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      color: Nord.light,
-                      fontWeight: FontWeight.bold,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                    child: Text(
+                      widget.declineText!,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText1!
+                          .copyWith(fontWeight: FontWeight.w600),
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  TextButton(
+                    child: Text(
+                      widget.confirmText!,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText1!
+                          .copyWith(fontWeight: FontWeight.w600),
+                    ),
+                    onPressed: () => Navigator.pop(
+                      context,
+                      double.parse('$_weightKg.$_weightDec'),
                     ),
                   ),
-                  onPressed: () => Navigator.pop(context),
-                ),
-                TextButton(
-                  child: Text(
-                    widget.confirmText!,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      color: Nord.light,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  onPressed: () => Navigator.pop(
-                    context,
-                    double.parse('$_weightKg.$_weightDec'),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),
@@ -173,7 +171,7 @@ class CustomDialog {
       barrierDismissible: false,
       builder: (context) {
         return Dialog(
-          backgroundColor: Nord.darker,
+          backgroundColor: CustomColor.primaryAccent,
           insetPadding: const EdgeInsets.all(24.0),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),

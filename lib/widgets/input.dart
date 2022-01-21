@@ -44,22 +44,26 @@ class _InputState extends State<Input> {
         inputFormatters: widget.inputFormatters,
         validator: widget.validation,
         textAlign: TextAlign.center,
-        style: Theme.of(context).textTheme.headline4,
+        style: Theme.of(context)
+            .textTheme
+            .headline4!
+            .copyWith(color: CustomColor.primaryAccentDark),
         decoration: InputDecoration(
-          fillColor: const Color(0xFFF6F6F6),
+          fillColor: CustomColor.primaryAccentLight,
           filled: true,
           contentPadding: const EdgeInsets.all(12),
           label: widget.labelText is String ? Text(widget.labelText!) : null,
-          labelStyle: const TextStyle(fontSize: 16, color: Nord.lightMedium),
+          labelStyle: const TextStyle(
+              fontSize: 16, color: CustomColor.primaryAccentLight),
           enabledBorder: const UnderlineInputBorder(
             borderSide: BorderSide(
-              color: CustomColor.primaryAccentLight,
+              color: CustomColor.primaryAccent,
               width: 3,
             ),
           ),
           focusedBorder: const UnderlineInputBorder(
             borderSide: BorderSide(
-              color: CustomColor.primaryAccent,
+              color: CustomColor.primaryAccentDark,
               width: 3,
             ),
           ),

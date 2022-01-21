@@ -81,8 +81,13 @@ flutter:
       fonts:
         - asset: assets/fonts/Merienda-Bold.ttf
         - asset: assets/fonts/Merienda-Regular.ttf
+    - family: Roboto
+      fonts:
         - asset: assets/fonts/Roboto-Light.ttf
         - asset: assets/fonts/Roboto-Regular.ttf
         - asset: assets/fonts/Roboto-Medium.ttf
         - asset: assets/fonts/Roboto-Bold.ttf
         - asset: assets/fonts/Roboto-Black.ttf
+    - family: Staatliches
+      fonts:
+        - asset: assets/fonts/Staatliches-Regular.ttf

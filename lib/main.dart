@@ -135,49 +135,56 @@ class _MyHomePageState extends State<MyHomePage> {
               fontSize: 52,
               fontWeight: FontWeight.bold,
               color: CustomColor.primaryAccent,
-              fontFamily: 'Merienda',
+              fontFamily: 'Roboto',
+              letterSpacing: 5,
             ),
             headline2: TextStyle(
               fontSize: 64,
               fontWeight: FontWeight.w200,
-              color: Colors.black,
+              color: Colors.white,
               fontFamily: 'Roboto',
             ),
             headline3: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.w400,
-              color: Colors.black87,
+              color: Colors.white,
               fontFamily: 'Roboto',
             ),
             headline4: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w400,
-              color: Colors.black87,
+              color: Colors.white,
               fontFamily: 'Roboto',
             ),
             bodyText1: TextStyle(
-              fontSize: 16,
+              fontSize: 18,
               fontWeight: FontWeight.w300,
-              color: Colors.black87,
+              color: Colors.white70,
               fontFamily: 'Roboto',
             ),
           ),
         ),
-        color: Nord.darkLight,
+        color: CustomColor.primaryAccent,
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           body: AnnotatedRegion<SystemUiOverlayStyle>(
             value: SystemUiOverlayStyle.light.copyWith(
-              systemNavigationBarColor: Colors.white,
-              statusBarBrightness:
-                  Platform.isIOS ? Brightness.light : Brightness.dark,
-              statusBarIconBrightness:
-                  Platform.isIOS ? Brightness.light : Brightness.dark,
+              systemNavigationBarColor: CustomColor.primaryAccentLight,
               systemNavigationBarIconBrightness:
                   Platform.isIOS ? Brightness.light : Brightness.dark,
-              systemNavigationBarDividerColor: Colors.white,
-              statusBarColor:
-                  isOpen ? CustomColor.primaryAccentLight : Colors.white,
+              systemNavigationBarDividerColor: CustomColor.primaryAccentLight,
+              statusBarBrightness: Platform.isIOS
+                  ? isOpen
+                      ? Brightness.light
+                      : Brightness.dark
+                  : isOpen
+                      ? Brightness.dark
+                      : Brightness.light,
+              statusBarIconBrightness:
+                  Platform.isIOS ? Brightness.dark : Brightness.light,
+              statusBarColor: isOpen
+                  ? CustomColor.primaryAccentSemiLight
+                  : CustomColor.primaryAccent,
             ),
             child: _blocBuilder(),
           ),

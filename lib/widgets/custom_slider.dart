@@ -24,10 +24,10 @@ class CustomSlider extends StatelessWidget {
     return SliderTheme(
       data: const SliderThemeData(
         valueIndicatorTextStyle: TextStyle(
-          color: Colors.black87,
+          color: CustomColor.primaryAccentDark,
           letterSpacing: 1.0,
         ),
-        valueIndicatorColor: Color(0xFFF1F1F1),
+        valueIndicatorColor: CustomColor.primaryAccentLight,
       ),
       child: Slider(
         value: value,
@@ -35,7 +35,7 @@ class CustomSlider extends StatelessWidget {
         max: max,
         divisions: divisions,
         inactiveColor: CustomColor.primaryAccentLight,
-        activeColor: CustomColor.primaryAccent,
+        activeColor: CustomColor.primaryAccentLight,
         label: header,
         onChanged: onChanged,
       ),

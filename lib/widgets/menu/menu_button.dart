@@ -27,14 +27,18 @@ class MenuButton extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                  color: page == CurrentPage.HOME ? Colors.white : Nord.dark,
+                  color: page == CurrentPage.HOME
+                      ? Colors.white
+                      : CustomColor.primaryAccentSemiLight,
                   borderRadius: const BorderRadius.all(Radius.circular(24))),
               child: Row(
                 children: [
                   Icon(
                     icon,
                     size: 32,
-                    color: page == CurrentPage.HOME ? Nord.darker : Nord.light,
+                    color: page == CurrentPage.HOME
+                        ? CustomColor.primaryAccent
+                        : Colors.white,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 16.0),
@@ -42,8 +46,9 @@ class MenuButton extends StatelessWidget {
                       text,
                       style: TextStyle(
                         fontSize: 26,
-                        color:
-                            page == CurrentPage.HOME ? Nord.darker : Nord.light,
+                        color: page == CurrentPage.HOME
+                            ? CustomColor.primaryAccent
+                            : Colors.white,
                         fontWeight: FontWeight.w400,
                       ),
                       textAlign: TextAlign.left,

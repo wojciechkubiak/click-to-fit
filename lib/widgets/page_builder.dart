@@ -13,6 +13,8 @@ class PageBuilder extends StatefulWidget {
   final EdgeInsets margin;
   final ScrollController? controller;
   final Function? onBack;
+  final bool isDarkIcon;
+  final Color backgroundColor;
 
   const PageBuilder({
     Key? key,
@@ -23,6 +25,8 @@ class PageBuilder extends StatefulWidget {
     this.isAppBar = false,
     this.isBack = false,
     this.margin = const EdgeInsets.only(left: 16, right: 16, bottom: 20),
+    this.isDarkIcon = true,
+    this.backgroundColor = CustomColor.primaryAccentLight,
   }) : super(key: key);
 
   @override
@@ -30,6 +34,14 @@ class PageBuilder extends StatefulWidget {
 }
 
 class _PageBuilderState extends State<PageBuilder> {
+  bool isOut = false;
+
+  @override
+  void didChangeDependencies() {
+    print('isOut $isOut');
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ConditionalWillPopScope(
@@ -38,8 +50,8 @@ class _PageBuilderState extends State<PageBuilder> {
       child: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        decoration: const BoxDecoration(
-          color: Colors.white,
+        decoration: BoxDecoration(
+          color: widget.backgroundColor,
         ),
         child: Stack(
           children: [
@@ -50,12 +62,22 @@ class _PageBuilderState extends State<PageBuilder> {
                 BoxConstraints constraints,
               ) {
                 return Center(
-                  child: SingleChildScrollView(
-                    physics: const ClampingScrollPhysics(),
-                    controller: widget.controller,
-                    child: Container(
-                      margin: widget.margin,
-                      child: widget.page,
+                  child: NotificationListener<ScrollUpdateNotification>(
+                    onNotification: (notification) {
+                      double? pos = notification.scrollDelta;
+
+                      if (pos is double) {
+                        setState(() => isOut = pos > 0);
+                      }
+                      return false;
+                    },
+                    child: SingleChildScrollView(
+                      physics: const ClampingScrollPhysics(),
+                      controller: widget.controller,
+                      child: Container(
+                        margin: widget.margin,
+                        child: widget.page,
+                      ),
                     ),
                   ),
                 );
@@ -66,6 +88,8 @@ class _PageBuilderState extends State<PageBuilder> {
                 onBack: widget.onBack,
                 isBack: widget.isBack,
                 color: widget.color,
+                isDarkIcon: widget.isDarkIcon,
+                isOut: isOut,
               ),
           ],
         ),
