@@ -41,6 +41,8 @@ class HomeService extends DataHomeService {
             (value) => value,
           );
       prefs.setInt('userId', userId);
+
+      print('NEW USER ${user.toJson()} -> id: $userId');
       return userId;
     } catch (e) {
       return null;

@@ -138,7 +138,7 @@ class _MyHomePageState extends State<MyHomePage> {
               fontFamily: 'Merienda',
             ),
             headline2: TextStyle(
-              fontSize: 70,
+              fontSize: 64,
               fontWeight: FontWeight.w200,
               color: Colors.black,
               fontFamily: 'Roboto',

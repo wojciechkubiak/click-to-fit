@@ -6,27 +6,23 @@ class User {
   int? id;
   final String name;
   final int age;
+  final String unit;
   final double height;
-  final String heightUnit;
   final double initWeight;
-  final String initWeightUnit;
   final double targetWeight;
-  final String targetWeightUnit;
   final int stars;
   final String gender;
-  final String activityLevel;
+  final int activityLevel;
   final String initDate;
 
   User({
     this.id,
     required this.name,
     required this.age,
+    required this.unit,
     required this.height,
-    required this.heightUnit,
     required this.initWeight,
-    required this.initWeightUnit,
     required this.targetWeight,
-    required this.targetWeightUnit,
     required this.stars,
     required this.gender,
     required this.activityLevel,
@@ -38,15 +34,13 @@ class User {
       id: json['pk'],
       name: json['name'] ?? '',
       age: json['age'] ?? 18,
+      unit: json['unit'],
       height: json['height'],
-      heightUnit: json['heightUnit'],
       initWeight: json['initWeight'],
-      initWeightUnit: json['initWeightUnit'],
       targetWeight: json['targetWeight'],
-      targetWeightUnit: json['targetWeightUnit'],
       stars: json['stars'],
       gender: json['gender'].toString(),
-      activityLevel: json['activityLevel'].toString(),
+      activityLevel: json['activityLevel'],
       initDate: json['initDate'].toString(),
     );
     return user;
@@ -57,12 +51,10 @@ class User {
     data['pk'] = id;
     data['name'] = name;
     data['age'] = age;
+    data['unit'] = unit;
     data['height'] = height;
-    data['heightUnit'] = heightUnit;
     data['initWeight'] = initWeight;
-    data['initWeightUnit'] = initWeightUnit;
     data['targetWeight'] = targetWeight;
-    data['targetWeightUnit'] = targetWeightUnit;
     data['stars'] = stars;
     data['gender'] = gender;
     data['activityLevel'] = activityLevel;

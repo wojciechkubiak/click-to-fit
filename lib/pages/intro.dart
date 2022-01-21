@@ -29,11 +29,6 @@ class _IntroState extends State<Intro> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final validator = Validator();
 
-  final double imperialHeightMultiplier = 3.35; // 1m = 3.35ft
-  final double imperialWeightMultiplier = 2.21; // 1kg = 2.21lb
-  final double feet = 30.48;
-  final double inch = 2.54;
-
   int _step = 1;
   Sex? _sex;
   double _activityLevel = 3;
@@ -49,36 +44,20 @@ class _IntroState extends State<Intro> {
 
   int _age = 18;
 
+  Unit _unit = Unit.metric;
   int _heightCm = 175;
   int _heightMm = 5;
-  int _heightFeet = 5;
-  int _heightInch = 8;
-  Unit _heightUnit = Unit.metric;
-
   int _weightKg = 85;
   int _weightDec = 5;
-  int _weightLb = 187;
-  int _weightOz = 4;
-  Unit _weightUnit = Unit.metric;
-
   int _targetWeightKg = 75;
   int _targetWeightDec = 5;
-  Unit _targetWeightUnit = Unit.metric;
 
   late TextEditingController name;
-  late TextEditingController age;
-  late TextEditingController height;
-  late TextEditingController weight;
-  late TextEditingController targetWeight;
 
   @override
   void initState() {
     super.initState();
     name = TextEditingController(text: '');
-    age = TextEditingController(text: '18');
-    height = TextEditingController(text: '175.0');
-    weight = TextEditingController(text: '95.0');
-    targetWeight = TextEditingController(text: '85.0');
   }
 
   double ppmMale(double weight, double height, int age) {
@@ -91,44 +70,56 @@ class _IntroState extends State<Intro> {
     return 655 + (9.6 * weight) + (1.8 * height) - (4.7 * age);
   }
 
-  int countStars() {
-    int _age = int.parse(age.text);
-    double _height = double.parse(height.text);
-    double _weight = double.parse(weight.text);
-    int _activity = _activityLevel.toInt();
+  double? parseMetric({
+    required bool isWeight,
+    required int v1,
+    required int v2,
+  }) {
+    if (isWeight) {
+      double? lb = double.tryParse('$v1.$v2');
 
-    double ppm = _sex == Sex.male
-        ? ppmMale(_weight, _height, _age)
-        : ppmFemale(_weight, _height, _age);
-
-    List pal = [null, 1.2, 1.25, 1.5, 1.75, 2.0];
-
-    double cpm = ppm * pal[_activity];
-    return (cpm / 100).ceil();
+      if (lb is double) {
+        return lb * 0.45;
+      } else {
+        return null;
+      }
+    } else {
+      return v1 * 30.48 + v2 * 2.54;
+    }
   }
 
-  void parseHeight(Unit unit, int beforeDecimal, int afterDecimal) async {
-    if (unit == Unit.imperial) {
-      double initial = double.tryParse('$beforeDecimal.$afterDecimal') ?? 5;
-      int _feet = (initial / feet).floor();
-      double rest = initial - (_feet * feet);
-      int _inch = (rest / inch).floor();
+  int? countStars() {
+    double? _height = _unit == Unit.metric
+        ? double.parse('$_heightCm.$_heightMm')
+        : parseMetric(
+            isWeight: false,
+            v1: _heightCm,
+            v2: _heightMm,
+          );
+    double? _weight = _unit == Unit.metric
+        ? double.parse('$_weightKg.$_weightDec')
+        : parseMetric(
+            isWeight: true,
+            v1: _weightKg,
+            v2: _weightDec,
+          );
 
-      setState(() {
-        _heightFeet = _feet;
-        _heightInch = _inch;
-      });
+    if (_height is double && _weight is double) {
+      int _activity = _activityLevel.toInt();
+
+      double ppm = _sex == Sex.male
+          ? ppmMale(_weight, _height, _age)
+          : ppmFemale(_weight, _height, _age);
+
+      List pal = _sex == Sex.male
+          ? [null, 1.2, 1.25, 1.5, 1.75, 2.0]
+          : [null, 1.15, 1.2, 1.4, 1.65, 1.9];
+
+      double cpm = ppm * pal[_activity];
+      return (cpm / 100).ceil();
     } else {
-      String _cm =
-          ((beforeDecimal * feet) + (afterDecimal * inch)).toStringAsFixed(1);
-      List<String> _arr = _cm.split('.');
-
-      setState(() {
-        _heightCm = int.tryParse(_arr[0]) ?? 100;
-        _heightMm = int.tryParse(_arr[1]) ?? 0;
-      });
+      return null;
     }
-    // return unit == Unit.imperial ? value * imperialHeightMultiplier : ;
   }
 
   String parseEnum(dynamic en) {
@@ -210,24 +201,46 @@ class _IntroState extends State<Intro> {
 
   Widget unitPicker({
     required String text,
+    required String textHeight,
+    required String textWeight,
     required void Function() onTap,
     required bool isActive,
   }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        width: 260,
+        margin: const EdgeInsets.only(top: 24),
+        height: 120,
         decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: isActive ? CustomColor.primaryAccent : Colors.white,
-              width: 3,
-            ),
-          ),
+          color: isActive ? CustomColor.primaryAccent : const Color(0xFFF5F5F5),
+          borderRadius: BorderRadius.circular(20),
         ),
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-          text,
-          style: Theme.of(context).textTheme.headline3!.copyWith(fontSize: 18),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text(
+              text,
+              style: Theme.of(context).textTheme.headline3!.copyWith(
+                    color: isActive ? Colors.white : Colors.black87,
+                  ),
+              textAlign: TextAlign.start,
+            ),
+            Text(
+              textHeight,
+              style: Theme.of(context).textTheme.headline3!.copyWith(
+                    color: isActive ? Colors.white70 : Colors.black54,
+                    fontSize: 18,
+                  ),
+            ),
+            Text(
+              textWeight,
+              style: Theme.of(context).textTheme.headline3!.copyWith(
+                    color: isActive ? Colors.white70 : Colors.black54,
+                    fontSize: 18,
+                  ),
+            ),
+          ],
         ),
       ),
     );
@@ -244,54 +257,23 @@ class _IntroState extends State<Intro> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               NumberValuePicker(
-                value: _heightUnit == Unit.metric ? _heightCm : _heightFeet,
-                min: _heightUnit == Unit.metric ? 110 : 4,
-                max: _heightUnit == Unit.metric ? 245 : 8,
-                onChanged: (value) => setState(() => _heightUnit == Unit.metric
-                    ? _heightCm = value
-                    : _heightFeet = value),
+                value: _heightCm,
+                min: _unit == Unit.metric ? 110 : 4,
+                max: _unit == Unit.metric ? 245 : 8,
+                onChanged: (value) => setState(() => _heightCm = value),
               ),
               const Text(
                 ',',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               NumberValuePicker(
-                value: _heightUnit == Unit.metric ? _heightMm : _heightInch,
+                value: _heightMm,
                 min: 0,
-                max: _heightUnit == Unit.metric ? 10 : 11,
-                onChanged: (value) => setState(
-                  () => _heightUnit == Unit.metric
-                      ? _heightMm = value
-                      : _heightInch = value,
-                ),
+                max: _unit == Unit.metric ? 10 : 11,
+                onChanged: (value) => setState(() => _heightMm = value),
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                unitPicker(
-                  text: 'Metric (m)',
-                  onTap: () {
-                    parseHeight(Unit.metric, _heightFeet, _heightInch);
-                    setState(() => _heightUnit = Unit.metric);
-                  },
-                  isActive: _heightUnit == Unit.metric,
-                ),
-                unitPicker(
-                  text: 'Imperial (lb)',
-                  onTap: () {
-                    parseHeight(Unit.imperial, _heightCm, _heightMm);
-                    setState(() => _heightUnit = Unit.imperial);
-                  },
-                  isActive: _heightUnit == Unit.imperial,
-                )
-              ],
-            ),
-          )
         ],
       ),
     );
@@ -307,8 +289,8 @@ class _IntroState extends State<Intro> {
         children: [
           NumberValuePicker(
             value: _weightKg,
-            min: 65,
-            max: 235,
+            min: _unit == Unit.metric ? 65 : 110,
+            max: _unit == Unit.metric ? 235 : 700,
             onChanged: (value) => setState(() => _weightKg = value),
           ),
           const Text(
@@ -477,36 +459,85 @@ class _IntroState extends State<Intro> {
   }
 
   Widget step3() {
-    return SizedBox(
+    return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.7,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Column(
+      height: MediaQuery.of(context).size.height * 0.9,
+      margin: const EdgeInsets.only(top: 84),
+      child: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text(
-                'Height:',
-                style: Theme.of(context).textTheme.headline2,
-                textAlign: TextAlign.center,
+              Padding(
+                padding: const EdgeInsets.only(top: 32.0, left: 24, right: 24),
+                child: Text(
+                  'Choose unit:',
+                  style: Theme.of(context).textTheme.headline2,
+                  textAlign: TextAlign.center,
+                ),
               ),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 12.0, horizontal: 62),
+                padding: const EdgeInsets.symmetric(vertical: 12.0),
                 child: Text(
-                  "Pick the one that you feel that fits you the best.",
+                  "It can be changed inside application",
                   style: Theme.of(context).textTheme.bodyText1,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    unitPicker(
+                      text: 'Metric',
+                      textHeight: 'cm/mm',
+                      textWeight: 'kg/dec',
+                      onTap: () => setState(() {
+                        _unit = Unit.metric;
+                        _heightCm = 175;
+                        _heightMm = 5;
+                        _weightKg = 85;
+                        _weightDec = 5;
+                        _targetWeightKg = 75;
+                        _targetWeightDec = 5;
+                      }),
+                      isActive: _unit == Unit.metric,
+                    ),
+                    unitPicker(
+                      text: 'Imperial',
+                      textHeight: 'feet/inch',
+                      textWeight: 'lb/oz',
+                      onTap: () => setState(() {
+                        _unit = Unit.imperial;
+                        _heightCm = 5;
+                        _heightMm = 8;
+                        _weightKg = 187;
+                        _weightDec = 5;
+                        _targetWeightKg = 167;
+                        _targetWeightDec = 5;
+                      }),
+                      isActive: _unit == Unit.imperial,
+                    )
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 32.0, bottom: 82),
+                child: CustomButton(
+                  isDisabled: false,
+                  onPressed: () {
+                    final FormState? form = _formKey.currentState;
+                    if (form!.validate()) {
+                      setState(() => _step = 4);
+                    }
+                  },
                 ),
               )
             ],
           ),
-          heightPicker(),
-          CustomButton(
-            text: 'Next',
-            isDisabled: false,
-            onPressed: () => setState(() => _step = 4),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -521,7 +552,7 @@ class _IntroState extends State<Intro> {
           Column(
             children: [
               Text(
-                'Weight:',
+                'Height (${_unit == Unit.metric ? 'm' : 'ft'}):',
                 style: Theme.of(context).textTheme.headline2,
                 textAlign: TextAlign.center,
               ),
@@ -535,7 +566,7 @@ class _IntroState extends State<Intro> {
               )
             ],
           ),
-          weightPicker(),
+          heightPicker(),
           CustomButton(
             text: 'Next',
             isDisabled: false,
@@ -556,7 +587,42 @@ class _IntroState extends State<Intro> {
           Column(
             children: [
               Text(
-                'Target:',
+                'Weight (${_unit == Unit.metric ? 'kg' : 'lb'}):',
+                style: Theme.of(context).textTheme.headline2,
+                textAlign: TextAlign.center,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12.0, horizontal: 62),
+                child: Text(
+                  "Pick the one that you feel that fits you the best.",
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+              )
+            ],
+          ),
+          weightPicker(),
+          CustomButton(
+            text: 'Next',
+            isDisabled: false,
+            onPressed: () => setState(() => _step = 6),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget step6() {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height * 0.7,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Column(
+            children: [
+              Text(
+                'Target (${_unit == Unit.metric ? 'm' : 'ft'}):',
                 style: Theme.of(context).textTheme.headline2,
                 textAlign: TextAlign.center,
               ),
@@ -574,14 +640,14 @@ class _IntroState extends State<Intro> {
           CustomButton(
             text: 'Next',
             isDisabled: false,
-            onPressed: () => setState(() => _step = 6),
+            onPressed: () => setState(() => _step = 7),
           ),
         ],
       ),
     );
   }
 
-  Widget step6() {
+  Widget step7() {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.7,
@@ -624,16 +690,21 @@ class _IntroState extends State<Intro> {
             text: 'Go to summary',
             isDisabled: false,
             onPressed: () {
-              int _stars = countStars();
-              setState(() {
-                stars = _stars;
-                result = _stars;
-              });
+              int? _stars = countStars();
 
-              Future.delayed(
-                const Duration(milliseconds: 500),
-                () => setState(() => _step = 7),
-              );
+              if (_stars is int) {
+                setState(() {
+                  stars = _stars;
+                  result = _stars;
+                });
+
+                Future.delayed(
+                  const Duration(milliseconds: 500),
+                  () => setState(() => _step = 8),
+                );
+              } else {
+                setState(() => _step = 4);
+              }
             },
           )
         ],
@@ -641,7 +712,7 @@ class _IntroState extends State<Intro> {
     );
   }
 
-  Widget step7() {
+  Widget step8() {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 1,
@@ -722,23 +793,20 @@ class _IntroState extends State<Intro> {
                     User user = User(
                       name: name.text,
                       age: _age,
+                      unit: parseEnum(_unit),
                       height: double.parse('$_heightCm.$_heightMm'),
-                      heightUnit: _heightUnit.toString(),
                       initWeight: double.parse('$_weightKg.$_weightDec'),
-                      initWeightUnit: _weightUnit.toString(),
                       targetWeight:
                           double.parse('$_targetWeightKg.$_targetWeightDec'),
-                      targetWeightUnit: _targetWeightUnit.toString(),
                       stars: result,
                       gender: parseEnum(_sex),
-                      activityLevel: parseEnum(_activityLevel),
+                      activityLevel: _activityLevel.toInt(),
                       initDate: dateParser.getDateWithoutTime(),
                     );
 
-                    print('USER ${user.toJson()}');
-                    // widget.handlePage();
-                    // BlocProvider.of<HomeBloc>(context)
-                    //     .add(HomeLoadPage(user: user));
+                    widget.handlePage();
+                    BlocProvider.of<HomeBloc>(context)
+                        .add(HomeLoadPage(user: user));
                   }),
             )
           ],
@@ -763,6 +831,8 @@ class _IntroState extends State<Intro> {
         return step6();
       case 7:
         return step7();
+      case 8:
+        return step8();
       default:
         return const Loading();
     }
