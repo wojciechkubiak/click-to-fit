@@ -83,6 +83,7 @@ flutter:
         - asset: assets/fonts/Merienda-Regular.ttf
     - family: Roboto
       fonts:
+        - asset: assets/fonts/Roboto-Thin.ttf
         - asset: assets/fonts/Roboto-Light.ttf
         - asset: assets/fonts/Roboto-Regular.ttf
         - asset: assets/fonts/Roboto-Medium.ttf

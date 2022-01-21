@@ -140,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             headline2: TextStyle(
               fontSize: 64,
-              fontWeight: FontWeight.w200,
+              fontWeight: FontWeight.w100,
               color: Colors.white,
               fontFamily: 'Roboto',
             ),
