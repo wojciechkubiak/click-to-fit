@@ -24,15 +24,18 @@ class _LoadingState extends State<Loading> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Column(
+              children: [
+                Header(
+                  isHeader: widget.isHeader,
+                  isWhite: true,
+                ),
+              ],
+            ),
             Lottie.asset(
               'assets/lotties/loading.json',
               width: MediaQuery.of(context).size.width * 0.9,
               height: MediaQuery.of(context).size.width * 0.9,
-            ),
-            Column(
-              children: [
-                Header(isHeader: widget.isHeader),
-              ],
             ),
           ],
         ),

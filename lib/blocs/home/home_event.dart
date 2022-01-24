@@ -20,12 +20,14 @@ class HomeLoadInit extends HomeEvent {
 
 class HomeLoadIntro extends HomeEvent {
   final IntroMode introMode;
+  final User? user;
 
   HomeLoadIntro({
     this.introMode = IntroMode.init,
+    this.user,
   });
 
-  List<Object?> get props => [introMode];
+  List<Object?> get props => [introMode, user];
 }
 
 class HomeLoadSplash extends HomeEvent {}

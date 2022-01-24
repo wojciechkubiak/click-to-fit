@@ -79,7 +79,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   void _mapHomeLoadIntro(HomeEvent event, Emitter<HomeState> emit) async {
     if (event is HomeLoadIntro) {
-      emit(HomeIntro(introMode: event.introMode));
+      emit(HomeIntro(introMode: event.introMode, user: event.user));
     }
   }
 
@@ -128,11 +128,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(HomeLoading());
 
     List<User> users = await _homeService.getUsers();
-    int userId = await _homeService.getUserId();
+    User? currentUser = await _homeService.getUser(null);
 
-    emit(HomeSettings(
-      users: users,
-      userId: userId,
-    ));
+    if (currentUser is User) {
+      emit(HomeSettings(
+        users: users,
+        currentUser: currentUser,
+      ));
+    }
   }
 }

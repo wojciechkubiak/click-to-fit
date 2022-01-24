@@ -4,7 +4,7 @@ class CustomColor {
   static const primaryAccentLight = Color(0xFFf6f4fa);
   static const primaryAccentSemiLight = Color(0xFF88769b);
   static const primaryAccent = Color(0xFF624a7b);
-  static const primaryAccentDark = Color(0xFF3b3d5e);
+  static const primaryAccentDark = Color(0xFF4B3563);
 
   static const secondaryAccent = Color(0xFF303f9f);
   static const secondaryAccentDark = Color(0xFF00227b);

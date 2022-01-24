@@ -73,7 +73,13 @@ class ChartState extends State<Chart> {
       barRods: [
         BarChartRodData(
           y: y > 0 ? y + 1 : 0,
-          colors: [CustomColor.primaryAccentDark],
+          colors: [
+            _stars.last.stars >= widget.initialLimit + 3
+                ? Nord.auroraRed
+                : _stars.last.stars > widget.initialLimit - 3
+                    ? Nord.auroraGreen
+                    : CustomColor.primaryAccent,
+          ],
           width: width,
           backDrawRodData: BackgroundBarChartRodData(
             show: true,

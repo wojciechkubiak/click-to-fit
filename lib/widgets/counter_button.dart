@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:star_metter/config/colors.dart';
 
@@ -18,6 +20,7 @@ class CounterButton extends StatefulWidget {
 }
 
 class _CounterButtonState extends State<CounterButton> {
+  Timer? timer;
   bool isClicked = false;
 
   @override
@@ -35,10 +38,35 @@ class _CounterButtonState extends State<CounterButton> {
             }
           });
         },
+        onLongPress: () {
+          timer = Timer.periodic(const Duration(milliseconds: 200), (t) {
+            widget.onClick();
+          });
+        },
+        onLongPressCancel: () {
+          if (timer is Timer) {
+            timer!.cancel();
+          }
+        },
+        onLongPressEnd: (_) {
+          if (timer is Timer) {
+            timer!.cancel();
+          }
+        },
+        onTapUp: (TapUpDetails details) {
+          if (timer is Timer) {
+            timer!.cancel();
+          }
+        },
+        onTapCancel: () {
+          if (timer is Timer) {
+            timer!.cancel();
+          }
+        },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          height: 58,
-          width: 58,
+          height: 36,
+          width: 36,
           // decoration: BoxDecoration(
           //   border: Border.all(
           //     width: isClicked ? 4 : 3,
@@ -48,7 +76,7 @@ class _CounterButtonState extends State<CounterButton> {
           // ),
           child: Icon(
             widget.icon,
-            size: isClicked ? 52 : 48,
+            size: 36,
             color: Nord.light,
           ),
         ),

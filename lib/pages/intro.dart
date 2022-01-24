@@ -14,11 +14,13 @@ import '../../widgets/widgets.dart';
 class Intro extends StatefulWidget {
   final Function() handlePage;
   final IntroMode introMode;
+  final User? user;
 
   const Intro({
     Key? key,
     required this.handlePage,
     required this.introMode,
+    this.user,
   }) : super(key: key);
 
   @override
@@ -30,7 +32,6 @@ class _IntroState extends State<Intro> {
   final validator = Validator();
 
   int _step = 1;
-  Sex? _sex;
   double _activityLevel = 3;
   List<String> headers = [
     'Sick / Mostly laying',
@@ -39,25 +40,62 @@ class _IntroState extends State<Intro> {
     'Above avarege / 3-4 trainings/week',
     'High / Physical worker / Proffesional'
   ];
-  int stars = 0;
   int result = 0;
 
-  int _age = 18;
-
-  Unit _unit = Unit.metric;
-  int _heightCm = 175;
-  int _heightMm = 5;
-  int _weightKg = 85;
-  int _weightDec = 5;
-  int _targetWeightKg = 75;
-  int _targetWeightDec = 5;
+  late Sex? _sex;
+  late int stars;
+  late int _age;
+  late Unit _unit;
+  late int _heightCm;
+  late int _heightMm;
+  late int _weightKg;
+  late int _weightDec;
+  late int _targetWeightKg;
+  late int _targetWeightDec;
 
   late TextEditingController name;
 
   @override
   void initState() {
     super.initState();
-    name = TextEditingController(text: '');
+    name = TextEditingController(text: widget.user?.name ?? '');
+    stars = widget.user?.stars ?? 0;
+    _age = widget.user?.age ?? 18;
+
+    if (widget.user is User) {
+      if (widget.user?.unit == 'metric') {
+        _unit = Unit.metric;
+      } else {
+        _unit = Unit.imperial;
+      }
+      if (widget.user?.gender == 'male') {
+        _sex = Sex.male;
+      } else {
+        _sex = Sex.female;
+      }
+      List<String> parsedHeight = widget.user!.height.split('\'');
+      List<String> parsedWeight = widget.user!.initWeight.toString().split('.');
+      List<String> parsedTargetWeight =
+          widget.user!.targetWeight.toString().split('.');
+
+      _heightCm = int.parse(parsedHeight.first);
+      _heightMm = int.parse(parsedHeight.last);
+      _weightKg = int.parse(parsedWeight.first);
+      _weightDec = int.parse(parsedWeight.last);
+      _targetWeightKg = int.parse(parsedTargetWeight.first);
+      _targetWeightDec = int.parse(parsedTargetWeight.last);
+    } else {
+      _sex = null;
+      _unit = Unit.metric;
+      _heightCm = 175;
+      _heightMm = 5;
+      _weightKg = 85;
+      _weightDec = 5;
+      _targetWeightKg = 75;
+      _targetWeightDec = 5;
+    }
+
+    print(widget.user?.toJson());
   }
 
   double ppmMale(double weight, double height, int age) {
@@ -823,7 +861,7 @@ class _IntroState extends State<Intro> {
                       name: name.text,
                       age: _age,
                       unit: parseEnum(_unit),
-                      height: double.parse('$_heightCm.$_heightMm'),
+                      height: '$_heightCm\'$_heightMm',
                       initWeight: double.parse('$_weightKg.$_weightDec'),
                       targetWeight:
                           double.parse('$_targetWeightKg.$_targetWeightDec'),

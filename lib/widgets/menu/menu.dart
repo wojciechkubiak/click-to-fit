@@ -110,7 +110,7 @@ class _MenuState extends State<Menu> {
     return Container(
       height: height,
       width: width,
-      color: CustomColor.primaryAccentSemiLight,
+      color: CustomColor.primaryAccentDark,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

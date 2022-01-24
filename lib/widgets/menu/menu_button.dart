@@ -21,41 +21,44 @@ class MenuButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         width: MediaQuery.of(context).size.width - 16,
-        margin: const EdgeInsets.only(left: 16),
-        child: GestureDetector(
-            onTap: onClick,
-            child: Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                  color: page == CurrentPage.HOME
-                      ? Colors.white
-                      : CustomColor.primaryAccentSemiLight,
-                  borderRadius: const BorderRadius.all(Radius.circular(24))),
-              child: Row(
-                children: [
-                  Icon(
-                    icon,
-                    size: 32,
-                    color: page == CurrentPage.HOME
-                        ? CustomColor.primaryAccent
-                        : Colors.white,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: Text(
-                      text,
-                      style: TextStyle(
-                        fontSize: 26,
-                        color: page == CurrentPage.HOME
-                            ? CustomColor.primaryAccent
-                            : Colors.white,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                ],
+        margin: const EdgeInsets.only(top: 16),
+        child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+              elevation: page == CurrentPage.HOME ? 10 : 8,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(32),
               ),
+              textStyle: Theme.of(context).textTheme.bodyText1,
+              primary: page == CurrentPage.HOME
+                  ? CustomColor.primaryAccentLight
+                  : CustomColor.primaryAccentDark,
+            ),
+            onPressed: onClick,
+            child: Row(
+              children: [
+                Icon(
+                  icon,
+                  size: 32,
+                  color: page == CurrentPage.HOME
+                      ? CustomColor.primaryAccent
+                      : Colors.white,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: Text(
+                    text,
+                    style: TextStyle(
+                      fontSize: 26,
+                      color: page == CurrentPage.HOME
+                          ? CustomColor.primaryAccent
+                          : Colors.white,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+              ],
             )));
   }
 }

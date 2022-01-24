@@ -136,7 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
               fontWeight: FontWeight.bold,
               color: CustomColor.primaryAccent,
               fontFamily: 'Roboto',
-              letterSpacing: 5,
+              letterSpacing: 2,
             ),
             headline2: TextStyle(
               fontSize: 64,
@@ -183,7 +183,7 @@ class _MyHomePageState extends State<MyHomePage> {
               statusBarIconBrightness:
                   Platform.isIOS ? Brightness.dark : Brightness.light,
               statusBarColor: isOpen
-                  ? CustomColor.primaryAccentSemiLight
+                  ? CustomColor.primaryAccentDark
                   : CustomColor.primaryAccent,
             ),
             child: _blocBuilder(),
@@ -201,6 +201,7 @@ class _MyHomePageState extends State<MyHomePage> {
             controller: zoomController,
             disableGesture: isOpen,
             style: DrawerStyle.Style5,
+            showShadow: true,
             menuScreen: Menu(
               currentPage: _currentPage,
               onClick: _menuButtonHandler,
@@ -232,7 +233,6 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             borderRadius: 24.0,
-            showShadow: true,
             angle: -12.0,
             backgroundColor: CustomColor.primaryAccentDark,
             slideWidth: MediaQuery.of(context).size.width * .45,
@@ -249,13 +249,14 @@ class _MyHomePageState extends State<MyHomePage> {
           return Intro(
             handlePage: _setDefaultPage,
             introMode: state.introMode,
+            user: state.user,
           );
         }
         if (state is HomeSettings) {
           return Settings(
             handlePage: _setDefaultPage,
             users: state.users,
-            userId: state.userId,
+            currentUser: state.currentUser,
           );
         }
         return const Loading();

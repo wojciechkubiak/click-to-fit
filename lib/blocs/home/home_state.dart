@@ -10,9 +10,11 @@ class HomeLoading extends HomeState {}
 
 class HomeIntro extends HomeState {
   final IntroMode introMode;
+  final User? user;
 
   HomeIntro({
     required this.introMode,
+    this.user,
   });
 
   List<Object> get props => [introMode];
@@ -20,14 +22,14 @@ class HomeIntro extends HomeState {
 
 class HomeSettings extends HomeState {
   final List<User> users;
-  final int userId;
+  final User currentUser;
 
   HomeSettings({
     required this.users,
-    required this.userId,
+    required this.currentUser,
   });
 
-  List<Object> get props => [users, userId];
+  List<Object> get props => [users, currentUser];
 }
 
 class HomePage extends HomeState {

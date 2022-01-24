@@ -10,13 +10,13 @@ import '../widgets/widgets.dart';
 class Settings extends StatefulWidget {
   final Function() handlePage;
   final List<User> users;
-  final int userId;
+  final User currentUser;
 
   const Settings({
     Key? key,
     required this.handlePage,
     required this.users,
-    required this.userId,
+    required this.currentUser,
   }) : super(key: key);
 
   @override
@@ -192,7 +192,7 @@ class _SettingsState extends State<Settings> {
                     ...users.map(
                       (e) => listElement(
                         name: e.name,
-                        isActive: e.id == widget.userId,
+                        isActive: e.id == widget.currentUser.id,
                         id: e.id,
                       ),
                     )
@@ -212,14 +212,36 @@ class _SettingsState extends State<Settings> {
             CustomIconButton(
               text: 'Update Initial Data',
               onClick: () {
-                BlocProvider.of<HomeBloc>(context).add(HomeLoadIntro());
+                BlocProvider.of<HomeBloc>(context).add(
+                  HomeLoadIntro(
+                    introMode: IntroMode.edit,
+                    user: widget.currentUser,
+                  ),
+                );
               },
               margin: const EdgeInsets.symmetric(vertical: 6),
               width: 320,
             ),
             CustomIconButton(
               text: 'Clear Your Data',
-              onClick: () {},
+              onClick: () async {
+                bool? result = await CustomDialog().showBaseDialog(
+                  context: context,
+                  header: 'Data Clear',
+                  dialogBody:
+                      'All your records excluding initial will be deleted. Are you sure? You may also consider clearing app storage or reinstall of your app if you\'re new user and you want to start from scratch. ',
+                  confirmText: 'Yes',
+                  declineText: 'No',
+                );
+                if (result is bool && result == true) {
+                  // BlocProvider.of<HomeBloc>(context).add(
+                  //   HomeLoadInit(
+                  //     handlePage: widget.handlePage,
+                  //     userId: id,
+                  //   ),
+                  // );
+                }
+              },
               margin: const EdgeInsets.symmetric(vertical: 6),
               width: 320,
             )

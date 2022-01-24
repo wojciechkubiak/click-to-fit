@@ -29,14 +29,16 @@ class Header extends StatelessWidget {
           Text(
             isHeader ? text : "Loading",
             style: Theme.of(context).textTheme.headline1!.copyWith(
-                  color: Colors.white,
+                  color: isWhite ? Colors.white : CustomColor.primaryAccent,
                 ),
           ),
           if (showBottomText && isHeader)
             Text(
               'LOSE WEIGHT LIKE A STAR',
               style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                    color: Colors.white70,
+                    color: isWhite
+                        ? Colors.white70
+                        : CustomColor.primaryAccentSemiLight,
                   ),
             ),
         ],

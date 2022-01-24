@@ -7,7 +7,7 @@ class User {
   final String name;
   final int age;
   final String unit;
-  final double height;
+  final String height;
   final double initWeight;
   final double targetWeight;
   final int stars;

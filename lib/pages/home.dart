@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:star_metter/models/metric.dart';
 import 'package:star_metter/widgets/custom_icon_button.dart';
+import 'package:star_metter/widgets/gauge.dart';
+import 'package:star_metter/widgets/navigation_button.dart';
 import 'package:star_metter/widgets/shadow_wrapper.dart';
 
 import '../../config/colors.dart';
@@ -37,16 +40,43 @@ class _HomeState extends State<Home> {
   }
 
   double getBMI() {
-    if (progress.weight is Weight) {
-      return (progress.weight!.weight /
-          ((user.height / 100) * (user.height / 100)));
+    if (user.unit == 'imperial') {
+      Metric metric = Metric(
+        height: user.height,
+        weight: progress.weight?.weight ?? progress.prevWeight?.weight,
+      );
+
+      double height = metric.getParsedHeight();
+      double weight = metric.getParsedWeight();
+
+      return (weight / ((height / 100) * (height / 100)));
     } else {
-      if (progress.prevWeight is Weight) {
-        return (progress.prevWeight!.weight /
-            ((user.height / 100) * (user.height / 100)));
+      String height = user.height.replaceAll('\'', '.');
+      if (progress.weight is Weight) {
+        return (progress.weight!.weight /
+            ((double.parse(height) / 100) * (double.parse(height) / 100)));
       } else {
-        return 0;
+        if (progress.prevWeight is Weight) {
+          return (progress.prevWeight!.weight /
+              ((double.parse(height) / 100) * (double.parse(height) / 100)));
+        } else {
+          return 0;
+        }
       }
+    }
+  }
+
+  Color getColor({required double? current, required double? previous}) {
+    if (previous is double && current is double) {
+      if (current > previous) {
+        return Nord.auroraRed;
+      } else if (current < previous) {
+        return Nord.auroraGreen;
+      } else {
+        return CustomColor.primaryAccent;
+      }
+    } else {
+      return CustomColor.primaryAccent;
     }
   }
 
@@ -54,7 +84,7 @@ class _HomeState extends State<Home> {
     Star stars = progress.star;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 42),
+      padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -76,42 +106,80 @@ class _HomeState extends State<Home> {
             icon: Icons.remove,
             isDisabled: stars.stars == 0,
           ),
-          Column(
+          Stack(
             children: [
-              const Icon(
-                Icons.star_border,
-                size: 64,
-                color: Colors.white,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 60,
-                    width: 60,
-                    child: Text(
-                      '${stars.stars < 10 ? "0" : ""}${stars.stars}',
-                      style: const TextStyle(
-                        fontSize: 42,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                      textAlign: TextAlign.end,
+              Container(
+                constraints: BoxConstraints(
+                  minWidth: MediaQuery.of(context).size.width * 0.6,
+                  minHeight: MediaQuery.of(context).size.width * 0.6,
+                ),
+                decoration: BoxDecoration(
+                  color: CustomColor.primaryAccentLight,
+                  borderRadius: BorderRadius.circular(160),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black38,
+                      offset: Offset(0.0, 1.0), //(x,y)
+                      blurRadius: 6.0,
                     ),
-                  ),
-                  SizedBox(
-                      height: 40,
-                      width: 40,
-                      child: Text(
-                        '/${stars.progressLimit}',
-                        style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.normal,
-                          color: Nord.light,
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.star_border,
+                      size: 64,
+                      color: CustomColor.primaryAccentSemiLight,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 60,
+                          width: 60,
+                          child: Text(
+                            '${stars.stars < 10 ? "0" : ""}${stars.stars}',
+                            style:
+                                Theme.of(context).textTheme.headline3!.copyWith(
+                                      color: CustomColor.primaryAccent,
+                                      fontSize: 52,
+                                    ),
+                            textAlign: TextAlign.end,
+                          ),
                         ),
-                      ))
-                ],
-              )
+                        SizedBox(
+                          height: 40,
+                          width: 40,
+                          child: Text(
+                            '/${stars.progressLimit}',
+                            style:
+                                Theme.of(context).textTheme.headline3!.copyWith(
+                                      color: CustomColor.primaryAccent,
+                                      fontSize: 26,
+                                    ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                constraints: BoxConstraints(
+                  minWidth: MediaQuery.of(context).size.width * 0.6,
+                  maxWidth: MediaQuery.of(context).size.width * 0.6,
+                  minHeight: MediaQuery.of(context).size.width * 0.6,
+                  maxHeight: MediaQuery.of(context).size.width * 0.6,
+                ),
+                child: Gauge(
+                  currentValue: progress.star.stars.toDouble(),
+                  max: progress.star.progressLimit.toDouble(),
+                ),
+              ),
             ],
           ),
           CounterButton(
@@ -208,75 +276,213 @@ class _HomeState extends State<Home> {
                         ? progress.starProgress.last.progressLimit
                         : progress.star.progressLimit,
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 42.0),
-                    child: Text(
-                      'Weight:',
-                      style: TextStyle(
-                        fontSize: 44,
-                        fontWeight: FontWeight.w300,
-                        color: Nord.light,
-                      ),
-                      textAlign: TextAlign.start,
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 16, right: 16, top: 12),
+                    child: NavigationButton(
+                      onPressed: () {},
+                      text: 'More',
                     ),
                   ),
-                  WeightCard(
-                    padding: const EdgeInsets.only(top: 24, bottom: 32),
-                    currentWeight: progress.weight?.weight,
-                    date: progress.weight?.date,
-                    previousWeight: progress.prevWeight?.weight,
-                    previousDate: progress.prevWeight?.date,
-                    bmi: getBMI(),
-                  ),
-                  Center(
-                    child: CustomIconButton(
-                      text: progress.weight is Weight
-                          ? 'Update weight'
-                          : 'Add weight',
-                      onClick: () async {
-                        double initValue = progress.weight is Weight
-                            ? progress.weight!.weight
-                            : progress.prevWeight!.weight;
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 42.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          constraints: BoxConstraints(
+                            minWidth: MediaQuery.of(context).size.width * 0.3,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Previous:',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .copyWith(
+                                      color: CustomColor.primaryAccentSemiLight,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                              if (progress.prevWeight?.weight is double) ...[
+                                Text(
+                                  '${progress.prevWeight?.weight} ${user.unit == 'imperial' ? 'lb' : 'kg'}',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .copyWith(
+                                        color: CustomColor.primaryAccent,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 28,
+                                      ),
+                                ),
+                                Text(
+                                  '${progress.prevWeight?.date}',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .copyWith(
+                                        color:
+                                            CustomColor.primaryAccentSemiLight,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                      ),
+                                ),
+                              ] else
+                                Text(
+                                  'N/A',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .copyWith(
+                                        color:
+                                            CustomColor.primaryAccentSemiLight,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 52,
+                                      ),
+                                )
+                            ],
+                          ),
+                        ),
+                        Container(
+                          constraints: BoxConstraints(
+                            minHeight: 200,
+                            minWidth: MediaQuery.of(context).size.width * 0.6,
+                          ),
+                          child: Card(
+                            color: getColor(
+                              current: progress.weight?.weight,
+                              previous: progress.prevWeight?.weight,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Text(
+                                  '${progress.weight?.weight ?? progress.prevWeight?.weight} ${user.unit == 'imperial' ? 'lb' : 'kg'}',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline2!
+                                      .copyWith(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 48,
+                                      ),
+                                ),
+                                Text(
+                                  '${progress.weight?.date ?? progress.prevWeight?.date}',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .copyWith(
+                                        color: CustomColor.primaryAccentLight,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: Text(
+                                    'BMI ${getBMI().toStringAsFixed(2)}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .copyWith(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 24,
+                                        ),
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    elevation: 10,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    textStyle:
+                                        Theme.of(context).textTheme.bodyText1,
+                                    primary: getColor(
+                                      current: progress.weight?.weight,
+                                      previous: progress.prevWeight?.weight,
+                                    ),
+                                  ),
+                                  onPressed: () async {
+                                    double initValue = progress.weight is Weight
+                                        ? progress.weight!.weight
+                                        : progress.prevWeight!.weight;
 
-                        double? result = await CustomDialog().showNumericDialog(
-                          context: context,
-                          header: "New weight",
-                          confirmText: "Confirm",
-                          declineText: "Cancel",
-                          dialogBody: "test",
-                          initValue: initValue,
-                        );
+                                    double? result =
+                                        await CustomDialog().showNumericDialog(
+                                      context: context,
+                                      header:
+                                          "Weight (${user.unit == "metric" ? "kg" : "lg"}):",
+                                      confirmText: "Confirm",
+                                      declineText: "Cancel",
+                                      dialogBody: "test",
+                                      initValue: initValue,
+                                    );
 
-                        if (result != null && result != initValue) {
-                          double value = result;
-                          int? id =
-                              progress.weight?.id ?? progress.prevWeight?.id;
+                                    if (result != null && result != initValue) {
+                                      double value = result;
+                                      int? id = progress.weight?.id ??
+                                          progress.prevWeight?.id;
 
-                          if (id is int) {
-                            if (progress.weight is Weight) {
-                              setState(
-                                () => progress.weight!.weight = value,
-                              );
-                              WeightService()
-                                  .updateWeight(recordId: id, weight: value);
-                            } else {
-                              Weight? weight =
-                                  await WeightService().insertNewRecord(
-                                id: user.id!,
-                                weight: value,
-                              );
-                              setState(
-                                () => progress.weight = weight,
-                              );
-                            }
-                          }
+                                      if (id is int) {
+                                        if (progress.weight is Weight) {
+                                          setState(
+                                            () =>
+                                                progress.weight!.weight = value,
+                                          );
+                                          WeightService().updateWeight(
+                                              recordId: id, weight: value);
+                                        } else {
+                                          Weight? weight = await WeightService()
+                                              .insertNewRecord(
+                                            id: user.id!,
+                                            weight: value,
+                                          );
+                                          setState(
+                                            () => progress.weight = weight,
+                                          );
+                                        }
+                                      }
 
-                          if (id != null) {}
-                        }
-                      },
-                      icon: Icons.add,
+                                      if (id != null) {}
+                                    }
+                                  },
+                                  child: Text(
+                                    progress.weight is Weight
+                                        ? 'Update weight'
+                                        : 'Add weight',
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  )
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 16,
+                      right: 16,
+                      top: 12,
+                      bottom: 62,
+                    ),
+                    child: NavigationButton(
+                      onPressed: () {},
+                      text: 'More',
+                    ),
+                  ),
                 ],
               ),
             )

@@ -42,7 +42,7 @@ class _CustomDialogWrapperState extends State<CustomDialogWrapper> {
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.symmetric(vertical: 32.0),
-      margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 42),
+      margin: const EdgeInsets.symmetric(vertical: 12),
       child: Column(
         children: [
           Row(
