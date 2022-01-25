@@ -219,7 +219,7 @@ class WeightService extends DataWeightService {
     try {
       final db = await storageService.getDatabase();
       List<Map<String, dynamic>> weightList = await db.rawQuery(
-          "SELECT * FROM weights WHERE userId = $id ORDER BY pk DESC LIMIT 1");
+          "SELECT * FROM weights WHERE userId = $id ORDER BY pk ASC LIMIT 1");
 
       List<Weight> tempWeights = [];
 
