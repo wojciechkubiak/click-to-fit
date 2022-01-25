@@ -442,11 +442,22 @@ class _HomeState extends State<Home> {
                                                 progress.weight!.weight = value,
                                           );
                                           WeightService().updateWeight(
-                                              recordId: id, weight: value);
+                                            recordId: id,
+                                            weight: value,
+                                          );
+
+                                          if (progress.prevWeight?.weight
+                                                  is! double &&
+                                              user.id is int) {
+                                            HomeService().updateUserWeight(
+                                              user.id!,
+                                              value,
+                                            );
+                                          }
                                         } else {
                                           Weight? weight = await WeightService()
                                               .insertNewRecord(
-                                            id: user.id!,
+                                            userId: user.id!,
                                             weight: value,
                                           );
                                           setState(

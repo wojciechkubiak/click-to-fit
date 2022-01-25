@@ -19,9 +19,12 @@ abstract class DataWeightService extends ConfigService {
     required double weight,
   });
   Future<Weight?> insertNewRecord({
-    required int id,
+    required int userId,
     required double weight,
+    int? id,
   });
+  Future<int?>? getFirstWeightID({required int id});
+  Future<bool> isWeightCreated({required int id});
 }
 
 class WeightService extends DataWeightService {
@@ -162,8 +165,9 @@ class WeightService extends DataWeightService {
 
   @override
   Future<Weight?> insertNewRecord({
-    required int id,
+    required int userId,
     required double weight,
+    int? id,
   }) async {
     StorageService storageService = StorageService();
 
@@ -176,8 +180,9 @@ class WeightService extends DataWeightService {
 
       Weight _emptyWeight = Weight(
         date: parsedDate,
-        userId: id,
+        userId: userId,
         weight: weight,
+        id: id,
       );
 
       Weight _resultWeight = await db
@@ -204,6 +209,48 @@ class WeightService extends DataWeightService {
     } catch (e) {
       print(e);
       return null;
+    }
+  }
+
+  @override
+  Future<int?>? getFirstWeightID({required int id}) async {
+    StorageService storageService = StorageService();
+
+    try {
+      final db = await storageService.getDatabase();
+      List<Map<String, dynamic>> weightList = await db.rawQuery(
+          "SELECT * FROM weights WHERE userId = $id ORDER BY pk DESC LIMIT 1");
+
+      List<Weight> tempWeights = [];
+
+      for (var element in weightList) {
+        tempWeights.add(Weight.fromJson(element));
+      }
+
+      if (tempWeights.isNotEmpty) {
+        return tempWeights.first.id;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  @override
+  Future<bool> isWeightCreated({required int id}) async {
+    StorageService storageService = StorageService();
+
+    try {
+      final db = await storageService.getDatabase();
+      List<Map<String, dynamic>> weightList =
+          await db.rawQuery("SELECT * FROM weights WHERE pk = $id");
+
+      return weightList.isNotEmpty;
+    } catch (e) {
+      print(e);
+      return false;
     }
   }
 }

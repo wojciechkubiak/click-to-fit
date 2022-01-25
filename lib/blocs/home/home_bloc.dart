@@ -88,15 +88,43 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     if (event is HomeLoadPage) {
       if (event.user is User) {
+        late Weight? weight;
+
         User user = event.user!;
         int? userId = await _homeService.insertUser(event.user!);
         user.id = userId;
 
         if (userId is int) {
-          Weight? weight = await _weightService.insertNewRecord(
-            id: userId,
-            weight: user.initWeight,
-          );
+          if (event.introMode == IntroMode.edit) {
+            int? firstWeightID = await _weightService.getFirstWeightID(
+              id: userId,
+            );
+
+            if (firstWeightID is int) {
+              await _weightService.updateWeight(
+                recordId: firstWeightID,
+                weight: user.initWeight,
+              );
+
+              weight = Weight(
+                id: firstWeightID,
+                date: user.initDate,
+                userId: user.id!,
+                weight: user.initWeight,
+              );
+            } else {
+              weight = await _weightService.insertNewRecord(
+                userId: userId,
+                weight: user.initWeight,
+              );
+            }
+          } else {
+            weight = await _weightService.insertNewRecord(
+              userId: userId,
+              weight: user.initWeight,
+            );
+          }
+
           Weight? previousWeight =
               await _weightService.getPreviousWeight(id: user.id!);
           List<Weight>? weightHistory =

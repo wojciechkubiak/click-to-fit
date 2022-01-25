@@ -510,7 +510,10 @@ class _IntroState extends State<Intro> {
                   onPressed: () {
                     final FormState? form = _formKey.currentState;
                     if (form!.validate()) {
-                      setState(() => _step = 3);
+                      setState(
+                        () =>
+                            _step = widget.introMode == IntroMode.edit ? 4 : 3,
+                      );
                     }
                   },
                 ),
@@ -858,6 +861,7 @@ class _IntroState extends State<Intro> {
                     DateParser dateParser = DateParser(date: now);
 
                     User user = User(
+                      id: widget.user?.id,
                       name: name.text,
                       age: _age,
                       unit: parseEnum(_unit),
@@ -868,12 +872,15 @@ class _IntroState extends State<Intro> {
                       stars: result,
                       gender: parseEnum(_sex),
                       activityLevel: _activityLevel.toInt(),
-                      initDate: dateParser.getDateWithoutTime(),
+                      initDate: widget.user?.initDate ??
+                          dateParser.getDateWithoutTime(),
                     );
 
                     widget.handlePage();
-                    BlocProvider.of<HomeBloc>(context)
-                        .add(HomeLoadPage(user: user));
+                    BlocProvider.of<HomeBloc>(context).add(HomeLoadPage(
+                      user: user,
+                      introMode: widget.introMode,
+                    ));
                   }),
             )
           ],

@@ -20,6 +20,7 @@ abstract class DataHomeService extends ConfigService {
   });
   Future<List<User>> getUsers();
   Future<int> getUserId();
+  Future<void> updateUserWeight(int userId, double weight);
 }
 
 class HomeService extends DataHomeService {
@@ -143,5 +144,22 @@ class HomeService extends DataHomeService {
     int? id = prefs.getInt('userId');
 
     return id ?? 0;
+  }
+
+  @override
+  Future<void> updateUserWeight(int userId, double weight) async {
+    StorageService storageService = StorageService();
+
+    try {
+      final db = await storageService.getDatabase();
+
+      int count = await db.rawUpdate(
+        'UPDATE users SET initWeight = ? WHERE pk = ?',
+        [weight, userId],
+      );
+      print('UPDATED WEIGHTS: id $userId count $count');
+    } catch (e) {
+      print(e);
+    }
   }
 }

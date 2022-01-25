@@ -15,7 +15,7 @@ class StorageService extends DataStorageService {
       join(await getDatabasesPath(), 'star_metter.db'),
       onCreate: (db, version) async {
         await db.execute(
-            '''CREATE TABLE users (pk INTEGER PRIMARY KEY, name TEXT, age INTEGER, unit TEXT,
+            '''CREATE TABLE users (pk INTEGER PRIMARY KEY, name TEXT, age INTEGER, 
           height STRING, initWeight REAL, targetWeight REAL, stars INTEGER, 
           gender STRING, activityLevel INTEGER, initDate TEXT)''');
         await db.execute(
