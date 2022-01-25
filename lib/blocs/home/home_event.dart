@@ -42,3 +42,7 @@ class HomeLoadPage extends HomeEvent {
 }
 
 class HomeLoadSettings extends HomeEvent {}
+
+class HomeLoadStars extends HomeEvent {}
+
+class HomeLoadMeasures extends HomeEvent {}

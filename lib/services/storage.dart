@@ -16,7 +16,7 @@ class StorageService extends DataStorageService {
       onCreate: (db, version) async {
         await db.execute(
             '''CREATE TABLE users (pk INTEGER PRIMARY KEY, name TEXT, age INTEGER, 
-          height STRING, initWeight REAL, targetWeight REAL, stars INTEGER, 
+          height STRING, initWeight REAL, targetWeight REAL, unit TEXT, stars INTEGER, 
           gender STRING, activityLevel INTEGER, initDate TEXT)''');
         await db.execute(
             '''CREATE TABLE weights (pk INTEGER PRIMARY KEY, date TEXT, userId INTEGER,

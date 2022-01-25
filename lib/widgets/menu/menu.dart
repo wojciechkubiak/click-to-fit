@@ -78,7 +78,8 @@ class _MenuState extends State<Menu> {
           page: CurrentPage.ARTICLES,
           icon: Icons.star,
           onClick: () {
-            widget.onClick(CurrentPage.ARTICLES);
+            widget.onClick(CurrentPage.SETTINGS);
+            BlocProvider.of<HomeBloc>(context).add(HomeLoadStars());
           },
         ),
         MenuButton(
@@ -86,7 +87,8 @@ class _MenuState extends State<Menu> {
           page: CurrentPage.ARTICLES,
           icon: Icons.book,
           onClick: () {
-            widget.onClick(CurrentPage.ARTICLES);
+            widget.onClick(CurrentPage.SETTINGS);
+            BlocProvider.of<HomeBloc>(context).add(HomeLoadMeasures());
           },
         ),
         MenuButton(
@@ -118,7 +120,6 @@ class _MenuState extends State<Menu> {
             padding: EdgeInsets.only(top: 92),
             showBottomText: true,
             isWhite: true,
-            isHeader: true,
           ),
           _menuButtons(),
           Container(),

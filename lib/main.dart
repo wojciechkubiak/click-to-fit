@@ -3,11 +3,15 @@ import 'dart:io' show Platform;
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:star_metter/pages/measures.dart';
+import 'package:star_metter/pages/stars.dart';
 
 import './widgets/widgets.dart';
 import './blocs/home/home_bloc.dart';
 import './services/services.dart';
+import 'blocs/measures/measures_bloc.dart';
 import 'blocs/settings/settings_bloc.dart';
+import 'blocs/stars/stars_bloc.dart';
 import 'config/colors.dart';
 import 'pages/pages.dart';
 
@@ -113,6 +117,20 @@ class _MyHomePageState extends State<MyHomePage> {
           return SettingsBloc(settingsService)..add(SettingsLoadInit());
         },
       ),
+      BlocProvider<StarsBloc>(
+        create: (context) {
+          final settingsService =
+              RepositoryProvider.of<SettingsService>(context);
+          return StarsBloc(settingsService)..add(StarsLoadInit());
+        },
+      ),
+      BlocProvider<MeasuresBloc>(
+        create: (context) {
+          final settingsService =
+              RepositoryProvider.of<SettingsService>(context);
+          return MeasuresBloc(settingsService)..add(MeasuresLoadInit());
+        },
+      ),
     ], child: _main());
   }
 
@@ -175,8 +193,8 @@ class _MyHomePageState extends State<MyHomePage> {
               systemNavigationBarDividerColor: CustomColor.primaryAccentLight,
               statusBarBrightness: Platform.isIOS
                   ? isOpen
-                      ? Brightness.light
-                      : Brightness.dark
+                      ? Brightness.dark
+                      : Brightness.light
                   : isOpen
                       ? Brightness.dark
                       : Brightness.light,
@@ -257,6 +275,16 @@ class _MyHomePageState extends State<MyHomePage> {
             handlePage: _setDefaultPage,
             users: state.users,
             currentUser: state.currentUser,
+          );
+        }
+        if (state is HomeStars) {
+          return Stars(
+            handlePage: _setDefaultPage,
+          );
+        }
+        if (state is HomeMeasures) {
+          return Measures(
+            handlePage: _setDefaultPage,
           );
         }
         return const Loading();

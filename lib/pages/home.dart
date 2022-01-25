@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:star_metter/blocs/home/home_bloc.dart';
 import 'package:star_metter/models/metric.dart';
 import 'package:star_metter/widgets/custom_icon_button.dart';
 import 'package:star_metter/widgets/gauge.dart';
@@ -280,7 +282,9 @@ class _HomeState extends State<Home> {
                     padding:
                         const EdgeInsets.only(left: 16, right: 16, top: 12),
                     child: NavigationButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        BlocProvider.of<HomeBloc>(context).add(HomeLoadStars());
+                      },
                       text: 'More',
                     ),
                   ),
@@ -465,8 +469,6 @@ class _HomeState extends State<Home> {
                                           );
                                         }
                                       }
-
-                                      if (id != null) {}
                                     }
                                   },
                                   child: Text(
@@ -490,7 +492,10 @@ class _HomeState extends State<Home> {
                       bottom: 62,
                     ),
                     child: NavigationButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        BlocProvider.of<HomeBloc>(context)
+                            .add(HomeLoadMeasures());
+                      },
                       text: 'More',
                     ),
                   ),

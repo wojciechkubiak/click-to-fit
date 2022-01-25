@@ -1,11 +1,5 @@
-import 'dart:async';
 import 'package:bloc/bloc.dart';
-import '../../models/progress.dart';
-import '../../models/star.dart';
-import '../../models/user.dart';
-import '../../models/weight.dart';
 import '../../services/settings.dart';
-import '../../services/weight.dart';
 import './../../services/services.dart';
 
 part 'settings_event.dart';

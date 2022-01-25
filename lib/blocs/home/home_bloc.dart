@@ -29,6 +29,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<HomeLoadIntro>(_mapHomeLoadIntro);
     on<HomeLoadPage>(_mapHomeLoadHomePage);
     on<HomeLoadSettings>(_mapHomeLoadSettings);
+    on<HomeLoadStars>(_mapHomeLoadStars);
+    on<HomeLoadMeasures>(_mapHomeLoadMeasures);
   }
 
   void _mapHomeInit(HomeEvent event, Emitter<HomeState> emit) async {
@@ -164,5 +166,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         currentUser: currentUser,
       ));
     }
+  }
+
+  void _mapHomeLoadStars(HomeEvent event, Emitter<HomeState> emit) async {
+    emit(HomeLoading());
+
+    emit(HomeStars());
+  }
+
+  void _mapHomeLoadMeasures(HomeEvent event, Emitter<HomeState> emit) async {
+    emit(HomeLoading());
+
+    emit(HomeMeasures());
   }
 }

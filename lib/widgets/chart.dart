@@ -159,7 +159,11 @@ class ChartState extends State<Chart> {
     return BarChartData(
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
-            tooltipBgColor: CustomColor.primaryAccent,
+            tooltipBgColor: _stars.last.stars >= widget.initialLimit + 3
+                ? Nord.auroraRed
+                : _stars.last.stars > widget.initialLimit - 3
+                    ? Nord.auroraGreen
+                    : CustomColor.primaryAccentDark,
             getTooltipItem: (group, groupIndex, rod, rodIndex) {
               String weekDay;
               switch (group.x.toInt()) {

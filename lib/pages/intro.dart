@@ -404,7 +404,7 @@ class _IntroState extends State<Intro> {
   Widget step1() {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.7,
+      height: 500,
       child: Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -461,8 +461,9 @@ class _IntroState extends State<Intro> {
   Widget step2() {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.9,
+      height: MediaQuery.of(context).size.height,
       margin: const EdgeInsets.only(top: 84),
+      padding: const EdgeInsets.only(bottom: 32),
       child: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -528,8 +529,9 @@ class _IntroState extends State<Intro> {
   Widget step3() {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.9,
+      height: MediaQuery.of(context).size.height,
       margin: const EdgeInsets.only(top: 84),
+      padding: const EdgeInsets.only(bottom: 16),
       child: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -590,8 +592,8 @@ class _IntroState extends State<Intro> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 32.0, bottom: 82),
+              Container(
+                padding: const EdgeInsets.only(top: 32.0),
                 child: CustomButton(
                   isDisabled: false,
                   onPressed: () {
@@ -927,11 +929,7 @@ class _IntroState extends State<Intro> {
           setState(() => _step = _step - 1);
         } else {
           if (_step == 1) {
-            BlocProvider.of<HomeBloc>(context).add(
-              HomeLoadInit(
-                handlePage: widget.handlePage,
-              ),
-            );
+            BlocProvider.of<HomeBloc>(context).add(HomeLoadSettings());
           } else {
             setState(() => _step = _step - 1);
           }

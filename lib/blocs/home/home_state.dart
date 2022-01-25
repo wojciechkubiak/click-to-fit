@@ -32,6 +32,10 @@ class HomeSettings extends HomeState {
   List<Object> get props => [users, currentUser];
 }
 
+class HomeStars extends HomeState {}
+
+class HomeMeasures extends HomeState {}
+
 class HomePage extends HomeState {
   final User user;
   final Progress progress;

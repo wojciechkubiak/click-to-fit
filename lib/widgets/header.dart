@@ -8,14 +8,12 @@ class Header extends StatelessWidget {
   final bool isWhite;
   final FontWeight fontWeight;
   final EdgeInsets padding;
-  final bool isHeader;
 
   const Header({
     Key? key,
     this.text = 'Star Metter',
     this.showBottomText = true,
     this.isWhite = false,
-    this.isHeader = false,
     this.fontWeight = FontWeight.bold,
     this.padding = EdgeInsets.zero,
   }) : super(key: key);
@@ -27,12 +25,12 @@ class Header extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            isHeader ? text : "Loading",
+            text,
             style: Theme.of(context).textTheme.headline1!.copyWith(
                   color: isWhite ? Colors.white : CustomColor.primaryAccent,
                 ),
           ),
-          if (showBottomText && isHeader)
+          if (showBottomText)
             Text(
               'LOSE WEIGHT LIKE A STAR',
               style: Theme.of(context).textTheme.bodyText1!.copyWith(
