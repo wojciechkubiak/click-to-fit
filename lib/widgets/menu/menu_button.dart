@@ -25,7 +25,7 @@ class MenuButton extends StatelessWidget {
         child: ElevatedButton(
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-              elevation: page == CurrentPage.HOME ? 10 : 8,
+              elevation: page == CurrentPage.HOME ? 10 : 5,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(32),
               ),

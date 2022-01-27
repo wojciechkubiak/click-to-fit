@@ -7,6 +7,7 @@ class NavigationButton extends StatelessWidget {
   final String? text;
   final bool isIcon;
   final IconData? icon;
+  final bool isDisabled;
 
   const NavigationButton({
     Key? key,
@@ -14,6 +15,7 @@ class NavigationButton extends StatelessWidget {
     this.isIcon = false,
     this.icon,
     this.text,
+    this.isDisabled = false,
     required this.onPressed,
   }) : super(key: key);
 
@@ -32,7 +34,7 @@ class NavigationButton extends StatelessWidget {
           horizontal: isIcon ? 6 : 72,
         ),
       ),
-      onPressed: onPressed,
+      onPressed: isDisabled ? () {} : onPressed,
       child: !isIcon
           ? Text(
               text!,
@@ -49,7 +51,9 @@ class NavigationButton extends StatelessWidget {
               child: Icon(
                 icon!,
                 size: 44,
-                color: CustomColor.primaryAccentSemiLight,
+                color: isDisabled
+                    ? CustomColor.primaryAccentLightSaturated
+                    : CustomColor.primaryAccentSemiLight,
               ),
             ),
     );

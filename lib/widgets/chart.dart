@@ -25,18 +25,19 @@ class ChartState extends State<Chart> {
   final Duration animDuration = const Duration(milliseconds: 250);
   List<Star> _stars = [];
 
-  @override
-  void initState() {
-    super.initState();
-    if (widget.stars.isNotEmpty) {
-      _stars = widget.stars;
-    }
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   if (widget.stars.isNotEmpty) {
+  //     _stars = widget.stars;
+  //   }
+  // }
 
   int touchedIndex = -1;
 
   @override
   Widget build(BuildContext context) {
+    _stars = widget.stars;
     return AspectRatio(
       aspectRatio: 1,
       child: Container(
@@ -84,11 +85,7 @@ class ChartState extends State<Chart> {
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
             y: limit + 1,
-            colors: [
-              y == 0
-                  ? CustomColor.primaryAccentLight
-                  : CustomColor.primaryAccentSemiLight
-            ],
+            colors: [CustomColor.primaryAccentLightSaturated],
           ),
         ),
       ],

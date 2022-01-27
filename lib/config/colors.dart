@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class CustomColor {
   static const primaryAccentLight = Color(0xFFf6f4fa);
+  static const primaryAccentLightSaturated = Color(0xFFE7E5EB);
   static const primaryAccentSemiLight = Color(0xFF88769b);
   static const primaryAccent = Color(0xFF624a7b);
   static const primaryAccentDark = Color(0xFF4B3563);

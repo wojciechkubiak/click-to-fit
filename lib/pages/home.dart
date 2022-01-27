@@ -426,7 +426,7 @@ class _HomeState extends State<Home> {
                                         ? progress.weight!.weight
                                         : progress.prevWeight!.weight;
 
-                                    double? result =
+                                    String? result =
                                         await CustomDialog().showNumericDialog(
                                       context: context,
                                       header:
@@ -441,20 +441,19 @@ class _HomeState extends State<Home> {
                                       maxRight: 9,
                                     );
 
-                                    if (result != null && result != initValue) {
-                                      double value = result;
+                                    if (result is String) {
                                       int? id = progress.weight?.id ??
                                           progress.prevWeight?.id;
 
                                       if (id is int) {
                                         if (progress.weight is Weight) {
                                           setState(
-                                            () =>
-                                                progress.weight!.weight = value,
+                                            () => progress.weight!.weight =
+                                                double.parse(result),
                                           );
                                           WeightService().updateWeight(
                                             recordId: id,
-                                            weight: value,
+                                            weight: double.parse(result),
                                           );
 
                                           if (progress.prevWeight?.weight
@@ -462,14 +461,14 @@ class _HomeState extends State<Home> {
                                               user.id is int) {
                                             HomeService().updateUserWeight(
                                               user.id!,
-                                              value,
+                                              double.parse(result),
                                             );
                                           }
                                         } else {
                                           Weight? weight = await WeightService()
                                               .insertNewRecord(
                                             userId: user.id!,
-                                            weight: value,
+                                            weight: double.parse(result),
                                           );
                                           setState(
                                             () => progress.weight = weight,

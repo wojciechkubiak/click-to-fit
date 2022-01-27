@@ -3,8 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:star_metter/blocs/home/home_bloc.dart';
 import 'package:star_metter/config/colors.dart';
 import 'package:star_metter/models/models.dart';
+import 'package:star_metter/services/stars.dart';
 import 'package:star_metter/widgets/navigation_button.dart';
 import 'package:star_metter/widgets/widgets.dart';
+
+enum OffsetChange { backward, forward }
 
 class Stars extends StatefulWidget {
   final Function() handlePage;
@@ -21,11 +24,13 @@ class Stars extends StatefulWidget {
 }
 
 class _StarsState extends State<Stars> {
+  StarsService starsService = StarsService();
+
   late List<Star> _weekStars;
   late List<Star> _chartStars;
 
-  int offset = 0;
-
+  int _offset = 0;
+  bool _isLoading = false;
   DateScope _scope = DateScope.week;
 
   @override
@@ -45,6 +50,31 @@ class _StarsState extends State<Stars> {
     return temp[scope]!;
   }
 
+  void handleOffset({
+    required OffsetChange direction,
+    required int offset,
+    DateScope scope = DateScope.week,
+  }) async {
+    setState(() => _isLoading = true);
+    int newOffset =
+        direction == OffsetChange.backward ? offset + 1 : offset - 1;
+    List<Star> _stars = await starsService.getStars(
+      id: _weekStars.first.userId,
+      scope: scope,
+      offset: newOffset,
+    );
+
+    Future.delayed(const Duration(milliseconds: 300), () {
+      if (mounted) {
+        setState(() {
+          _offset = newOffset;
+          _chartStars = _stars;
+          _isLoading = false;
+        });
+      }
+    });
+  }
+
   Color getColor({required double? stars, required double? limit}) {
     if (stars is double && limit is double) {
       if (stars > limit + 2) {
@@ -57,6 +87,10 @@ class _StarsState extends State<Stars> {
     } else {
       return CustomColor.primaryAccent;
     }
+  }
+
+  String parseDate(String date) {
+    return date.substring(0, 5).replaceAll('-', '/');
   }
 
   Widget listElement({required Star star}) {
@@ -85,7 +119,7 @@ class _StarsState extends State<Stars> {
               ),
             ),
             onPressed: () async {
-              double? result = await CustomDialog().showNumericDialog(
+              String? result = await CustomDialog().showNumericDialog(
                 context: context,
                 header: "Stars:",
                 confirmText: "Confirm",
@@ -98,6 +132,39 @@ class _StarsState extends State<Stars> {
                 minRight: 0,
                 maxRight: 50,
               );
+
+              if (result is String) {
+                List<String> parsed = result.split('.');
+                await starsService.updateStarsLimit(
+                  recordId: star.id!,
+                  stars: int.parse(parsed.first),
+                  limit: int.parse(parsed.last),
+                );
+
+                setState(() {
+                  _weekStars[_weekStars
+                      .indexWhere((element) => element.id == star.id)] = Star(
+                    id: star.id,
+                    date: star.date,
+                    userId: star.userId,
+                    stars: int.parse(parsed.first),
+                    progressLimit: int.parse(parsed.last),
+                  );
+
+                  int idx = _chartStars
+                      .indexWhere((element) => element.id == star.id);
+
+                  if (idx != -1) {
+                    _chartStars[idx] = Star(
+                      id: star.id,
+                      date: star.date,
+                      userId: star.userId,
+                      stars: int.parse(parsed.first),
+                      progressLimit: int.parse(parsed.last),
+                    );
+                  }
+                });
+              }
             },
             child: Text(
               '${star.stars}/${star.progressLimit}',
@@ -112,10 +179,6 @@ class _StarsState extends State<Stars> {
         ],
       ),
     );
-  }
-
-  String parseDate(String date) {
-    return date.substring(0, 5).replaceAll('-', '/');
   }
 
   @override
@@ -176,8 +239,21 @@ class _StarsState extends State<Stars> {
               child: Column(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 24.0),
+                    margin: const EdgeInsets.symmetric(vertical: 24.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: CustomColor.primaryAccentLight,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black26,
+                          offset: Offset(0.0, 3), //(x,y)
+                          blurRadius: 3.0,
+                        ),
+                      ],
+                    ),
                     child: DropdownButton<DateScope>(
+                        elevation: 10,
                         value: _scope,
                         dropdownColor: CustomColor.primaryAccentLight,
                         icon: const Icon(
@@ -186,7 +262,7 @@ class _StarsState extends State<Stars> {
                         ),
                         underline: Container(
                           height: 2,
-                          color: CustomColor.primaryAccent,
+                          color: CustomColor.primaryAccentLight,
                         ),
                         items: <DateScope>[
                           DateScope.week,
@@ -239,9 +315,14 @@ class _StarsState extends State<Stars> {
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               NavigationButton(
-                                onPressed: () {},
+                                onPressed: () async => handleOffset(
+                                  direction: OffsetChange.backward,
+                                  offset: _offset,
+                                  scope: _scope,
+                                ),
                                 isIcon: true,
                                 icon: Icons.arrow_back,
+                                isDisabled: _isLoading,
                               ),
                               SizedBox(
                                 width: 150,
@@ -258,8 +339,13 @@ class _StarsState extends State<Stars> {
                                 ),
                               ),
                               NavigationButton(
-                                onPressed: () {},
+                                onPressed: () async => handleOffset(
+                                  direction: OffsetChange.forward,
+                                  offset: _offset,
+                                  scope: _scope,
+                                ),
                                 isIcon: true,
+                                isDisabled: _offset == 0 || _isLoading,
                                 icon: Icons.arrow_forward,
                               ),
                             ],

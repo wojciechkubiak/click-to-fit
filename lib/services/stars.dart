@@ -28,6 +28,11 @@ abstract class DataStarsService extends ConfigService {
   Future<int> insertStarsDay({
     required Star star,
   });
+  Future<bool> updateStarsLimit({
+    required int recordId,
+    required int stars,
+    required int limit,
+  });
 }
 
 class StarsService extends DataStarsService {
@@ -56,8 +61,9 @@ class StarsService extends DataStarsService {
         List<String> dates = [];
 
         for (int i = 0; i <= 6; i++) {
-          dates.add(DateParser(date: monday.add(Duration(days: i)))
-              .getDateWithoutTime());
+          dates.add(
+              DateParser(date: monday.add(Duration(days: i - (7 * offset))))
+                  .getDateWithoutTime());
         }
 
         List<Star> result = [];
@@ -230,6 +236,30 @@ class StarsService extends DataStarsService {
     } catch (e) {
       print(e);
       return 0;
+    }
+  }
+
+  @override
+  Future<bool> updateStarsLimit({
+    required int recordId,
+    required int stars,
+    required int limit,
+  }) async {
+    StorageService storageService = StorageService();
+
+    try {
+      final db = await storageService.getDatabase();
+
+      int count = await db.rawUpdate(
+        'UPDATE stars SET stars = ?, progressLimit = ? WHERE pk = ?',
+        [stars, limit, recordId],
+      );
+
+      print('UPDATED STARS: id $recordId count $count');
+      return count > 0;
+    } catch (e) {
+      print(e);
+      return false;
     }
   }
 }

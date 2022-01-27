@@ -38,15 +38,15 @@ class CustomDialogWrapper extends StatefulWidget {
 }
 
 class _CustomDialogWrapperState extends State<CustomDialogWrapper> {
-  int _weightKg = 1;
-  int _weightDec = 5;
+  String v1 = "1";
+  String v2 = "5";
 
   @override
   void initState() {
     super.initState();
     List<String> value = widget.initValue.toString().split('.');
-    _weightKg = int.parse(value.first);
-    _weightDec = int.parse(value.last);
+    v1 = value.first;
+    v2 = value.last;
   }
 
   Widget weightPicker() {
@@ -60,10 +60,10 @@ class _CustomDialogWrapperState extends State<CustomDialogWrapper> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               NumberValuePicker(
-                value: _weightKg,
+                value: int.parse(v1),
                 min: widget.minLeft,
                 max: widget.maxLeft,
-                onChanged: (value) => setState(() => _weightKg = value),
+                onChanged: (value) => setState(() => v1 = value.toString()),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -77,10 +77,10 @@ class _CustomDialogWrapperState extends State<CustomDialogWrapper> {
                 ),
               ),
               NumberValuePicker(
-                value: _weightDec,
+                value: int.parse(v2),
                 min: widget.minRight,
                 max: widget.maxRight,
-                onChanged: (value) => setState(() => _weightDec = value),
+                onChanged: (value) => setState(() => v2 = value.toString()),
               ),
             ],
           ),
@@ -131,10 +131,7 @@ class _CustomDialogWrapperState extends State<CustomDialogWrapper> {
                           .bodyText1!
                           .copyWith(fontWeight: FontWeight.w600),
                     ),
-                    onPressed: () => Navigator.pop(
-                      context,
-                      double.parse('$_weightKg.$_weightDec'),
-                    ),
+                    onPressed: () => Navigator.pop(context, '$v1.$v2'),
                   ),
                 ],
               ),
@@ -147,7 +144,7 @@ class _CustomDialogWrapperState extends State<CustomDialogWrapper> {
 }
 
 class CustomDialog {
-  Future<double?> showNumericDialog({
+  Future<String?> showNumericDialog({
     required BuildContext context,
     required double initValue,
     required int minleft,
