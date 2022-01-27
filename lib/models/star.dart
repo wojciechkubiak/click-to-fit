@@ -1,3 +1,5 @@
+enum DateScope { week, month, year }
+
 class Star {
   final int? id;
   final String date;

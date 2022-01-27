@@ -9,7 +9,10 @@ import '../config/config_service.dart';
 import './storage.dart';
 
 abstract class DataStarsService extends ConfigService {
-  Future<List<Star>> getStars({required int id});
+  Future<List<Star>> getStars({
+    required int id,
+    required DateScope scope,
+  });
   Future<Star?> getTodayStars({
     required int id,
     required int progressLimit,
@@ -18,11 +21,23 @@ abstract class DataStarsService extends ConfigService {
     required int recordId,
     required int stars,
   });
+  Future<bool> updateLastUserStars({
+    required int userId,
+    required int stars,
+  });
+  Future<int> insertStarsDay({
+    required Star star,
+  });
 }
 
 class StarsService extends DataStarsService {
   @override
-  Future<List<Star>> getStars({required int id}) async {
+  Future<List<Star>> getStars({
+    required int id,
+    required DateScope scope,
+    int offset = 0,
+    bool isNullStarIncluded = true,
+  }) async {
     StorageService storageService = StorageService();
 
     final db = await storageService.getDatabase();
@@ -32,13 +47,45 @@ class StarsService extends DataStarsService {
     try {
       List<Map<String, dynamic>> starsList = [];
       starsList = await db
-          .rawQuery("SELECT * FROM stars WHERE userId = $id ORDER BY pk ASC");
+          .rawQuery("SELECT * FROM stars WHERE userId = $id ORDER BY pk");
 
-      print('STARSLIST $starsList');
-      if (starsList.isNotEmpty) {
-        for (var star in starsList) {
-          stars.add(Star.fromJson(star));
+      if (scope == DateScope.week) {
+        DateTime now = DateTime.now();
+        DateTime monday = now.add(Duration(days: -(now.weekday - 1)));
+
+        List<String> dates = [];
+
+        for (int i = 0; i <= 6; i++) {
+          dates.add(DateParser(date: monday.add(Duration(days: i)))
+              .getDateWithoutTime());
         }
+
+        List<Star> result = [];
+
+        if (starsList.isNotEmpty) {
+          List<Star> starsFound = [];
+
+          for (var star in starsList) {
+            starsFound.add(Star.fromJson(star));
+          }
+
+          for (var date in dates) {
+            Star? _star = starsFound.firstWhere(
+              (element) => element.date == date,
+              orElse: () {
+                return Star(
+                  date: date,
+                  userId: starsFound.last.userId,
+                  stars: 0,
+                  progressLimit: starsFound.last.progressLimit,
+                );
+              },
+            );
+            result.add(_star);
+          }
+        }
+
+        return result;
       }
     } catch (e) {
       print(e);
@@ -126,6 +173,63 @@ class StarsService extends DataStarsService {
     } catch (e) {
       print(e);
       return false;
+    }
+  }
+
+  @override
+  Future<bool> updateLastUserStars({
+    required int userId,
+    required int stars,
+  }) async {
+    StorageService storageService = StorageService();
+
+    try {
+      List<Map<String, dynamic>> starsList = [];
+
+      final db = await storageService.getDatabase();
+      starsList = await db.rawQuery(
+          "SELECT * FROM stars WHERE userId = $userId ORDER BY pk DESC LIMIT 1");
+
+      if (starsList.isNotEmpty) {
+        Star tempStar = Star.fromJson(starsList.last);
+
+        int count = await db.rawUpdate(
+          'UPDATE stars SET progressLimit = ? WHERE pk = ?',
+          [stars, tempStar.id],
+        );
+
+        print('UPDATED STARS: id ${tempStar.id} count $count');
+        return count > 0;
+      }
+
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  @override
+  Future<int> insertStarsDay({
+    required Star star,
+  }) async {
+    StorageService storageService = StorageService();
+
+    try {
+      final db = await storageService.getDatabase();
+      int id = await db
+          .insert(
+        'stars',
+        star.toJson(),
+      )
+          .then((value) {
+        return value;
+      });
+
+      return id;
+    } catch (e) {
+      print(e);
+      return 0;
     }
   }
 }

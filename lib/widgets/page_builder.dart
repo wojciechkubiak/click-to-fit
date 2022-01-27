@@ -37,12 +37,6 @@ class _PageBuilderState extends State<PageBuilder> {
   bool isOut = false;
 
   @override
-  void didChangeDependencies() {
-    print('isOut $isOut');
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return ConditionalWillPopScope(
       shouldAddCallbacks: true,

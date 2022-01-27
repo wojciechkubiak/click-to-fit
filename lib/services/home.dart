@@ -21,6 +21,7 @@ abstract class DataHomeService extends ConfigService {
   Future<List<User>> getUsers();
   Future<int> getUserId();
   Future<void> updateUserWeight(int userId, double weight);
+  Future<int?> getCurrentUser();
 }
 
 class HomeService extends DataHomeService {
@@ -161,5 +162,14 @@ class HomeService extends DataHomeService {
     } catch (e) {
       print(e);
     }
+  }
+
+  @override
+  Future<int?> getCurrentUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    int? userId = prefs.getInt('userId');
+
+    return userId;
   }
 }

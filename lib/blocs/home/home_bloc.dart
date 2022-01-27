@@ -53,7 +53,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           id: user.id!,
           progressLimit: user.stars,
         );
-        List<Star> starProgress = await _starsService.getStars(id: user.id!);
+        List<Star> starProgress = await _starsService.getStars(
+          id: user.id!,
+          scope: DateScope.week,
+        );
 
         Progress? progress = await _homeService.getProgress(
           user: user,
@@ -111,7 +114,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
               weight = Weight(
                 id: firstWeightID,
                 date: user.initDate,
-                userId: user.id!,
+                userId: userId,
                 weight: user.initWeight,
               );
             } else {
@@ -120,6 +123,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
                 weight: user.initWeight,
               );
             }
+
+            _starsService.updateLastUserStars(
+              userId: userId,
+              stars: user.stars,
+            );
           } else {
             weight = await _weightService.insertNewRecord(
               userId: userId,
@@ -136,7 +144,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             id: user.id!,
             progressLimit: user.stars,
           );
-          List<Star> starProgress = await _starsService.getStars(id: user.id!);
+          List<Star> starProgress = await _starsService.getStars(
+            id: user.id!,
+            scope: DateScope.week,
+          );
 
           Progress? progress = await _homeService.getProgress(
             user: user,
@@ -170,8 +181,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   void _mapHomeLoadStars(HomeEvent event, Emitter<HomeState> emit) async {
     emit(HomeLoading());
+    int? userId = await _homeService.getCurrentUser();
 
-    emit(HomeStars());
+    if (userId is int) {
+      List<Star> stars = await _starsService.getStars(
+        id: userId,
+        scope: DateScope.week,
+        isNullStarIncluded: false,
+      );
+      emit(HomeStars(stars: stars));
+    }
   }
 
   void _mapHomeLoadMeasures(HomeEvent event, Emitter<HomeState> emit) async {

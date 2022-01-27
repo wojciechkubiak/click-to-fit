@@ -33,12 +33,15 @@ class _HomeState extends State<Home> {
   StarsService starsService = StarsService();
   late User user;
   late Progress progress;
+  late Star current;
 
   @override
   void initState() {
     super.initState();
     user = widget.user;
     progress = widget.progress;
+    current =
+        widget.progress.starProgress.lastWhere((element) => element.id != null);
   }
 
   double getBMI() {
@@ -98,7 +101,7 @@ class _HomeState extends State<Home> {
                 if (update) {
                   setState(() {
                     if (progress.starProgress.isNotEmpty) {
-                      progress.starProgress.last.stars = stars.stars - 1;
+                      current.stars = stars.stars - 1;
                     }
                     stars.stars = stars.stars - 1;
                   });
@@ -192,7 +195,7 @@ class _HomeState extends State<Home> {
                 if (update) {
                   setState(() {
                     if (progress.starProgress.isNotEmpty) {
-                      progress.starProgress.last.stars = stars.stars + 1;
+                      current.stars = stars.stars + 1;
                     }
                     stars.stars = stars.stars + 1;
                   });
@@ -430,8 +433,12 @@ class _HomeState extends State<Home> {
                                           "Weight (${user.unit == "metric" ? "kg" : "lg"}):",
                                       confirmText: "Confirm",
                                       declineText: "Cancel",
-                                      dialogBody: "test",
                                       initValue: initValue,
+                                      minleft: user.unit == "metric" ? 42 : 85,
+                                      maxLeft:
+                                          user.unit == "metric" ? 400 : 900,
+                                      minRight: 0,
+                                      maxRight: 9,
                                     );
 
                                     if (result != null && result != initValue) {

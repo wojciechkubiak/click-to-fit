@@ -191,13 +191,8 @@ class _MyHomePageState extends State<MyHomePage> {
               systemNavigationBarIconBrightness:
                   Platform.isIOS ? Brightness.light : Brightness.dark,
               systemNavigationBarDividerColor: CustomColor.primaryAccentLight,
-              statusBarBrightness: Platform.isIOS
-                  ? isOpen
-                      ? Brightness.dark
-                      : Brightness.light
-                  : isOpen
-                      ? Brightness.dark
-                      : Brightness.light,
+              statusBarBrightness:
+                  Platform.isIOS ? Brightness.dark : Brightness.light,
               statusBarIconBrightness:
                   Platform.isIOS ? Brightness.dark : Brightness.light,
               statusBarColor: isOpen
@@ -280,6 +275,7 @@ class _MyHomePageState extends State<MyHomePage> {
         if (state is HomeStars) {
           return Stars(
             handlePage: _setDefaultPage,
+            stars: state.stars,
           );
         }
         if (state is HomeMeasures) {

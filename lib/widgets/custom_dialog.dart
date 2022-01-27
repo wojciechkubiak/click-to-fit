@@ -13,6 +13,11 @@ class CustomDialogWrapper extends StatefulWidget {
   final String? dialogBody;
   final String? declineText;
   final String? confirmText;
+  final String divider;
+  final int minLeft;
+  final int maxLeft;
+  final int minRight;
+  final int maxRight;
 
   const CustomDialogWrapper({
     Key? key,
@@ -21,6 +26,11 @@ class CustomDialogWrapper extends StatefulWidget {
     required this.dialogBody,
     required this.declineText,
     required this.confirmText,
+    required this.minLeft,
+    required this.minRight,
+    required this.maxLeft,
+    required this.maxRight,
+    this.divider = ",",
   }) : super(key: key);
 
   @override
@@ -34,8 +44,9 @@ class _CustomDialogWrapperState extends State<CustomDialogWrapper> {
   @override
   void initState() {
     super.initState();
-    _weightKg = int.parse(widget.initValue.floor().toStringAsFixed(0));
-    _weightDec = ((widget.initValue % 1) * pow(10, 1)).floor();
+    List<String> value = widget.initValue.toString().split('.');
+    _weightKg = int.parse(value.first);
+    _weightDec = int.parse(value.last);
   }
 
   Widget weightPicker() {
@@ -50,15 +61,15 @@ class _CustomDialogWrapperState extends State<CustomDialogWrapper> {
             children: [
               NumberValuePicker(
                 value: _weightKg,
-                min: 65,
-                max: 235,
+                min: widget.minLeft,
+                max: widget.maxLeft,
                 onChanged: (value) => setState(() => _weightKg = value),
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
                 child: Text(
-                  ',',
-                  style: TextStyle(
+                  widget.divider,
+                  style: const TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -67,8 +78,8 @@ class _CustomDialogWrapperState extends State<CustomDialogWrapper> {
               ),
               NumberValuePicker(
                 value: _weightDec,
-                min: 0,
-                max: 10,
+                min: widget.minRight,
+                max: widget.maxRight,
                 onChanged: (value) => setState(() => _weightDec = value),
               ),
             ],
@@ -139,10 +150,15 @@ class CustomDialog {
   Future<double?> showNumericDialog({
     required BuildContext context,
     required double initValue,
+    required int minleft,
+    required int minRight,
+    required int maxLeft,
+    required int maxRight,
     String? header,
     String? dialogBody,
     String? declineText,
     String? confirmText,
+    String divider = ",",
   }) async {
     return showDialog(
       context: context,
@@ -154,6 +170,11 @@ class CustomDialog {
           dialogBody: dialogBody,
           declineText: declineText,
           confirmText: confirmText,
+          divider: divider,
+          minLeft: minleft,
+          minRight: minRight,
+          maxLeft: maxLeft,
+          maxRight: maxRight,
         );
       },
     );

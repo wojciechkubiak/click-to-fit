@@ -4,13 +4,17 @@ import 'package:star_metter/config/colors.dart';
 class NavigationButton extends StatelessWidget {
   final Color color;
   final Function() onPressed;
-  final String text;
+  final String? text;
+  final bool isIcon;
+  final IconData? icon;
 
   const NavigationButton({
     Key? key,
     this.color = CustomColor.primaryAccentLight,
+    this.isIcon = false,
+    this.icon,
+    this.text,
     required this.onPressed,
-    required this.text,
   }) : super(key: key);
 
   @override
@@ -23,21 +27,31 @@ class NavigationButton extends StatelessWidget {
         ),
         textStyle: Theme.of(context).textTheme.headline4,
         primary: color,
-        padding: const EdgeInsets.symmetric(
-          vertical: 15,
-          horizontal: 72,
+        padding: EdgeInsets.symmetric(
+          vertical: isIcon ? 6 : 15,
+          horizontal: isIcon ? 6 : 72,
         ),
       ),
       onPressed: onPressed,
-      child: Text(
-        text,
-        style: Theme.of(context).textTheme.headline3!.copyWith(
-              fontWeight: FontWeight.w500,
-              fontSize: 16,
-              color: CustomColor.primaryAccent,
-              letterSpacing: 2,
+      child: !isIcon
+          ? Text(
+              text!,
+              style: Theme.of(context).textTheme.headline3!.copyWith(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                    color: CustomColor.primaryAccent,
+                    letterSpacing: 2,
+                  ),
+            )
+          : SizedBox(
+              height: 42,
+              width: 42,
+              child: Icon(
+                icon!,
+                size: 44,
+                color: CustomColor.primaryAccentSemiLight,
+              ),
             ),
-      ),
     );
   }
 }

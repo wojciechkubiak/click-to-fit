@@ -74,9 +74,9 @@ class ChartState extends State<Chart> {
         BarChartRodData(
           y: y > 0 ? y + 1 : 0,
           colors: [
-            _stars.last.stars >= widget.initialLimit + 3
+            y >= limit + 3
                 ? Nord.auroraRed
-                : _stars.last.stars > widget.initialLimit - 3
+                : y > limit - 3
                     ? Nord.auroraGreen
                     : CustomColor.primaryAccent,
           ],
@@ -84,7 +84,11 @@ class ChartState extends State<Chart> {
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
             y: limit + 1,
-            colors: [CustomColor.primaryAccentSemiLight],
+            colors: [
+              y == 0
+                  ? CustomColor.primaryAccentLight
+                  : CustomColor.primaryAccentSemiLight
+            ],
           ),
         ),
       ],
@@ -159,11 +163,7 @@ class ChartState extends State<Chart> {
     return BarChartData(
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
-            tooltipBgColor: _stars.last.stars >= widget.initialLimit + 3
-                ? Nord.auroraRed
-                : _stars.last.stars > widget.initialLimit - 3
-                    ? Nord.auroraGreen
-                    : CustomColor.primaryAccentDark,
+            tooltipBgColor: CustomColor.primaryAccentDark,
             getTooltipItem: (group, groupIndex, rod, rodIndex) {
               String weekDay;
               switch (group.x.toInt()) {
@@ -200,7 +200,7 @@ class ChartState extends State<Chart> {
                 ),
                 children: <TextSpan>[
                   TextSpan(
-                    text: (rod.y - 1).toString(),
+                    text: (rod.y - 1).toStringAsFixed(0),
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 16,

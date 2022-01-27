@@ -32,7 +32,15 @@ class HomeSettings extends HomeState {
   List<Object> get props => [users, currentUser];
 }
 
-class HomeStars extends HomeState {}
+class HomeStars extends HomeState {
+  final List<Star> stars;
+
+  HomeStars({
+    required this.stars,
+  });
+
+  List<Object> get props => [stars];
+}
 
 class HomeMeasures extends HomeState {}
 
