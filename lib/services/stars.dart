@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:quiver/time.dart';
 
 import '../../models/models.dart';
 import '../../services/services.dart';
@@ -54,45 +55,132 @@ class StarsService extends DataStarsService {
       starsList = await db
           .rawQuery("SELECT * FROM stars WHERE userId = $id ORDER BY pk");
 
-      if (scope == DateScope.week) {
-        DateTime now = DateTime.now();
-        DateTime monday = now.add(Duration(days: -(now.weekday - 1)));
+      List<String> dates = [];
+      List<Star> result = [];
+      DateTime now = DateTime.now();
 
-        List<String> dates = [];
+      if (scope == DateScope.week) {
+        DateTime monday = now.add(Duration(days: -(now.weekday - 1)));
 
         for (int i = 0; i <= 6; i++) {
           dates.add(
-              DateParser(date: monday.add(Duration(days: i - (7 * offset))))
-                  .getDateWithoutTime());
+            DateParser(date: monday.add(Duration(days: i - (7 * offset))))
+                .getDateWithoutTime(),
+          );
+        }
+      } else if (scope == DateScope.month) {
+        int year = now.year;
+        int month = now.month;
+
+        if (offset > 0) {
+          if (offset % 12 == 0) {
+            int yearOffset = offset ~/ 12;
+            year = year - yearOffset;
+          } else if (offset < 12) {
+            if (month - offset < 0) {
+              year = year - 1;
+              month = 12 + month - offset;
+            } else if (month - offset == 0) {
+              year = year - 1;
+              month = 12;
+            } else {
+              month = month - offset;
+            }
+          } else {
+            year = year - (offset / 12).floor();
+            int rest = (offset % 12);
+
+            if (month - rest < 0) {
+              year = year - 1;
+              month = 12 + month - rest;
+            } else if (month - rest == 0) {
+              year = year - 1;
+              month = 12;
+            } else {
+              month = month - rest;
+            }
+          }
         }
 
-        List<Star> result = [];
+        int days = daysInMonth(
+          year,
+          month,
+        );
 
-        if (starsList.isNotEmpty) {
-          List<Star> starsFound = [];
-
-          for (var star in starsList) {
-            starsFound.add(Star.fromJson(star));
-          }
-
-          for (var date in dates) {
-            Star? _star = starsFound.firstWhere(
-              (element) => element.date == date,
-              orElse: () {
-                return Star(
-                  date: date,
-                  userId: starsFound.last.userId,
-                  stars: 0,
-                  progressLimit: starsFound.last.progressLimit,
-                );
-              },
-            );
-            result.add(_star);
-          }
+        for (int i = 1; i <= days; i++) {
+          dates.add(
+            '${i < 10 ? '0$i' : i}-${month < 10 ? '0$month' : month}-$year',
+          );
         }
-
-        return result;
       }
+
+      if (starsList.isNotEmpty) {
+        List<Star> starsFound = [];
+
+        for (var star in starsList) {
+          starsFound.add(Star.fromJson(star));
+        }
+
+        for (var date in dates) {
+          Star? _star = starsFound.firstWhere(
+            (element) => element.date == date,
+            orElse: () {
+              return Star(
+                date: date,
+                userId: starsFound.last.userId,
+                stars: 0,
+                progressLimit: starsFound.last.progressLimit,
+              );
+            },
+          );
+          result.add(_star);
+        }
+      }
+
+      if (scope == DateScope.month) {
+        List<List<Star>> weekList = [];
+        List<Star> sortedStars = [];
+        int chunkSize = 7;
+
+        for (int i = 0; i < result.length; i += chunkSize) {
+          weekList.add(
+            result.sublist(
+              i,
+              i + chunkSize > result.length ? result.length : i + chunkSize,
+            ),
+          );
+        }
+
+        for (var list in weekList) {
+          int stars = 0;
+          int limit = 0;
+
+          for (var star in list) {
+            stars += star.stars;
+            limit += star.progressLimit;
+          }
+
+          if (stars > 0) {
+            sortedStars.add(Star(
+              date: list.first.date,
+              stars: (stars / list.length).floor(),
+              progressLimit: (limit / list.length).floor(),
+              userId: list.first.userId,
+            ));
+          } else {
+            sortedStars.add(Star(
+              date: list.first.date,
+              stars: 0,
+              progressLimit: (limit / list.length).floor(),
+              userId: list.first.userId,
+            ));
+          }
+
+          result = sortedStars;
+        }
+      }
+
+      return result;
     } catch (e) {
       print(e);
     }
@@ -133,10 +221,8 @@ class StarsService extends DataStarsService {
         )
             .then(
           (value) {
-            print('INSERTED ${_emptyStars.toJson()}');
             int pk = value;
 
-            print('PK $pk');
             return Star(
               id: pk,
               date: _emptyStars.date,
@@ -144,10 +230,9 @@ class StarsService extends DataStarsService {
               progressLimit: _emptyStars.progressLimit,
               stars: _emptyStars.stars,
             );
-          }, //TODO pk?
+          },
         );
 
-        print('TODAY STAR $_resultStar');
         return _resultStar;
       } else {
         Star star = Star.fromJson(starsList.last);

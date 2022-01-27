@@ -89,8 +89,16 @@ class _StarsState extends State<Stars> {
     }
   }
 
-  String parseDate(String date) {
-    return date.substring(0, 5).replaceAll('-', '/');
+  String parseDate(String date, DateScope scope) {
+    if (scope == DateScope.week) {
+      return date.substring(0, 5).replaceAll('-', '/');
+    }
+
+    if (scope == DateScope.month) {
+      return date.substring(3, 10).replaceAll('-', '/');
+    }
+
+    return '';
   }
 
   Widget listElement({required Star star}) {
@@ -286,9 +294,29 @@ class _StarsState extends State<Stars> {
                             ),
                           );
                         }).toList(),
-                        onChanged: (DateScope? dateScope) {
+                        onChanged: (DateScope? dateScope) async {
                           if (dateScope is DateScope) {
                             setState(() => _scope = dateScope);
+
+                            if (dateScope == DateScope.week) {
+                              List<Star> _stars = await starsService.getStars(
+                                id: _weekStars.first.userId,
+                                scope: DateScope.week,
+                                offset: 0,
+                              );
+
+                              setState(() => _chartStars = _stars);
+                            }
+
+                            if (dateScope == DateScope.month) {
+                              List<Star> _stars = await starsService.getStars(
+                                id: _weekStars.first.userId,
+                                scope: DateScope.month,
+                                offset: 0,
+                              );
+
+                              setState(() => _chartStars = _stars);
+                            }
                           }
                         }),
                   ),
@@ -297,6 +325,7 @@ class _StarsState extends State<Stars> {
                     child: Chart(
                       stars: _chartStars,
                       initialLimit: _chartStars.last.progressLimit,
+                      scope: _scope,
                     ),
                   ),
                   Container(
@@ -327,7 +356,12 @@ class _StarsState extends State<Stars> {
                               SizedBox(
                                 width: 150,
                                 child: Text(
-                                  '${parseDate(_chartStars.first.date)} - ${parseDate(_chartStars.last.date)}',
+                                  _scope == DateScope.week
+                                      ? '${parseDate(_chartStars.first.date, DateScope.week)} - ${parseDate(_chartStars.last.date, DateScope.week)}'
+                                      : parseDate(
+                                          _chartStars.first.date,
+                                          DateScope.month,
+                                        ),
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyText1!

@@ -10,11 +10,13 @@ import '../models/models.dart';
 class Chart extends StatefulWidget {
   final List<Star> stars;
   final int initialLimit;
+  final DateScope scope;
 
   const Chart({
     Key? key,
     required this.stars,
     required this.initialLimit,
+    this.scope = DateScope.week,
   }) : super(key: key);
 
   @override
@@ -25,19 +27,15 @@ class ChartState extends State<Chart> {
   final Duration animDuration = const Duration(milliseconds: 250);
   List<Star> _stars = [];
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   if (widget.stars.isNotEmpty) {
-  //     _stars = widget.stars;
-  //   }
-  // }
-
   int touchedIndex = -1;
 
   @override
   Widget build(BuildContext context) {
     _stars = widget.stars;
+
+    for (var star in _stars) {
+      print(star.toJson());
+    }
     return AspectRatio(
       aspectRatio: 1,
       child: Container(
@@ -97,43 +95,19 @@ class ChartState extends State<Chart> {
     required List<Star> list,
   }) {
     DateTime now = DateTime.now();
-    List<DateTime> dates = [];
     List<ChartStar> result = [];
 
-    int dayOfWeek = now.weekday;
-
-    for (int i = 7; i > dayOfWeek; i--) {
-      dates.add(now.add(Duration(days: i - dayOfWeek)));
-    }
-    dates.add(now);
-    for (int i = 1; i < dayOfWeek; i++) {
-      dates.add(now.add(Duration(days: i * -1)));
+    for (var star in list) {
+      result.add(ChartStar(
+        date: star.date,
+        value: star.stars,
+        limit: star.progressLimit,
+      ));
     }
 
-    for (var date in dates) {
-      DateParser dateParser = DateParser(date: date);
-      String _date = dateParser.getDateWithoutTime();
-
-      ChartStar? chartStar = ChartStar(
-        date: _date,
-        value: 0,
-        limit: widget.initialLimit,
-      ); //
-
-      for (var element in list) {
-        if (element.date == _date) {
-          chartStar.value = element.stars;
-          chartStar.limit = element.progressLimit;
-        }
-      }
-      result.add(chartStar);
-    }
-
-    List<ChartStar> output = result.reversed.toList();
-
-    return List.generate(7, (i) {
-      double value = output[i].value.toDouble();
-      double limit = output[i].limit.toDouble();
+    return List.generate(result.length, (i) {
+      double value = result[i].value.toDouble();
+      double limit = result[i].limit.toDouble();
 
       switch (i) {
         case 0:
@@ -165,19 +139,31 @@ class ChartState extends State<Chart> {
               String weekDay;
               switch (group.x.toInt()) {
                 case 0:
-                  weekDay = 'Monday';
+                  weekDay = widget.scope == DateScope.week
+                      ? 'Monday'
+                      : _stars[0].date.substring(0, 5).replaceAll('-', '/');
                   break;
                 case 1:
-                  weekDay = 'Tuesday';
+                  weekDay = widget.scope == DateScope.week
+                      ? 'Tuesday'
+                      : _stars[1].date.substring(0, 5).replaceAll('-', '/');
                   break;
                 case 2:
-                  weekDay = 'Wednesday';
+                  weekDay = widget.scope == DateScope.week
+                      ? 'Wednesday'
+                      : _stars[2].date.substring(0, 5).replaceAll('-', '/');
                   break;
                 case 3:
-                  weekDay = 'Thursday';
+                  weekDay = widget.scope == DateScope.week
+                      ? 'Thursday'
+                      : _stars[3].date.substring(0, 5).replaceAll('-', '/');
                   break;
                 case 4:
-                  weekDay = 'Friday';
+                  weekDay = widget.scope == DateScope.week
+                      ? 'Friday'
+                      : _stars.length == 5
+                          ? _stars[4].date.substring(0, 5).replaceAll('-', '/')
+                          : '';
                   break;
                 case 5:
                   weekDay = 'Saturday';
@@ -219,19 +205,32 @@ class ChartState extends State<Chart> {
             fontWeight: FontWeight.bold,
             fontSize: 14,
           ),
+          rotateAngle: widget.scope == DateScope.week ? 0 : 85,
           margin: 16,
           getTitles: (double value) {
             switch (value.toInt()) {
               case 0:
-                return 'M';
+                return widget.scope == DateScope.week
+                    ? 'M'
+                    : _stars[0].date.substring(0, 5).replaceAll('-', '/');
               case 1:
-                return 'T';
+                return widget.scope == DateScope.week
+                    ? 'T'
+                    : _stars[1].date.substring(0, 5).replaceAll('-', '/');
               case 2:
-                return 'W';
+                return widget.scope == DateScope.week
+                    ? 'W'
+                    : _stars[2].date.substring(0, 5).replaceAll('-', '/');
               case 3:
-                return 'T';
+                return widget.scope == DateScope.week
+                    ? 'T'
+                    : _stars[3].date.substring(0, 5).replaceAll('-', '/');
               case 4:
-                return 'F';
+                return widget.scope == DateScope.week
+                    ? 'F'
+                    : _stars.length == 5
+                        ? _stars[4].date.substring(0, 5).replaceAll('-', '/')
+                        : '';
               case 5:
                 return 'S';
               case 6:
