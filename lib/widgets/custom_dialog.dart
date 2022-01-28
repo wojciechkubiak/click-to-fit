@@ -8,7 +8,7 @@ import '../widgets/widgets.dart';
 import 'number_value_picker.dart';
 
 class CustomDialogWrapper extends StatefulWidget {
-  final double initValue;
+  final String initValue;
   final String? header;
   final String? dialogBody;
   final String? declineText;
@@ -44,7 +44,7 @@ class _CustomDialogWrapperState extends State<CustomDialogWrapper> {
   @override
   void initState() {
     super.initState();
-    List<String> value = widget.initValue.toString().split('.');
+    List<String> value = widget.initValue.split('.');
     v1 = value.first;
     v2 = value.last;
   }
@@ -146,7 +146,7 @@ class _CustomDialogWrapperState extends State<CustomDialogWrapper> {
 class CustomDialog {
   Future<String?> showNumericDialog({
     required BuildContext context,
-    required double initValue,
+    required String initValue,
     required int minleft,
     required int minRight,
     required int maxLeft,

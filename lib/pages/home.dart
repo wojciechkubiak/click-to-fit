@@ -433,7 +433,7 @@ class _HomeState extends State<Home> {
                                           "Weight (${user.unit == "metric" ? "kg" : "lg"}):",
                                       confirmText: "Confirm",
                                       declineText: "Cancel",
-                                      initValue: initValue,
+                                      initValue: initValue.toString(),
                                       minleft: user.unit == "metric" ? 42 : 85,
                                       maxLeft:
                                           user.unit == "metric" ? 400 : 900,

@@ -134,7 +134,7 @@ class _StarsState extends State<Stars> {
                 declineText: "Cancel",
                 dialogBody: "test",
                 divider: "/",
-                initValue: double.parse('${star.stars}.${star.progressLimit}'),
+                initValue: '${star.stars}.${star.progressLimit}',
                 minleft: 0,
                 maxLeft: 50,
                 minRight: 0,
@@ -172,6 +172,16 @@ class _StarsState extends State<Stars> {
                     );
                   }
                 });
+
+                if (_scope == DateScope.month) {
+                  List<Star> _stars = await starsService.getStars(
+                    id: _weekStars.first.userId,
+                    scope: DateScope.month,
+                    offset: 0,
+                  );
+
+                  setState(() => _chartStars = _stars);
+                }
               }
             },
             child: Text(
