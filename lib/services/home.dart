@@ -1,13 +1,11 @@
 import 'dart:async';
-import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sql.dart';
 
 import '../../models/models.dart';
-import '../config/config_service.dart';
 import './storage.dart';
 
-abstract class DataHomeService extends ConfigService {
+abstract class DataHomeService {
   Future<int?> insertUser(User user);
   Future<User?> getUser(int? id);
   Future<Progress?> getProgress({

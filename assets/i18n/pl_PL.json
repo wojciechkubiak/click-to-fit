@@ -1,0 +1,25 @@
+{
+    "home": {
+        "today": "Dzisiaj:"
+    },
+    "days": {
+        "short": {
+            "monday": "P",
+            "tuesday": "W",
+            "wednesday": "Ś",
+            "thursday": "C",
+            "friday": "P",
+            "saturday": "S",
+            "sunday": "N"
+        },
+        "long": {
+            "monday": "Poniedziałek",
+            "tuesday": "Wtorek",
+            "wednesday": "Środa",
+            "thursday": "Czwartek",
+            "friday": "Piątek",
+            "saturday": "Sobota",
+            "sunday": "Niedziela"
+        }
+    }
+}

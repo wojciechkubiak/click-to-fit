@@ -11,7 +11,7 @@ class Header extends StatelessWidget {
 
   const Header({
     Key? key,
-    this.text = 'Star Metter',
+    this.text = 'Lazy&Fit',
     this.showBottomText = true,
     this.isWhite = false,
     this.fontWeight = FontWeight.bold,
@@ -32,7 +32,7 @@ class Header extends StatelessWidget {
           ),
           if (showBottomText)
             Text(
-              'LOSE WEIGHT LIKE A STAR',
+              'Lose weight with few clicks',
               style: Theme.of(context).textTheme.bodyText1!.copyWith(
                     color: isWhite
                         ? Colors.white70

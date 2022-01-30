@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:star_metter/blocs/home/home_bloc.dart';
 import 'package:star_metter/models/metric.dart';
-import 'package:star_metter/widgets/custom_icon_button.dart';
 import 'package:star_metter/widgets/gauge.dart';
 import 'package:star_metter/widgets/navigation_button.dart';
-import 'package:star_metter/widgets/shadow_wrapper.dart';
 
+import '../lang/keys.dart';
 import '../../config/colors.dart';
 import '../../models/models.dart';
 import '../../services/services.dart';
@@ -248,7 +247,7 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                     child: Text(
-                      'Today:',
+                      translate(Keys.globalToday),
                       style: Theme.of(context).textTheme.headline2!,
                       textAlign: TextAlign.center,
                     ),

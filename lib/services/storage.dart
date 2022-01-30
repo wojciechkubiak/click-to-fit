@@ -2,9 +2,7 @@ import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../config/config_service.dart';
-
-abstract class DataStorageService extends ConfigService {
+abstract class DataStorageService {
   Future<Database> getDatabase();
 }
 

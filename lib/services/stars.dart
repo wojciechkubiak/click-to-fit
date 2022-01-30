@@ -1,15 +1,11 @@
 import 'dart:async';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:quiver/time.dart';
 
 import '../../models/models.dart';
 import '../../services/services.dart';
-import '../config/config_service.dart';
 import './storage.dart';
 
-abstract class DataStarsService extends ConfigService {
+abstract class DataStarsService {
   Future<List<Star>> getStars({
     required int id,
     required DateScope scope,

@@ -1,12 +1,9 @@
 import 'dart:async';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite/sqflite.dart';
 
 import '../models/models.dart';
-import '../config/config_service.dart';
 import './storage.dart';
 
-abstract class DataWeightService extends ConfigService {
+abstract class DataWeightService {
   Future<Weight?> getTodayWeight({
     required double initialWeight,
     required int id,

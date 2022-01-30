@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
+import 'package:star_metter/lang/keys.dart';
 import 'package:star_metter/widgets/shadow_wrapper.dart';
 
 import '../config/colors.dart';
@@ -140,36 +142,36 @@ class ChartState extends State<Chart> {
               switch (group.x.toInt()) {
                 case 0:
                   weekDay = widget.scope == DateScope.week
-                      ? 'Monday'
+                      ? translate(Keys.daysLongMonday)
                       : _stars[0].date.substring(0, 5).replaceAll('-', '/');
                   break;
                 case 1:
                   weekDay = widget.scope == DateScope.week
-                      ? 'Tuesday'
+                      ? translate(Keys.daysLongTuesday)
                       : _stars[1].date.substring(0, 5).replaceAll('-', '/');
                   break;
                 case 2:
                   weekDay = widget.scope == DateScope.week
-                      ? 'Wednesday'
+                      ? translate(Keys.daysLongWednesday)
                       : _stars[2].date.substring(0, 5).replaceAll('-', '/');
                   break;
                 case 3:
                   weekDay = widget.scope == DateScope.week
-                      ? 'Thursday'
+                      ? translate(Keys.daysLongThursday)
                       : _stars[3].date.substring(0, 5).replaceAll('-', '/');
                   break;
                 case 4:
                   weekDay = widget.scope == DateScope.week
-                      ? 'Friday'
+                      ? translate(Keys.daysLongFriday)
                       : _stars.length == 5
                           ? _stars[4].date.substring(0, 5).replaceAll('-', '/')
                           : '';
                   break;
                 case 5:
-                  weekDay = 'Saturday';
+                  weekDay = translate(Keys.daysLongSaturday);
                   break;
                 case 6:
-                  weekDay = 'Sunday';
+                  weekDay = translate(Keys.daysLongSunday);
                   break;
                 default:
                   throw Error();
@@ -211,30 +213,30 @@ class ChartState extends State<Chart> {
             switch (value.toInt()) {
               case 0:
                 return widget.scope == DateScope.week
-                    ? 'M'
+                    ? translate(Keys.daysShortMonday)
                     : _stars[0].date.substring(0, 5).replaceAll('-', '/');
               case 1:
                 return widget.scope == DateScope.week
-                    ? 'T'
+                    ? translate(Keys.daysShortTuesday)
                     : _stars[1].date.substring(0, 5).replaceAll('-', '/');
               case 2:
                 return widget.scope == DateScope.week
-                    ? 'W'
+                    ? translate(Keys.daysShortWednesday)
                     : _stars[2].date.substring(0, 5).replaceAll('-', '/');
               case 3:
                 return widget.scope == DateScope.week
-                    ? 'T'
+                    ? translate(Keys.daysShortThursday)
                     : _stars[3].date.substring(0, 5).replaceAll('-', '/');
               case 4:
                 return widget.scope == DateScope.week
-                    ? 'F'
+                    ? translate(Keys.daysShortFriday)
                     : _stars.length == 5
                         ? _stars[4].date.substring(0, 5).replaceAll('-', '/')
                         : '';
               case 5:
-                return 'S';
+                return translate(Keys.daysShortSaturday);
               case 6:
-                return 'S';
+                return translate(Keys.daysShortSunday);
               default:
                 return '';
             }

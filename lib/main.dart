@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:star_metter/pages/measures.dart';
 import 'package:star_metter/pages/stars.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 
 import './widgets/widgets.dart';
 import './blocs/home/home_bloc.dart';
@@ -13,17 +15,25 @@ import 'blocs/measures/measures_bloc.dart';
 import 'blocs/settings/settings_bloc.dart';
 import 'blocs/stars/stars_bloc.dart';
 import 'config/colors.dart';
+import 'lang/translate_preferences.dart';
 import 'pages/pages.dart';
 
 enum CurrentPage { INTRO, LOADING, HOME, ARTICLES, ABOUT, SETTINGS }
 
 void main() async {
+  var delegate = await LocalizationDelegate.create(
+    basePath: 'assets/i18n/',
+    fallbackLocale: 'en_US',
+    preferences: TranslatePreferences(),
+    supportedLocales: ['en_US', 'pl_PL'],
+  );
+
   WidgetsFlutterBinding.ensureInitialized();
   StorageService storageService = StorageService();
 
   storageService.getDatabase();
 
-  runApp(const MyApp());
+  runApp(LocalizedApp(delegate, const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -31,9 +41,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MyHomePage(),
+    var localizationDelegate = LocalizedApp.of(context).delegate;
+
+    return LocalizationProvider(
+      state: LocalizationProvider.of(context).state,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        supportedLocales: localizationDelegate.supportedLocales,
+        locale: localizationDelegate.currentLocale,
+        home: const MyHomePage(),
+      ),
     );
   }
 }

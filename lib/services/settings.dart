@@ -1,10 +1,8 @@
 import 'dart:async';
 
 import '../models/user.dart';
-import '../config/config_service.dart';
-import './storage.dart';
 
-abstract class DataSettingsService extends ConfigService {
+abstract class DataSettingsService {
   Future<List<User>> getUsers();
 }
 
