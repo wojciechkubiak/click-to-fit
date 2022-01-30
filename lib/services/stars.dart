@@ -34,6 +34,12 @@ abstract class DataStarsService extends ConfigService {
     required int stars,
     required int limit,
   });
+  Future<Star?> insertStar({
+    required int userId,
+    required int stars,
+    required int limit,
+    required String date,
+  });
 }
 
 class StarsService extends DataStarsService {
@@ -345,6 +351,49 @@ class StarsService extends DataStarsService {
     } catch (e) {
       print(e);
       return false;
+    }
+  }
+
+  @override
+  Future<Star?> insertStar({
+    required int userId,
+    required int stars,
+    required int limit,
+    required String date,
+  }) async {
+    StorageService storageService = StorageService();
+    Star newStar = Star(
+      date: date,
+      userId: userId,
+      stars: stars,
+      progressLimit: limit,
+    );
+
+    try {
+      final db = await storageService.getDatabase();
+
+      Star _resultStar = await db
+          .insert(
+        'stars',
+        newStar.toJson(),
+      )
+          .then(
+        (value) {
+          int pk = value;
+
+          return Star(
+            id: pk,
+            date: date,
+            userId: userId,
+            progressLimit: limit,
+            stars: stars,
+          );
+        },
+      );
+
+      return _resultStar;
+    } catch (e) {
+      print(e);
     }
   }
 }

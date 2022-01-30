@@ -108,7 +108,7 @@ class _StarsState extends State<Stars> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            star.date,
+            star.date.replaceAll('-', '/'),
             style: Theme.of(context).textTheme.bodyText1!.copyWith(
                   fontSize: 22,
                   fontWeight: FontWeight.w400,
@@ -149,19 +149,19 @@ class _StarsState extends State<Stars> {
                   limit: int.parse(parsed.last),
                 );
 
+                _weekStars[_weekStars
+                    .indexWhere((element) => element.id == star.id)] = Star(
+                  id: star.id,
+                  date: star.date,
+                  userId: star.userId,
+                  stars: int.parse(parsed.first),
+                  progressLimit: int.parse(parsed.last),
+                );
+
+                int idx =
+                    _chartStars.indexWhere((element) => element.id == star.id);
+
                 setState(() {
-                  _weekStars[_weekStars
-                      .indexWhere((element) => element.id == star.id)] = Star(
-                    id: star.id,
-                    date: star.date,
-                    userId: star.userId,
-                    stars: int.parse(parsed.first),
-                    progressLimit: int.parse(parsed.last),
-                  );
-
-                  int idx = _chartStars
-                      .indexWhere((element) => element.id == star.id);
-
                   if (idx != -1) {
                     _chartStars[idx] = Star(
                       id: star.id,
@@ -199,21 +199,142 @@ class _StarsState extends State<Stars> {
     );
   }
 
+  Widget dropdown() {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 24.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: CustomColor.primaryAccentLight,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black26,
+            offset: Offset(0.0, 3), //(x,y)
+            blurRadius: 3.0,
+          ),
+        ],
+      ),
+      child: DropdownButton<DateScope>(
+        elevation: 10,
+        value: _scope,
+        dropdownColor: CustomColor.primaryAccentLight,
+        icon: const Icon(
+          Icons.arrow_downward,
+          color: CustomColor.primaryAccentSemiLight,
+        ),
+        underline: Container(
+          height: 2,
+          color: CustomColor.primaryAccentLight,
+        ),
+        items: <DateScope>[DateScope.week, DateScope.month, DateScope.year]
+            .map<DropdownMenuItem<DateScope>>((DateScope scope) {
+          return DropdownMenuItem<DateScope>(
+            value: scope,
+            child: Center(
+              child: Text(
+                getText(scope),
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      fontSize: 22,
+                      color: CustomColor.primaryAccent,
+                    ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
+        }).toList(),
+        onChanged: (DateScope? dateScope) async {
+          if (dateScope is DateScope) {
+            setState(() => _scope = dateScope);
+
+            if (dateScope == DateScope.week) {
+              List<Star> _stars = await starsService.getStars(
+                id: _weekStars.first.userId,
+                scope: DateScope.week,
+                offset: 0,
+              );
+
+              setState(() => _chartStars = _stars);
+            }
+
+            if (dateScope == DateScope.month) {
+              List<Star> _stars = await starsService.getStars(
+                id: _weekStars.first.userId,
+                scope: DateScope.month,
+                offset: 0,
+              );
+
+              setState(() => _chartStars = _stars);
+            }
+          }
+        },
+      ),
+    );
+  }
+
+  Widget navigation() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        NavigationButton(
+          onPressed: () async => handleOffset(
+            direction: OffsetChange.backward,
+            offset: _offset,
+            scope: _scope,
+          ),
+          isIcon: true,
+          icon: Icons.arrow_back,
+          isDisabled: _isLoading,
+        ),
+        SizedBox(
+          width: 150,
+          child: Text(
+            _scope == DateScope.week
+                ? '${parseDate(_chartStars.first.date, DateScope.week)} - ${parseDate(_chartStars.last.date, DateScope.week)}'
+                : parseDate(
+                    _chartStars.first.date,
+                    DateScope.month,
+                  ),
+            style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                  color: CustomColor.primaryAccent,
+                  fontWeight: FontWeight.w400,
+                ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        NavigationButton(
+          onPressed: () async => handleOffset(
+            direction: OffsetChange.forward,
+            offset: _offset,
+            scope: _scope,
+          ),
+          isIcon: true,
+          isDisabled: _offset == 0 || _isLoading,
+          icon: Icons.arrow_forward,
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    List<Star> _stars = _weekStars;
+
+    for (var st in _stars) {
+      print(st.toJson());
+    }
+
     return PageBuilder(
       margin: const EdgeInsets.only(top: 82),
       isAppBar: true,
       color: CustomColor.primaryAccent,
       backgroundColor: CustomColor.primaryAccent,
       isDarkIcon: false,
-      onBack: () {
-        BlocProvider.of<HomeBloc>(context).add(
-          HomeLoadInit(
-            handlePage: widget.handlePage,
-          ),
-        );
-      },
+      onBack: () => BlocProvider.of<HomeBloc>(context).add(
+        HomeLoadInit(
+          handlePage: widget.handlePage,
+        ),
+      ),
       isBack: true,
       page: Center(
         child: Column(
@@ -256,80 +377,7 @@ class _StarsState extends State<Stars> {
               ),
               child: Column(
                 children: [
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical: 24.0),
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    decoration: BoxDecoration(
-                      color: CustomColor.primaryAccentLight,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black26,
-                          offset: Offset(0.0, 3), //(x,y)
-                          blurRadius: 3.0,
-                        ),
-                      ],
-                    ),
-                    child: DropdownButton<DateScope>(
-                        elevation: 10,
-                        value: _scope,
-                        dropdownColor: CustomColor.primaryAccentLight,
-                        icon: const Icon(
-                          Icons.arrow_downward,
-                          color: CustomColor.primaryAccentSemiLight,
-                        ),
-                        underline: Container(
-                          height: 2,
-                          color: CustomColor.primaryAccentLight,
-                        ),
-                        items: <DateScope>[
-                          DateScope.week,
-                          DateScope.month,
-                          DateScope.year
-                        ].map<DropdownMenuItem<DateScope>>((DateScope scope) {
-                          return DropdownMenuItem<DateScope>(
-                            value: scope,
-                            child: Center(
-                              child: Text(
-                                getText(scope),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .copyWith(
-                                      fontSize: 22,
-                                      color: CustomColor.primaryAccent,
-                                    ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (DateScope? dateScope) async {
-                          if (dateScope is DateScope) {
-                            setState(() => _scope = dateScope);
-
-                            if (dateScope == DateScope.week) {
-                              List<Star> _stars = await starsService.getStars(
-                                id: _weekStars.first.userId,
-                                scope: DateScope.week,
-                                offset: 0,
-                              );
-
-                              setState(() => _chartStars = _stars);
-                            }
-
-                            if (dateScope == DateScope.month) {
-                              List<Star> _stars = await starsService.getStars(
-                                id: _weekStars.first.userId,
-                                scope: DateScope.month,
-                                offset: 0,
-                              );
-
-                              setState(() => _chartStars = _stars);
-                            }
-                          }
-                        }),
-                  ),
+                  dropdown(),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: Chart(
@@ -349,51 +397,7 @@ class _StarsState extends State<Stars> {
                           padding: const EdgeInsets.symmetric(
                             vertical: 24,
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              NavigationButton(
-                                onPressed: () async => handleOffset(
-                                  direction: OffsetChange.backward,
-                                  offset: _offset,
-                                  scope: _scope,
-                                ),
-                                isIcon: true,
-                                icon: Icons.arrow_back,
-                                isDisabled: _isLoading,
-                              ),
-                              SizedBox(
-                                width: 150,
-                                child: Text(
-                                  _scope == DateScope.week
-                                      ? '${parseDate(_chartStars.first.date, DateScope.week)} - ${parseDate(_chartStars.last.date, DateScope.week)}'
-                                      : parseDate(
-                                          _chartStars.first.date,
-                                          DateScope.month,
-                                        ),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .copyWith(
-                                        color: CustomColor.primaryAccent,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              NavigationButton(
-                                onPressed: () async => handleOffset(
-                                  direction: OffsetChange.forward,
-                                  offset: _offset,
-                                  scope: _scope,
-                                ),
-                                isIcon: true,
-                                isDisabled: _offset == 0 || _isLoading,
-                                icon: Icons.arrow_forward,
-                              ),
-                            ],
-                          ),
+                          child: navigation(),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(
@@ -442,6 +446,90 @@ class _StarsState extends State<Stars> {
                                         (e) => listElement(star: e),
                                       )
                                 ]),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16.0),
+                          child: NavigationButton(
+                            isDisabled: !_weekStars.any(
+                              (element) => element.id == null,
+                            ),
+                            customIconPaddingHorizontal: 52,
+                            onPressed: () async {
+                              List<String> allowedStars = [];
+
+                              for (Star star in _stars) {
+                                if (star.id == null) {
+                                  allowedStars.add(star.date);
+                                }
+                              }
+
+                              String? result =
+                                  await CustomDialog().showNumericDialog(
+                                context: context,
+                                header: "New:",
+                                confirmText: "Confirm",
+                                declineText: "Cancel",
+                                dialogBody: "test",
+                                divider: "/",
+                                initValue: '0.${_stars.last.progressLimit}',
+                                allowedStars: allowedStars,
+                                minleft: 0,
+                                maxLeft: 50,
+                                minRight: 0,
+                                maxRight: 50,
+                              );
+
+                              if (result != null) {
+                                List<String> collectedData = result.split('.');
+                                int stars = int.parse(collectedData[0]);
+                                int limit = int.parse(collectedData[1]);
+
+                                Star? newStar = await starsService.insertStar(
+                                  userId: _chartStars.first.userId,
+                                  date: collectedData[2],
+                                  stars: stars,
+                                  limit: limit,
+                                );
+
+                                int idxChart = _chartStars.indexWhere(
+                                  (element) => element.date == collectedData[2],
+                                );
+
+                                int idxWeek = _weekStars.indexWhere(
+                                  (element) => element.date == collectedData[2],
+                                );
+
+                                if (newStar is Star) {
+                                  setState(() {
+                                    if (idxChart != -1 &&
+                                        _scope != DateScope.month) {
+                                      _chartStars[idxChart] = newStar;
+                                    }
+
+                                    if (idxWeek != -1) {
+                                      _weekStars[idxWeek] = newStar;
+                                    }
+                                  });
+                                }
+
+                                if (idxChart != -1 &&
+                                    _scope == DateScope.month) {
+                                  List<Star> _stars =
+                                      await starsService.getStars(
+                                    id: _weekStars.first.userId,
+                                    scope: DateScope.month,
+                                    offset: 0,
+                                  );
+
+                                  setState(() {
+                                    _chartStars = _stars;
+                                  });
+                                }
+                              }
+                            },
+                            isIcon: true,
+                            icon: Icons.add,
                           ),
                         ),
                       ],

@@ -18,6 +18,7 @@ class CustomDialogWrapper extends StatefulWidget {
   final int maxLeft;
   final int minRight;
   final int maxRight;
+  final List<String> allowedStars;
 
   const CustomDialogWrapper({
     Key? key,
@@ -31,6 +32,7 @@ class CustomDialogWrapper extends StatefulWidget {
     required this.maxLeft,
     required this.maxRight,
     this.divider = ",",
+    this.allowedStars = const [],
   }) : super(key: key);
 
   @override
@@ -38,8 +40,9 @@ class CustomDialogWrapper extends StatefulWidget {
 }
 
 class _CustomDialogWrapperState extends State<CustomDialogWrapper> {
-  String v1 = "1";
-  String v2 = "5";
+  late String chosenDate;
+  late String v1;
+  late String v2;
 
   @override
   void initState() {
@@ -47,15 +50,70 @@ class _CustomDialogWrapperState extends State<CustomDialogWrapper> {
     List<String> value = widget.initValue.split('.');
     v1 = value.first;
     v2 = value.last;
+    if (widget.allowedStars.isNotEmpty) {
+      chosenDate = widget.allowedStars.first;
+    }
   }
 
   Widget weightPicker() {
+    print(widget.allowedStars);
+    print([...widget.allowedStars]);
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.symmetric(vertical: 32.0),
       margin: const EdgeInsets.symmetric(vertical: 12),
       child: Column(
         children: [
+          if (widget.allowedStars.isNotEmpty)
+            Container(
+              margin: const EdgeInsets.only(bottom: 24.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                color: CustomColor.primaryAccentLight,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black26,
+                    offset: Offset(0.0, 3), //(x,y)
+                    blurRadius: 3.0,
+                  ),
+                ],
+              ),
+              child: DropdownButton<String>(
+                elevation: 10,
+                value: chosenDate,
+                dropdownColor: CustomColor.primaryAccentLight,
+                icon: const Icon(
+                  Icons.arrow_downward,
+                  color: CustomColor.primaryAccentSemiLight,
+                ),
+                underline: Container(
+                  height: 2,
+                  color: CustomColor.primaryAccentLight,
+                ),
+                items: <String>[...widget.allowedStars]
+                    .map<DropdownMenuItem<String>>((String allowed) {
+                  return DropdownMenuItem<String>(
+                    value: allowed,
+                    child: Center(
+                      child: Text(
+                        allowed.replaceAll('-', '/'),
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                              fontSize: 22,
+                              color: CustomColor.primaryAccent,
+                            ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  );
+                }).toList(),
+                onChanged: (String? _allowedDate) {
+                  if (_allowedDate is String) {
+                    setState(() => chosenDate = _allowedDate);
+                  }
+                },
+              ),
+            ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -131,7 +189,12 @@ class _CustomDialogWrapperState extends State<CustomDialogWrapper> {
                           .bodyText1!
                           .copyWith(fontWeight: FontWeight.w600),
                     ),
-                    onPressed: () => Navigator.pop(context, '$v1.$v2'),
+                    onPressed: () => Navigator.pop(
+                      context,
+                      widget.allowedStars.isNotEmpty
+                          ? '$v1.$v2.$chosenDate'
+                          : '$v1.$v2',
+                    ),
                   ),
                 ],
               ),
@@ -156,6 +219,7 @@ class CustomDialog {
     String? declineText,
     String? confirmText,
     String divider = ",",
+    List<String> allowedStars = const [],
   }) async {
     return showDialog(
       context: context,
@@ -172,6 +236,7 @@ class CustomDialog {
           minRight: minRight,
           maxLeft: maxLeft,
           maxRight: maxRight,
+          allowedStars: allowedStars,
         );
       },
     );

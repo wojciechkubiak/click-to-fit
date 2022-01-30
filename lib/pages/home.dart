@@ -327,7 +327,7 @@ class _HomeState extends State<Home> {
                                       ),
                                 ),
                                 Text(
-                                  '${progress.prevWeight?.date}',
+                                  '${progress.prevWeight?.date.replaceAll('-', '/')}',
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyText1!
@@ -373,7 +373,7 @@ class _HomeState extends State<Home> {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Text(
-                                  '${progress.weight?.weight ?? progress.prevWeight?.weight} ${user.unit == 'imperial' ? 'lb' : 'kg'}',
+                                  '${progress.weight?.weight ?? 'N/A'} ${user.unit == 'imperial' ? 'lb' : 'kg'}',
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline2!
@@ -384,7 +384,7 @@ class _HomeState extends State<Home> {
                                       ),
                                 ),
                                 Text(
-                                  '${progress.weight?.date ?? progress.prevWeight?.date}',
+                                  '${progress.weight?.date.replaceAll('-', '/') ?? progress.prevWeight?.date.replaceAll('-', '/')}',
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyText1!
@@ -414,12 +414,7 @@ class _HomeState extends State<Home> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(16),
                                     ),
-                                    textStyle:
-                                        Theme.of(context).textTheme.bodyText1,
-                                    primary: getColor(
-                                      current: progress.weight?.weight,
-                                      previous: progress.prevWeight?.weight,
-                                    ),
+                                    primary: CustomColor.primaryAccentLight,
                                   ),
                                   onPressed: () async {
                                     double initValue = progress.weight is Weight
@@ -481,6 +476,13 @@ class _HomeState extends State<Home> {
                                     progress.weight is Weight
                                         ? 'Update weight'
                                         : 'Add weight',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .copyWith(
+                                          color: CustomColor.primaryAccentDark,
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                   ),
                                 )
                               ],

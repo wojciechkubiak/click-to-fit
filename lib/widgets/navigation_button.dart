@@ -8,6 +8,9 @@ class NavigationButton extends StatelessWidget {
   final bool isIcon;
   final IconData? icon;
   final bool isDisabled;
+  final EdgeInsets? padding;
+  final double? customIconPaddingVertical;
+  final double? customIconPaddingHorizontal;
 
   const NavigationButton({
     Key? key,
@@ -16,6 +19,12 @@ class NavigationButton extends StatelessWidget {
     this.icon,
     this.text,
     this.isDisabled = false,
+    this.padding = const EdgeInsets.symmetric(
+      vertical: 15,
+      horizontal: 72,
+    ),
+    this.customIconPaddingVertical,
+    this.customIconPaddingHorizontal,
     required this.onPressed,
   }) : super(key: key);
 
@@ -29,10 +38,12 @@ class NavigationButton extends StatelessWidget {
         ),
         textStyle: Theme.of(context).textTheme.headline4,
         primary: color,
-        padding: EdgeInsets.symmetric(
-          vertical: isIcon ? 6 : 15,
-          horizontal: isIcon ? 6 : 72,
-        ),
+        padding: isIcon
+            ? EdgeInsets.symmetric(
+                vertical: customIconPaddingVertical ?? 4,
+                horizontal: customIconPaddingHorizontal ?? 6,
+              )
+            : padding,
       ),
       onPressed: isDisabled ? () {} : onPressed,
       child: !isIcon
