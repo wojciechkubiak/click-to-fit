@@ -45,6 +45,7 @@ class StarsService extends DataStarsService {
     required DateScope scope,
     int offset = 0,
     bool isNullStarIncluded = true,
+    User? user,
   }) async {
     StorageService storageService = StorageService();
 
@@ -59,6 +60,7 @@ class StarsService extends DataStarsService {
 
       List<String> dates = [];
       List<Star> result = [];
+
       DateTime now = DateTime.now();
 
       if (scope == DateScope.week) {
@@ -114,72 +116,130 @@ class StarsService extends DataStarsService {
             '${i < 10 ? '0$i' : i}-${month < 10 ? '0$month' : month}-$year',
           );
         }
-      }
+      } else {
+        DateTime now = DateTime.now();
+        int year = now.year - offset;
 
-      if (starsList.isNotEmpty) {
-        List<Star> starsFound = [];
+        Map<String, YearStar> yearDates = {
+          '01-$year': YearStar(value: 0, limit: 0),
+          '02-$year': YearStar(value: 0, limit: 0),
+          '03-$year': YearStar(value: 0, limit: 0),
+          '04-$year': YearStar(value: 0, limit: 0),
+          '05-$year': YearStar(value: 0, limit: 0),
+          '06-$year': YearStar(value: 0, limit: 0),
+          '07-$year': YearStar(value: 0, limit: 0),
+          '08-$year': YearStar(value: 0, limit: 0),
+          '09-$year': YearStar(value: 0, limit: 0),
+          '10-$year': YearStar(value: 0, limit: 0),
+          '11-$year': YearStar(value: 0, limit: 0),
+          '12-$year': YearStar(value: 0, limit: 0),
+        };
 
-        for (var star in starsList) {
-          starsFound.add(Star.fromJson(star));
-        }
+        if (starsList.isNotEmpty) {
+          List<Star> starsFound = [];
 
-        for (var date in dates) {
-          Star? _star = starsFound.firstWhere(
-            (element) => element.date == date,
-            orElse: () {
-              return Star(
-                date: date,
-                userId: starsFound.last.userId,
-                stars: 0,
-                progressLimit: starsFound.last.progressLimit,
-              );
-            },
-          );
-          result.add(_star);
-        }
-      }
-
-      if (scope == DateScope.month) {
-        List<List<Star>> weekList = [];
-        List<Star> sortedStars = [];
-        int chunkSize = 7;
-
-        for (int i = 0; i < result.length; i += chunkSize) {
-          weekList.add(
-            result.sublist(
-              i,
-              i + chunkSize > result.length ? result.length : i + chunkSize,
-            ),
-          );
-        }
-
-        for (var list in weekList) {
-          int stars = 0;
-          int limit = 0;
-
-          for (var star in list) {
-            stars += star.stars;
-            limit += star.progressLimit;
+          for (var star in starsList) {
+            starsFound.add(Star.fromJson(star));
           }
 
-          if (stars > 0) {
-            sortedStars.add(Star(
-              date: list.first.date,
-              stars: (stars / list.length).floor(),
-              progressLimit: (limit / list.length).floor(),
-              userId: list.first.userId,
+          for (Star star in starsFound) {
+            String starKey = star.date.substring(3, 10);
+            if (yearDates.containsKey(starKey)) {
+              yearDates[starKey]!.value =
+                  yearDates[starKey]!.value + star.stars;
+              yearDates[starKey]!.limit =
+                  yearDates[starKey]!.limit + star.progressLimit;
+            }
+          }
+
+          for (var yr in yearDates.entries) {
+            stars.add(Star(
+              date: '01-${yr.key}',
+              stars: yr.value.value,
+              progressLimit: yr.value.limit,
+              userId: id,
             ));
-          } else {
-            sortedStars.add(Star(
-              date: list.first.date,
+          }
+        } else {
+          for (var yr in yearDates.entries) {
+            stars.add(Star(
+              date: '01-${yr.key}',
               stars: 0,
-              progressLimit: (limit / list.length).floor(),
-              userId: list.first.userId,
+              progressLimit: 0,
+              userId: id,
             ));
           }
-
-          result = sortedStars;
         }
+      }
+
+      if (scope != DateScope.year) {
+        if (starsList.isNotEmpty) {
+          List<Star> starsFound = [];
+
+          for (var star in starsList) {
+            starsFound.add(Star.fromJson(star));
+          }
+
+          for (var date in dates) {
+            Star? _star = starsFound.firstWhere(
+              (element) => element.date == date,
+              orElse: () {
+                return Star(
+                  date: date,
+                  userId: starsFound.last.userId,
+                  stars: 0,
+                  progressLimit: starsFound.last.progressLimit,
+                );
+              },
+            );
+            result.add(_star);
+          }
+        }
+
+        if (scope == DateScope.month) {
+          List<List<Star>> weekList = [];
+          List<Star> sortedStars = [];
+          int chunkSize = 7;
+
+          for (int i = 0; i < result.length; i += chunkSize) {
+            weekList.add(
+              result.sublist(
+                i,
+                i + chunkSize > result.length ? result.length : i + chunkSize,
+              ),
+            );
+          }
+
+          for (var list in weekList) {
+            int stars = 0;
+            int limit = 0;
+
+            for (var star in list) {
+              stars += star.stars;
+              limit += star.progressLimit;
+            }
+
+            if (stars > 0) {
+              sortedStars.add(Star(
+                date: list.first.date,
+                stars: (stars / list.length).floor(),
+                progressLimit: (limit / list.length).floor(),
+                userId: list.first.userId,
+              ));
+            } else {
+              sortedStars.add(Star(
+                date: list.first.date,
+                stars: 0,
+                progressLimit: 0,
+                userId: list.first.userId,
+              ));
+            }
+
+            result = sortedStars;
+          }
+        }
+      } else {
+        return stars;
       }
 
       return result;

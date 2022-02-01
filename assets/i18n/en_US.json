@@ -1,6 +1,20 @@
 {
+    "app_desc": "Lose weight with a few clicks",
     "home": {
-        "today": "Today:"
+        "today": "Today",
+        "more": "More",
+        "previous": "Previous",
+        "na": "N/A",
+        "update": "Update",
+        "add": "Add", 
+        "dialogHeader": "Weight"
+    },
+    "menu": {
+        "greet": "Hi",
+        "summary": "Summary",
+        "stars": "Stars",
+        "measures": "Measures",
+        "settings": "Settings"
     },
     "days": {
         "short": {
@@ -21,5 +35,112 @@
             "saturday": "Saturday",
             "sunday": "Sunday"
         }
+    },
+    "settings": {
+        "header": "Settings",
+        "subheader": "Be careful, some changes cannot be undone.",
+        "add": "Add New User",
+        "update": "Update Initial Data",
+        "showUsers": "Show list of users",
+        "dialogHeader": "User change",
+        "dialogBody": "All your data is already stored. Do you want to change account?",
+        "dialogConfirm": "Yes",
+        "dialogDecline": "No"
+    },
+    "datesRange": {
+        "week": "Week",
+        "month": "Month",
+        "year": "Year"
+    },
+    "months": {
+        "short": {
+            "january": "Jan",
+            "february": "Feb",
+            "march": "Mar",
+            "april": "Apr",
+            "may": "May",
+            "june": "Jun",
+            "july": "Jul",
+            "august": "Aug",
+            "september": "Sep",
+            "october": "Oct",
+            "november": "Nov",
+            "december": "Dec"
+        },
+        "long": {
+            "january": "January",
+            "february": "February",
+            "march": "March",
+            "april": "April",
+            "may": "May",
+            "june": "June",
+            "july": "July",
+            "august": "August",
+            "september": "September",
+            "october": "October",
+            "november": "November",
+            "december": "December"
+        }
+    },
+    "stars": {
+        "header": "Stars",
+        "subheader": "By saving your stars today, you are making yourself obligated to do it again, next day.", 
+        "headerWeek": "This week",
+        "subheaderWeek": "You can edit your stars history by clicking on the values",
+        "dialogConfirm": "Confirm",
+        "dialogDecline": "Decline",
+        "dialogNewHeader": "New"
+    },
+    "intro": {
+        "btnNext": "Next",
+        "btnSubmit": "Submit Plan",
+        "activity": {
+            "header": "Activity",
+            "subheader": "We are going to add some extra stars based on your choice",
+            "sick": "Sick / Mostly laying", 
+            "low": "Low / Office work",
+            "medium": "Medium / 2-3 trainings/week",
+            "above": "Above avarege / 3-4 trainings/week",
+            "high": "High / Physical worker / Proffesional"
+        },
+        "gender": {
+            "header": "Gender",
+            "subheader": "Pick your biological sex, so we can calculate your diet",
+            "male": "Male",
+            "female": "Female"
+        },
+        "personal": {
+            "header": "Your data",
+            "subheader": "What is your name?", 
+            "subsubheader": "This is how we will address you",
+            "ageSubheader": "How young are you?",
+            "ageSubsubheader": "We need it for our calculations"
+        },
+        "units": {
+            "header": "Units",
+            "subheader": "Choose carefully, you won't be able to change it later",
+            "metric": "Metric",
+            "imperial": "Imperial",
+            "feet": "feets",
+            "inch": "inches"
+        },
+        "height": {
+            "header": "Height",
+            "subheader": "Try to be honest (noone else won't see that information). This data is really important for our calculations"
+        },
+        "weight": {
+            "header": "Weight",
+            "subheader": "Try to be honest (noone else won't see that information). This data is really important for our calculations"
+        },
+        "target": {
+            "header": "Target",
+            "subheader": "This data is going to allow us to show you some fancy graphs, so you can track your progress"
+        }, 
+        "summary": {
+            "header": "Your plan",
+            "subheader": "We have counted out that you need {value} stars to keep your weight. Use slider in case you want to lose or gain some weight.",
+            "reminder": "Reminder: Each star equals to 100 kcal. Remember about your health! Do not rush - diet should not be a suffering!"
+        },
+        "week": "week"
     }
 }

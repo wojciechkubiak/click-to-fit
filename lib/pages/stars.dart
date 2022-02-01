@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:star_metter/blocs/home/home_bloc.dart';
 import 'package:star_metter/config/colors.dart';
+import 'package:star_metter/lang/keys.dart';
 import 'package:star_metter/models/models.dart';
 import 'package:star_metter/services/stars.dart';
 import 'package:star_metter/widgets/navigation_button.dart';
@@ -28,6 +30,7 @@ class _StarsState extends State<Stars> {
 
   late List<Star> _weekStars;
   late List<Star> _chartStars;
+  late List<Star> _availableDays;
 
   int _offset = 0;
   bool _isLoading = false;
@@ -38,13 +41,14 @@ class _StarsState extends State<Stars> {
     super.initState();
     _weekStars = widget.stars.reversed.toList();
     _chartStars = widget.stars;
+    _availableDays = widget.stars;
   }
 
   String getText(DateScope scope) {
     Map<DateScope, String> temp = {
-      DateScope.week: "Week",
-      DateScope.month: "Month",
-      DateScope.year: "Year",
+      DateScope.week: translate(Keys.datesRangeWeek),
+      DateScope.month: translate(Keys.datesRangeMonth),
+      DateScope.year: translate(Keys.datesRangeYear),
     };
 
     return temp[scope]!;
@@ -98,6 +102,10 @@ class _StarsState extends State<Stars> {
       return date.substring(3, 10).replaceAll('-', '/');
     }
 
+    if (scope == DateScope.year) {
+      return date.substring(6, 10);
+    }
+
     return '';
   }
 
@@ -129,10 +137,9 @@ class _StarsState extends State<Stars> {
             onPressed: () async {
               String? result = await CustomDialog().showNumericDialog(
                 context: context,
-                header: "Stars:",
-                confirmText: "Confirm",
-                declineText: "Cancel",
-                dialogBody: "test",
+                header: "${translate(Keys.starsHeader)}:",
+                confirmText: translate(Keys.starsDialogConfirm),
+                declineText: translate(Keys.starsDialogDecline),
                 divider: "/",
                 initValue: '${star.stars}.${star.progressLimit}',
                 minleft: 0,
@@ -150,6 +157,15 @@ class _StarsState extends State<Stars> {
                 );
 
                 _weekStars[_weekStars
+                    .indexWhere((element) => element.id == star.id)] = Star(
+                  id: star.id,
+                  date: star.date,
+                  userId: star.userId,
+                  stars: int.parse(parsed.first),
+                  progressLimit: int.parse(parsed.last),
+                );
+
+                _availableDays[_availableDays
                     .indexWhere((element) => element.id == star.id)] = Star(
                   id: star.id,
                   date: star.date,
@@ -253,7 +269,10 @@ class _StarsState extends State<Stars> {
                 offset: 0,
               );
 
-              setState(() => _chartStars = _stars);
+              setState(() {
+                _chartStars = _stars;
+                _offset = 0;
+              });
             }
 
             if (dateScope == DateScope.month) {
@@ -263,7 +282,23 @@ class _StarsState extends State<Stars> {
                 offset: 0,
               );
 
-              setState(() => _chartStars = _stars);
+              setState(() {
+                _chartStars = _stars;
+                _offset = 0;
+              });
+            }
+
+            if (dateScope == DateScope.year) {
+              List<Star> _stars = await starsService.getStars(
+                id: _weekStars.first.userId,
+                scope: DateScope.year,
+                offset: 0,
+              );
+
+              setState(() {
+                _chartStars = _stars;
+                _offset = 0;
+              });
             }
           }
         },
@@ -289,12 +324,14 @@ class _StarsState extends State<Stars> {
         SizedBox(
           width: 150,
           child: Text(
-            _scope == DateScope.week
-                ? '${parseDate(_chartStars.first.date, DateScope.week)} - ${parseDate(_chartStars.last.date, DateScope.week)}'
-                : parseDate(
-                    _chartStars.first.date,
-                    DateScope.month,
-                  ),
+            _scope == DateScope.year
+                ? parseDate(_chartStars.first.date, DateScope.year)
+                : _scope == DateScope.week
+                    ? '${parseDate(_chartStars.first.date, DateScope.week)} - ${parseDate(_chartStars.last.date, DateScope.week)}'
+                    : parseDate(
+                        _chartStars.first.date,
+                        DateScope.month,
+                      ),
             style: Theme.of(context).textTheme.bodyText1!.copyWith(
                   color: CustomColor.primaryAccent,
                   fontWeight: FontWeight.w400,
@@ -320,10 +357,6 @@ class _StarsState extends State<Stars> {
   Widget build(BuildContext context) {
     List<Star> _stars = _weekStars;
 
-    for (var st in _stars) {
-      print(st.toJson());
-    }
-
     return PageBuilder(
       margin: const EdgeInsets.only(top: 82),
       isAppBar: true,
@@ -340,7 +373,7 @@ class _StarsState extends State<Stars> {
         child: Column(
           children: [
             Text(
-              'Stars:',
+              '${translate(Keys.starsHeader)}:',
               style: Theme.of(context).textTheme.headline2,
               textAlign: TextAlign.center,
             ),
@@ -352,7 +385,7 @@ class _StarsState extends State<Stars> {
                 bottom: 48,
               ),
               child: Text(
-                "By saving your stars today, you are making yourself obligated to do it again, next day.",
+                translate(Keys.starsSubheader),
                 style: Theme.of(context).textTheme.bodyText1,
               ),
             ),
@@ -405,7 +438,7 @@ class _StarsState extends State<Stars> {
                             bottom: 12,
                           ),
                           child: Text(
-                            'This week:',
+                            '${translate(Keys.starsHeaderWeek)}:',
                             style:
                                 Theme.of(context).textTheme.headline2!.copyWith(
                                       color: CustomColor.primaryAccentDark,
@@ -422,7 +455,7 @@ class _StarsState extends State<Stars> {
                             bottom: 48,
                           ),
                           child: Text(
-                            "You can edit your stars history by clicking on the values",
+                            translate(Keys.starsSubheaderWeek),
                             style:
                                 Theme.of(context).textTheme.bodyText1!.copyWith(
                                       color: CustomColor.primaryAccentSemiLight,
@@ -439,7 +472,7 @@ class _StarsState extends State<Stars> {
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  ..._weekStars
+                                  ..._availableDays
                                       .where((element) => element.id != null)
                                       .toList()
                                       .map(
@@ -451,29 +484,29 @@ class _StarsState extends State<Stars> {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16.0),
                           child: NavigationButton(
-                            isDisabled: !_weekStars.any(
+                            isDisabled: !_availableDays.any(
                               (element) => element.id == null,
                             ),
                             customIconPaddingHorizontal: 52,
                             onPressed: () async {
-                              List<String> allowedStars = [];
+                              List<String> days = [];
 
-                              for (Star star in _stars) {
+                              for (Star star in _availableDays) {
                                 if (star.id == null) {
-                                  allowedStars.add(star.date);
+                                  days.add(star.date);
                                 }
                               }
 
                               String? result =
                                   await CustomDialog().showNumericDialog(
                                 context: context,
-                                header: "New:",
-                                confirmText: "Confirm",
-                                declineText: "Cancel",
-                                dialogBody: "test",
+                                header:
+                                    '${translate(Keys.starsDialogNewHeader)}:',
+                                confirmText: translate(Keys.starsDialogConfirm),
+                                declineText: translate(Keys.starsDialogDecline),
                                 divider: "/",
                                 initValue: '0.${_stars.last.progressLimit}',
-                                allowedStars: allowedStars,
+                                allowedStars: days,
                                 minleft: 0,
                                 maxLeft: 50,
                                 minRight: 0,
@@ -500,6 +533,10 @@ class _StarsState extends State<Stars> {
                                   (element) => element.date == collectedData[2],
                                 );
 
+                                int idxAv = _availableDays.indexWhere(
+                                  (element) => element.date == collectedData[2],
+                                );
+
                                 if (newStar is Star) {
                                   setState(() {
                                     if (idxChart != -1 &&
@@ -509,6 +546,7 @@ class _StarsState extends State<Stars> {
 
                                     if (idxWeek != -1) {
                                       _weekStars[idxWeek] = newStar;
+                                      _availableDays[idxAv] = newStar;
                                     }
                                   });
                                 }
@@ -517,7 +555,7 @@ class _StarsState extends State<Stars> {
                                     _scope == DateScope.month) {
                                   List<Star> _stars =
                                       await starsService.getStars(
-                                    id: _weekStars.first.userId,
+                                    id: _availableDays.first.userId,
                                     scope: DateScope.month,
                                     offset: 0,
                                   );

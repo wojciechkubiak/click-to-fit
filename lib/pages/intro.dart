@@ -1,8 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:star_metter/lang/keys.dart';
 import 'package:star_metter/widgets/number_value_picker.dart';
 
 import '../../blocs/home/home_bloc.dart';
@@ -34,11 +36,11 @@ class _IntroState extends State<Intro> {
   int _step = 1;
   double _activityLevel = 3;
   List<String> headers = [
-    'Sick / Mostly laying',
-    'Low / Office work',
-    'Medium / 2-3 trainings/week',
-    'Above avarege / 3-4 trainings/week',
-    'High / Physical worker / Proffesional'
+    translate(Keys.introActivitySick),
+    translate(Keys.introActivityLow),
+    translate(Keys.introActivityMedium),
+    translate(Keys.introActivityAbove),
+    translate(Keys.introActivityHigh),
   ];
   int result = 0;
 
@@ -213,14 +215,14 @@ class _IntroState extends State<Intro> {
             child: Column(
               children: [
                 Text(
-                  'How young are you?',
+                  translate(Keys.introPersonalAgeSubheader),
                   style: Theme.of(context).textTheme.headline3,
                   textAlign: TextAlign.start,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12.0),
                   child: Text(
-                    "We need it for our calculations",
+                    translate(Keys.introPersonalAgeSubsubheader),
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 )
@@ -412,7 +414,7 @@ class _IntroState extends State<Intro> {
           Column(
             children: [
               Text(
-                'Gender:',
+                translate(Keys.introGenderHeader),
                 style: Theme.of(context).textTheme.headline2,
                 textAlign: TextAlign.center,
               ),
@@ -420,7 +422,7 @@ class _IntroState extends State<Intro> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 12.0, horizontal: 42),
                 child: Text(
-                  "Pick your biological sex, so we can calculate your diet",
+                  translate(Keys.introGenderSubheader),
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
               ),
@@ -435,18 +437,19 @@ class _IntroState extends State<Intro> {
                 icon: Icons.female,
                 onTap: () => setState(() => _sex = Sex.female),
                 isActive: _sex == Sex.female,
-                text: "Female",
+                text: translate(Keys.introGenderFemale),
               ),
               tileButton(
                 icon: Icons.male,
                 onTap: () => setState(() => _sex = Sex.male),
                 isActive: _sex == Sex.male,
-                text: "Male",
+                text: translate(Keys.introGenderMale),
               ),
             ],
           ),
           CustomButton(
             isDisabled: _sex == null,
+            text: translate(Keys.introBtnNext),
             onPressed: () {
               if (_sex != null) {
                 setState(() => _step = 2);
@@ -473,7 +476,7 @@ class _IntroState extends State<Intro> {
               Padding(
                 padding: const EdgeInsets.only(top: 32.0),
                 child: Text(
-                  'Your data:',
+                  '${translate(Keys.introPersonalHeader)}:',
                   style: Theme.of(context).textTheme.headline2,
                   textAlign: TextAlign.center,
                 ),
@@ -483,13 +486,13 @@ class _IntroState extends State<Intro> {
                 child: Column(
                   children: [
                     Text(
-                      'What is your name?',
+                      translate(Keys.introPersonalSubheader),
                       style: Theme.of(context).textTheme.headline3,
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 12.0),
                       child: Text(
-                        "This is how we will address you",
+                        translate(Keys.introPersonalSubsubheader),
                         style: Theme.of(context).textTheme.bodyText1,
                       ),
                     )
@@ -508,6 +511,7 @@ class _IntroState extends State<Intro> {
                 padding: const EdgeInsets.only(top: 32.0, bottom: 82),
                 child: CustomButton(
                   isDisabled: false,
+                  text: translate(Keys.introBtnNext),
                   onPressed: () {
                     final FormState? form = _formKey.currentState;
                     if (form!.validate()) {
@@ -537,19 +541,23 @@ class _IntroState extends State<Intro> {
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Padding(
+              Container(
                 padding: const EdgeInsets.only(top: 32.0, left: 24, right: 24),
                 child: Text(
-                  'Choose unit:',
+                  '${translate(Keys.introUnitsHeader)}:',
                   style: Theme.of(context).textTheme.headline2,
                   textAlign: TextAlign.center,
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12.0),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 12.0,
+                  horizontal: 42,
+                ),
                 child: Text(
-                  "It can be changed inside application",
+                  translate(Keys.introUnitsSubheader),
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
               ),
@@ -560,7 +568,7 @@ class _IntroState extends State<Intro> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     unitPicker(
-                      text: 'Metric',
+                      text: translate(Keys.introUnitsMetric),
                       textHeight: 'cm/mm',
                       textWeight: 'kg/dec',
                       onTap: () => setState(() {
@@ -575,8 +583,9 @@ class _IntroState extends State<Intro> {
                       isActive: _unit == Unit.metric,
                     ),
                     unitPicker(
-                      text: 'Imperial',
-                      textHeight: 'feet/inch',
+                      text: translate(Keys.introUnitsImperial),
+                      textHeight:
+                          '${translate(Keys.introUnitsFeet)}/${translate(Keys.introUnitsInch)}',
                       textWeight: 'lb/oz',
                       onTap: () => setState(() {
                         _unit = Unit.imperial;
@@ -596,6 +605,7 @@ class _IntroState extends State<Intro> {
                 padding: const EdgeInsets.only(top: 32.0),
                 child: CustomButton(
                   isDisabled: false,
+                  text: translate(Keys.introBtnNext),
                   onPressed: () {
                     final FormState? form = _formKey.currentState;
                     if (form!.validate()) {
@@ -621,7 +631,7 @@ class _IntroState extends State<Intro> {
           Column(
             children: [
               Text(
-                'Height (${_unit == Unit.metric ? 'm' : 'ft'}):',
+                '${translate(Keys.introHeightHeader)} (${_unit == Unit.metric ? 'm' : 'ft'}):',
                 style: Theme.of(context).textTheme.headline2,
                 textAlign: TextAlign.center,
               ),
@@ -629,7 +639,7 @@ class _IntroState extends State<Intro> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 12.0, horizontal: 62),
                 child: Text(
-                  "Pick the one that you feel that fits you the best.",
+                  translate(Keys.introHeightSubheader),
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
               )
@@ -637,7 +647,7 @@ class _IntroState extends State<Intro> {
           ),
           heightPicker(),
           CustomButton(
-            text: 'Next',
+            text: translate(Keys.introBtnNext),
             isDisabled: false,
             onPressed: () => setState(() => _step = 5),
           ),
@@ -656,7 +666,7 @@ class _IntroState extends State<Intro> {
           Column(
             children: [
               Text(
-                'Weight (${_unit == Unit.metric ? 'kg' : 'lb'}):',
+                '${translate(Keys.introWeightHeader)} (${_unit == Unit.metric ? 'kg' : 'lb'}):',
                 style: Theme.of(context).textTheme.headline2,
                 textAlign: TextAlign.center,
               ),
@@ -664,7 +674,7 @@ class _IntroState extends State<Intro> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 12.0, horizontal: 62),
                 child: Text(
-                  "Pick the one that you feel that fits you the best.",
+                  translate(Keys.introWeightSubheader),
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
               )
@@ -672,7 +682,7 @@ class _IntroState extends State<Intro> {
           ),
           weightPicker(),
           CustomButton(
-            text: 'Next',
+            text: translate(Keys.introBtnNext),
             isDisabled: false,
             onPressed: () => setState(() => _step = 6),
           ),
@@ -691,7 +701,7 @@ class _IntroState extends State<Intro> {
           Column(
             children: [
               Text(
-                'Target (${_unit == Unit.metric ? 'kg' : 'lb'}):',
+                '${translate(Keys.introTargetHeader)} (${_unit == Unit.metric ? 'kg' : 'lb'}):',
                 style: Theme.of(context).textTheme.headline2,
                 textAlign: TextAlign.center,
               ),
@@ -699,7 +709,7 @@ class _IntroState extends State<Intro> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 12.0, horizontal: 62),
                 child: Text(
-                  "Pick the one that you feel that fits you the best.",
+                  translate(Keys.introTargetSubheader),
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
               )
@@ -707,7 +717,7 @@ class _IntroState extends State<Intro> {
           ),
           targetWeightPicker(),
           CustomButton(
-            text: 'Next',
+            text: translate(Keys.introBtnNext),
             isDisabled: false,
             onPressed: () => setState(() => _step = 7),
           ),
@@ -728,7 +738,7 @@ class _IntroState extends State<Intro> {
             child: Column(
               children: [
                 Text(
-                  'Activity:',
+                  '${translate(Keys.introActivityHeader)}:',
                   style: Theme.of(context).textTheme.headline2,
                   textAlign: TextAlign.center,
                 ),
@@ -736,7 +746,7 @@ class _IntroState extends State<Intro> {
                   padding: const EdgeInsets.symmetric(
                       vertical: 12.0, horizontal: 62),
                   child: Text(
-                    "Pick the one that you feel that fits you the best.",
+                    translate(Keys.introActivitySubeader),
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 )
@@ -759,7 +769,7 @@ class _IntroState extends State<Intro> {
             ),
           ),
           CustomButton(
-            text: 'Next',
+            text: translate(Keys.introBtnNext),
             isDisabled: false,
             onPressed: () {
               int? _stars = countStars();
@@ -798,7 +808,7 @@ class _IntroState extends State<Intro> {
               child: Column(
                 children: [
                   Text(
-                    'Your plan:',
+                    '${translate(Keys.introSummaryHeader)}:',
                     style: Theme.of(context).textTheme.headline2,
                     textAlign: TextAlign.center,
                   ),
@@ -806,7 +816,9 @@ class _IntroState extends State<Intro> {
                     padding: const EdgeInsets.symmetric(
                         vertical: 12.0, horizontal: 52),
                     child: Text(
-                      "We have counted out that you need $stars stars to keep your weight. Use slider in case you want to lose or gain some weight.",
+                      translate(Keys.introSummarySubheader, args: {
+                        "value": stars,
+                      }),
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                   )
@@ -834,7 +846,7 @@ class _IntroState extends State<Intro> {
               child: CustomSlider(
                 value: result.toDouble(),
                 header:
-                    '${_unit == Unit.metric ? '${(result - stars) * 100}g' : '${((result - stars) * 100 * 0.035).toStringAsPrecision(1)}oz'}/week',
+                    '${_unit == Unit.metric ? '${(result - stars) * 100}g' : '${((result - stars) * 100 * 0.035).toStringAsPrecision(1)}oz'}/${translate(Keys.introWeek)}',
                 onChanged: (double value) {
                   setState(() {
                     result = value.toInt();
@@ -849,14 +861,14 @@ class _IntroState extends State<Intro> {
               padding:
                   const EdgeInsets.symmetric(vertical: 24.0, horizontal: 52),
               child: Text(
-                'Reminder: Each star equals to 100 kcal. Remember about your health! Do not rush - diet should not be a suffering!',
+                translate(Keys.introSummaryReminder),
                 style: Theme.of(context).textTheme.bodyText1,
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 70.0),
               child: CustomButton(
-                  text: 'Submit Plan',
+                  text: translate(Keys.introBtnSubmit),
                   isDisabled: false,
                   onPressed: () {
                     DateTime now = DateTime.now();

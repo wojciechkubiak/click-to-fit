@@ -40,7 +40,7 @@ class _InputState extends State<Input> {
         focusNode: widget.focusNode,
         controller: widget.controller,
         keyboardType: widget.keyboardType,
-        cursorColor: CustomColor.primaryAccentLight,
+        cursorColor: CustomColor.primaryAccentDark,
         inputFormatters: widget.inputFormatters,
         validator: widget.validation,
         textAlign: TextAlign.center,

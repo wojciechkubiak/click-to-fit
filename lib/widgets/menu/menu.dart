@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_translate/flutter_translate.dart';
+import 'package:star_metter/lang/keys.dart';
 
 import '../../blocs/home/home_bloc.dart';
 import '../../models/models.dart';
@@ -47,7 +49,7 @@ class _MenuState extends State<Menu> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Hi,',
+                '${translate(Keys.menuGreet)},',
                 style: TextStyle(
                   fontSize: textSize(),
                   fontWeight: FontWeight.bold,
@@ -66,7 +68,7 @@ class _MenuState extends State<Menu> {
           ),
         ),
         MenuButton(
-          text: 'Summary',
+          text: translate(Keys.menuSummary),
           page: CurrentPage.HOME,
           icon: Icons.home,
           onClick: () {
@@ -74,7 +76,7 @@ class _MenuState extends State<Menu> {
           },
         ),
         MenuButton(
-          text: 'Stars',
+          text: translate(Keys.menuStars),
           page: CurrentPage.ARTICLES,
           icon: Icons.star,
           onClick: () {
@@ -83,7 +85,7 @@ class _MenuState extends State<Menu> {
           },
         ),
         MenuButton(
-          text: 'Measures',
+          text: translate(Keys.menuMeasures),
           page: CurrentPage.ARTICLES,
           icon: Icons.book,
           onClick: () {
@@ -92,7 +94,7 @@ class _MenuState extends State<Menu> {
           },
         ),
         MenuButton(
-          text: 'Settings',
+          text: translate(Keys.menuSettings),
           page: CurrentPage.SETTINGS,
           icon: Icons.settings,
           onClick: () {

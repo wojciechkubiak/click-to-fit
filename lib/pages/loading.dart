@@ -26,7 +26,7 @@ class _LoadingState extends State<Loading> {
           children: [
             if (widget.isHeader)
               Column(
-                children: [
+                children: const [
                   Header(
                     isWhite: true,
                   ),

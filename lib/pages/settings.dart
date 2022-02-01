@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:star_metter/config/colors.dart';
+import 'package:star_metter/lang/keys.dart';
 import 'package:star_metter/widgets/custom_icon_button.dart';
 
 import '../models/models.dart';
@@ -44,11 +46,10 @@ class _SettingsState extends State<Settings> {
         if (!isActive) {
           bool? result = await CustomDialog().showBaseDialog(
             context: context,
-            header: 'User change',
-            dialogBody:
-                'All your data is already stored. Do you want to change account?',
-            confirmText: 'Yes',
-            declineText: 'No',
+            header: translate(Keys.settingsDialogHeader),
+            dialogBody: translate(Keys.settingsDialogBody),
+            confirmText: translate(Keys.settingsDialogConfirm),
+            declineText: translate(Keys.settingsDialogDecline),
           );
           if (result is bool && result == true) {
             BlocProvider.of<HomeBloc>(context).add(
@@ -127,7 +128,7 @@ class _SettingsState extends State<Settings> {
               child: Column(
                 children: [
                   Text(
-                    'Settings:',
+                    translate(Keys.settingsHeader),
                     style: Theme.of(context).textTheme.headline1!.copyWith(
                           fontWeight: FontWeight.w200,
                           color: Colors.white,
@@ -138,7 +139,7 @@ class _SettingsState extends State<Settings> {
                     padding: const EdgeInsets.symmetric(
                         vertical: 12.0, horizontal: 62),
                     child: Text(
-                      "Be careful. Some changes cannot be undone.",
+                      translate(Keys.settingsSubheader),
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                   )
@@ -153,7 +154,7 @@ class _SettingsState extends State<Settings> {
                   children: [
                     if (!isListVisible)
                       Text(
-                        'Show list of users',
+                        translate(Keys.settingsShowUsers),
                         style: Theme.of(context).textTheme.bodyText1!.copyWith(
                               fontWeight: FontWeight.w600,
                               fontSize: 16,
@@ -200,7 +201,7 @@ class _SettingsState extends State<Settings> {
                 ),
               ),
             CustomIconButton(
-              text: 'Add User',
+              text: translate(Keys.settingsAdd),
               onClick: () {
                 BlocProvider.of<HomeBloc>(context).add(
                   HomeLoadIntro(introMode: IntroMode.create),
@@ -210,7 +211,7 @@ class _SettingsState extends State<Settings> {
               width: 320,
             ),
             CustomIconButton(
-              text: 'Update Initial Data',
+              text: translate(Keys.settingsUpdate),
               onClick: () {
                 BlocProvider.of<HomeBloc>(context).add(
                   HomeLoadIntro(

@@ -247,7 +247,7 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                     child: Text(
-                      translate(Keys.globalToday),
+                      '${translate(Keys.globalToday)}:',
                       style: Theme.of(context).textTheme.headline2!,
                       textAlign: TextAlign.center,
                     ),
@@ -287,7 +287,7 @@ class _HomeState extends State<Home> {
                       onPressed: () {
                         BlocProvider.of<HomeBloc>(context).add(HomeLoadStars());
                       },
-                      text: 'More',
+                      text: translate(Keys.globalMore),
                     ),
                   ),
                   Padding(
@@ -304,7 +304,7 @@ class _HomeState extends State<Home> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                'Previous:',
+                                '${translate(Keys.globalPrevious)}:',
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText1!
@@ -339,7 +339,7 @@ class _HomeState extends State<Home> {
                                 ),
                               ] else
                                 Text(
-                                  'N/A',
+                                  translate(Keys.globalNA),
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyText1!
@@ -372,7 +372,7 @@ class _HomeState extends State<Home> {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Text(
-                                  '${progress.weight?.weight ?? 'N/A'} ${user.unit == 'imperial' ? 'lb' : 'kg'}',
+                                  '${progress.weight?.weight ?? translate(Keys.globalNA)} ${progress.weight?.weight is double ? user.unit == 'imperial' ? 'lb' : 'kg' : ''}',
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline2!
@@ -381,9 +381,12 @@ class _HomeState extends State<Home> {
                                         fontWeight: FontWeight.bold,
                                         fontSize: 48,
                                       ),
+                                  textAlign: TextAlign.center,
                                 ),
                                 Text(
-                                  '${progress.weight?.date.replaceAll('-', '/') ?? progress.prevWeight?.date.replaceAll('-', '/')}',
+                                  DateParser(date: DateTime.now())
+                                      .getDateWithoutTime()
+                                      .replaceAll("-", "/"),
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyText1!
@@ -424,9 +427,11 @@ class _HomeState extends State<Home> {
                                         await CustomDialog().showNumericDialog(
                                       context: context,
                                       header:
-                                          "Weight (${user.unit == "metric" ? "kg" : "lg"}):",
-                                      confirmText: "Confirm",
-                                      declineText: "Cancel",
+                                          "${translate(Keys.globalDialogHeader)} (${user.unit == "metric" ? "kg" : "lg"}):",
+                                      confirmText:
+                                          translate(Keys.starsDialogConfirm),
+                                      declineText:
+                                          translate(Keys.starsDialogDecline),
                                       initValue: initValue.toString(),
                                       minleft: user.unit == "metric" ? 42 : 85,
                                       maxLeft:
@@ -473,8 +478,8 @@ class _HomeState extends State<Home> {
                                   },
                                   child: Text(
                                     progress.weight is Weight
-                                        ? 'Update weight'
-                                        : 'Add weight',
+                                        ? translate(Keys.globalUpdate)
+                                        : translate(Keys.globalAdd),
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyText1!
@@ -503,7 +508,7 @@ class _HomeState extends State<Home> {
                         BlocProvider.of<HomeBloc>(context)
                             .add(HomeLoadMeasures());
                       },
-                      text: 'More',
+                      text: translate(Keys.globalMore),
                     ),
                   ),
                 ],

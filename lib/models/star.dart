@@ -92,3 +92,33 @@ class ChartStar {
         date,
       ];
 }
+
+class YearStar {
+  int value;
+  int limit;
+
+  YearStar({
+    required this.value,
+    required this.limit,
+  });
+
+  factory YearStar.fromJson(Map<String, dynamic> json) {
+    YearStar starProgress = YearStar(
+      value: json['value'],
+      limit: json['limit'],
+    );
+    return starProgress;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['value'] = value;
+    data['limit'] = limit;
+    return data;
+  }
+
+  List<dynamic> get props => [
+        value,
+        limit,
+      ];
+}

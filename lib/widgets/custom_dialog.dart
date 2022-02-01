@@ -57,7 +57,6 @@ class _CustomDialogWrapperState extends State<CustomDialogWrapper> {
 
   Widget weightPicker() {
     print(widget.allowedStars);
-    print([...widget.allowedStars]);
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.symmetric(vertical: 32.0),

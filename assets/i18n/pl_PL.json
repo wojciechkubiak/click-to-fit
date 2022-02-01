@@ -1,6 +1,20 @@
 {
+    "app_desc": "Strać wagę w kilka kliknięć",
     "home": {
-        "today": "Dzisiaj:"
+        "today": "Dzisiaj",
+        "more": "Więcej",
+        "previous": "Poprzednio",
+        "na": "B/D",
+        "update": "Zaktualizuj",
+        "add": "Dodaj",
+        "dialogHeader": "Waga"
+    },
+    "menu": {
+        "greet": "Cześć",
+        "summary": "Główna",
+        "stars": "Gwiazdki",
+        "measures": "Pomiary",
+        "settings": "Ustawienia"
     },
     "days": {
         "short": {
@@ -21,5 +35,112 @@
             "saturday": "Sobota",
             "sunday": "Niedziela"
         }
+    },
+    "settings": {
+        "header": "Ustawienia",
+        "subheader": "Ostrożnie, niektórych zmian nie można cofnąć.",
+        "add": "Dodaj Użytkownika",
+        "update": "Zmień Dane Początkowe",
+        "showUsers": "Pokaż listę użytkowników",
+        "dialogHeader": "Zmiana użytkownika",
+        "dialogBody": "Wszystkie Twoje dotychczasowe dane są zapisane. Czy chcesz kontynuować?",
+        "dialogConfirm": "Tak",
+        "dialogDecline": "Nie"
+    },
+    "datesRange": {
+        "week": "Tydzień",
+        "month": "Miesiąc",
+        "year": "Rok"
+    },
+    "months": {
+        "short": {
+            "january": "Sty",
+            "february": "Lut",
+            "march": "Mar",
+            "april": "Kwi",
+            "may": "Maj",
+            "june": "Cze",
+            "july": "Lip",
+            "august": "Sie",
+            "september": "Wrz",
+            "october": "Paź",
+            "november": "Lis",
+            "december": "Gru"
+        },
+        "long": {
+            "january": "Styczeń",
+            "february": "Luty",
+            "march": "Marzec",
+            "april": "Kwiecień",
+            "may": "Maj",
+            "june": "Czerwiec",
+            "july": "Lipiec",
+            "august": "Sierpień",
+            "september": "Wrzesień",
+            "october": "Październik",
+            "november": "Listopad",
+            "december": "Grudzień"
+        }
+    },
+    "stars": {
+        "header": "Gwiazdki",
+        "subheader": "Zapisując swoje gwiazdki dzisiaj, będziesz miał motywację, by zapisać je równie jutro.",
+        "headerWeek": "Ten tydzień",
+        "subheaderWeek": "Możesz edytować swoją historę poprzez kliknięcie na wartość danego dnia.",
+        "dialogConfirm": "Potwierdź",
+        "dialogDecline": "Anuluj",
+        "dialogNewHeader": "Dodaj"
+    },
+    "intro": {
+        "btnNext": "Dalej",
+        "btnSubmit": "Zatwierdź Plan",
+        "activity": {
+            "header": "Aktywność",
+            "subheader": "Dodamy kilka gwiazdek na podstawie Twego wyboru",
+            "sick": "Choroba / Leżakowanie", 
+            "low": "Mała / Praca biurowa",
+            "medium": "Średnia / 2-3 treningi tygodniowo",
+            "above": "Powyżej średniej / 3-4 treningi tygodniowo",
+            "high": "Wysoka / Pracownik fizyczny, profesjonalny sport"
+        },
+        "gender": {
+            "header": "Płeć",
+            "subheader": "Wybierz swoją biologiczną płeć, żebyśmy mogli wyliczyć Twoje zapotrzebowanie",
+            "male": "Mężczyzna",
+            "female": "Kobieta"
+        },
+        "personal": {
+            "header": "Twoje dane",
+            "subheader": "Jak masz na imię?", 
+            "subsubheader": "Tak będziemy się do Ciebie zwracać",
+            "ageSubheader": "Jaki jest Twój wiek?",
+            "ageSubsubheader": "Potrzebne do naszych obliczeń"
+        },
+        "units": {
+            "header": "Jednostki",
+            "subheader": "Wybieraj ostrożnie, brak możliwości zmiany w przyszłości",
+            "metric": "Metryczny",
+            "imperial": "Imperialny",
+            "feet": "stopy",
+            "inch": "cale"
+        },
+        "height": {
+            "header": "Wzrost",
+            "subheader": "Podaj realne dane (nikt inny nie zobaczy tych informacji), dzięki czemu będziemy w stanie wyliczyć Twoje zapotrzebowanie z najlepszą dokładnością"
+        },
+        "weight": {
+            "header": "Waga",
+            "subheader": "Podaj realne dane (nikt inny nie zobaczy tych informacji), dzięki czemu będziemy w stanie wyliczyć Twoje zapotrzebowanie z najlepszą dokładnością"
+        },
+        "target": {
+            "header": "Cel",
+            "subheader": "Ta informacja pozwoli na pokazywać ci Twój progres oraz ile brakuje do Twojego celu"
+        }, 
+        "summary": {
+            "header": "Twój plan",
+            "subheader": "Obliczyliśmy Twoje zapotrzebowanie, które wynosi {value} gwiazdek w celu utrzymania aktualnej wagi. Użyj interaktywnego paska żeby ustawić przybieranie lub tracenie na wadze.",
+            "reminder": "Przypomnienie: Każda gwiazdka jest równa 100kcal. Pamiętaj o swojej wadze! Nie zamęczaj się - dieta nie powinna być katorgą"
+        },
+        "week": "tydzień"
     }
 }

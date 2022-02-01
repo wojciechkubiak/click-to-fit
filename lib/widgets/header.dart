@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
+import 'package:star_metter/lang/keys.dart';
 
 import '../config/colors.dart';
 
@@ -32,7 +34,7 @@ class Header extends StatelessWidget {
           ),
           if (showBottomText)
             Text(
-              'Lose weight with few clicks',
+              translate(Keys.appDesc),
               style: Theme.of(context).textTheme.bodyText1!.copyWith(
                     color: isWhite
                         ? Colors.white70
