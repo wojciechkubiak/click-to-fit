@@ -158,7 +158,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             weightProgress: weightHistory,
           );
           if (progress is Progress) {
-            await Future.delayed(const Duration(seconds: 5));
+            await Future.delayed(const Duration(seconds: 4));
 
             emit(HomePage(user: user, progress: progress));
           }

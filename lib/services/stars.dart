@@ -54,6 +54,10 @@ class StarsService extends DataStarsService {
     List<Star> stars = [];
 
     try {
+      HomeService homeService = HomeService();
+
+      User? user = await homeService.getUser(id);
+
       List<Map<String, dynamic>> starsList = [];
       starsList = await db
           .rawQuery("SELECT * FROM stars WHERE userId = $id ORDER BY pk");
@@ -121,18 +125,18 @@ class StarsService extends DataStarsService {
         int year = now.year - offset;
 
         Map<String, YearStar> yearDates = {
-          '01-$year': YearStar(value: 0, limit: 0),
-          '02-$year': YearStar(value: 0, limit: 0),
-          '03-$year': YearStar(value: 0, limit: 0),
-          '04-$year': YearStar(value: 0, limit: 0),
-          '05-$year': YearStar(value: 0, limit: 0),
-          '06-$year': YearStar(value: 0, limit: 0),
-          '07-$year': YearStar(value: 0, limit: 0),
-          '08-$year': YearStar(value: 0, limit: 0),
-          '09-$year': YearStar(value: 0, limit: 0),
-          '10-$year': YearStar(value: 0, limit: 0),
-          '11-$year': YearStar(value: 0, limit: 0),
-          '12-$year': YearStar(value: 0, limit: 0),
+          '01-$year': YearStar(value: 0, limit: 0, found: 0),
+          '02-$year': YearStar(value: 0, limit: 0, found: 0),
+          '03-$year': YearStar(value: 0, limit: 0, found: 0),
+          '04-$year': YearStar(value: 0, limit: 0, found: 0),
+          '05-$year': YearStar(value: 0, limit: 0, found: 0),
+          '06-$year': YearStar(value: 0, limit: 0, found: 0),
+          '07-$year': YearStar(value: 0, limit: 0, found: 0),
+          '08-$year': YearStar(value: 0, limit: 0, found: 0),
+          '09-$year': YearStar(value: 0, limit: 0, found: 0),
+          '10-$year': YearStar(value: 0, limit: 0, found: 0),
+          '11-$year': YearStar(value: 0, limit: 0, found: 0),
+          '12-$year': YearStar(value: 0, limit: 0, found: 0),
         };
 
         if (starsList.isNotEmpty) {
@@ -149,14 +153,25 @@ class StarsService extends DataStarsService {
                   yearDates[starKey]!.value + star.stars;
               yearDates[starKey]!.limit =
                   yearDates[starKey]!.limit + star.progressLimit;
+              yearDates[starKey]!.found = yearDates[starKey]!.found + 1;
             }
           }
 
           for (var yr in yearDates.entries) {
+            List<String> dates = yr.key.split('-');
+            int days = daysInMonth(
+              int.parse(dates.last),
+              int.parse(dates.first),
+            );
+
             stars.add(Star(
               date: '01-${yr.key}',
-              stars: yr.value.value,
-              progressLimit: yr.value.limit,
+              stars: (yr.value.value / days).ceil(),
+              progressLimit: user is User
+                  ? ((yr.value.limit + (days - yr.value.found) * user.stars) /
+                          days)
+                      .ceil()
+                  : yr.value.limit,
               userId: id,
             ));
           }
@@ -222,15 +237,15 @@ class StarsService extends DataStarsService {
             if (stars > 0) {
               sortedStars.add(Star(
                 date: list.first.date,
-                stars: (stars / list.length).floor(),
-                progressLimit: (limit / list.length).floor(),
+                stars: stars,
+                progressLimit: limit,
                 userId: list.first.userId,
               ));
             } else {
               sortedStars.add(Star(
                 date: list.first.date,
                 stars: 0,
-                progressLimit: 0,
+                progressLimit: limit,
                 userId: list.first.userId,
               ));
             }

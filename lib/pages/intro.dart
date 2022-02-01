@@ -637,7 +637,7 @@ class _IntroState extends State<Intro> {
               ),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 12.0, horizontal: 62),
+                    const EdgeInsets.symmetric(vertical: 12.0, horizontal: 42),
                 child: Text(
                   translate(Keys.introHeightSubheader),
                   style: Theme.of(context).textTheme.bodyText1,
@@ -672,7 +672,7 @@ class _IntroState extends State<Intro> {
               ),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 12.0, horizontal: 62),
+                    const EdgeInsets.symmetric(vertical: 12.0, horizontal: 42),
                 child: Text(
                   translate(Keys.introWeightSubheader),
                   style: Theme.of(context).textTheme.bodyText1,
@@ -707,7 +707,7 @@ class _IntroState extends State<Intro> {
               ),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 12.0, horizontal: 62),
+                    const EdgeInsets.symmetric(vertical: 12.0, horizontal: 42),
                 child: Text(
                   translate(Keys.introTargetSubheader),
                   style: Theme.of(context).textTheme.bodyText1,
@@ -744,7 +744,7 @@ class _IntroState extends State<Intro> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                      vertical: 12.0, horizontal: 62),
+                      vertical: 12.0, horizontal: 42),
                   child: Text(
                     translate(Keys.introActivitySubeader),
                     style: Theme.of(context).textTheme.bodyText1,

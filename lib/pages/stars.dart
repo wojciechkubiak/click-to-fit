@@ -189,10 +189,10 @@ class _StarsState extends State<Stars> {
                   }
                 });
 
-                if (_scope == DateScope.month) {
+                if (_scope != DateScope.week) {
                   List<Star> _stars = await starsService.getStars(
                     id: _weekStars.first.userId,
-                    scope: DateScope.month,
+                    scope: _scope,
                     offset: 0,
                   );
 
@@ -412,7 +412,7 @@ class _StarsState extends State<Stars> {
                 children: [
                   dropdown(),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Chart(
                       stars: _chartStars,
                       initialLimit: _chartStars.last.progressLimit,

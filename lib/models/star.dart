@@ -96,17 +96,17 @@ class ChartStar {
 class YearStar {
   int value;
   int limit;
+  int found;
 
   YearStar({
     required this.value,
     required this.limit,
+    required this.found,
   });
 
   factory YearStar.fromJson(Map<String, dynamic> json) {
     YearStar starProgress = YearStar(
-      value: json['value'],
-      limit: json['limit'],
-    );
+        value: json['value'], limit: json['limit'], found: json['found']);
     return starProgress;
   }
 
@@ -114,11 +114,13 @@ class YearStar {
     final Map<String, dynamic> data = {};
     data['value'] = value;
     data['limit'] = limit;
+    data['found'] = found;
     return data;
   }
 
   List<dynamic> get props => [
         value,
         limit,
+        found,
       ];
 }

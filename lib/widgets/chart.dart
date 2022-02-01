@@ -26,7 +26,7 @@ class Chart extends StatefulWidget {
 }
 
 class ChartState extends State<Chart> {
-  final Duration animDuration = const Duration(milliseconds: 250);
+  final Duration animDuration = const Duration(milliseconds: 0);
   List<Star> _stars = [];
 
   int touchedIndex = -1;
@@ -35,9 +35,6 @@ class ChartState extends State<Chart> {
   Widget build(BuildContext context) {
     _stars = widget.stars;
 
-    for (var star in _stars) {
-      print(star.toJson());
-    }
     return AspectRatio(
       aspectRatio: 1,
       child: Container(
@@ -113,31 +110,109 @@ class ChartState extends State<Chart> {
 
       switch (i) {
         case 0:
-          return makeGroupData(0, value, limit, isTouched: i == touchedIndex);
+          return makeGroupData(
+            0,
+            value,
+            limit,
+            isTouched: i == touchedIndex,
+            width: widget.scope != DateScope.year ? 22 : 16,
+          );
         case 1:
-          return makeGroupData(1, value, limit, isTouched: i == touchedIndex);
+          return makeGroupData(
+            1,
+            value,
+            limit,
+            isTouched: i == touchedIndex,
+            width: widget.scope != DateScope.year ? 22 : 16,
+          );
         case 2:
-          return makeGroupData(2, value, limit, isTouched: i == touchedIndex);
+          return makeGroupData(
+            2,
+            value,
+            limit,
+            isTouched: i == touchedIndex,
+            width: widget.scope != DateScope.year ? 22 : 16,
+          );
         case 3:
-          return makeGroupData(3, value, limit, isTouched: i == touchedIndex);
+          return makeGroupData(
+            3,
+            value,
+            limit,
+            isTouched: i == touchedIndex,
+            width: widget.scope != DateScope.year ? 22 : 16,
+          );
         case 4:
-          return makeGroupData(4, value, limit, isTouched: i == touchedIndex);
+          return makeGroupData(
+            4,
+            value,
+            limit,
+            isTouched: i == touchedIndex,
+            width: widget.scope != DateScope.year ? 22 : 16,
+          );
         case 5:
-          return makeGroupData(5, value, limit, isTouched: i == touchedIndex);
+          return makeGroupData(
+            5,
+            value,
+            limit,
+            isTouched: i == touchedIndex,
+            width: widget.scope != DateScope.year ? 22 : 16,
+          );
         case 6:
-          return makeGroupData(6, value, limit, isTouched: i == touchedIndex);
+          return makeGroupData(
+            6,
+            value,
+            limit,
+            isTouched: i == touchedIndex,
+            width: widget.scope != DateScope.year ? 22 : 16,
+          );
         case 7:
-          return makeGroupData(7, value, limit, isTouched: i == touchedIndex);
+          return makeGroupData(
+            7,
+            value,
+            limit,
+            isTouched: i == touchedIndex,
+            width: widget.scope != DateScope.year ? 22 : 16,
+          );
         case 8:
-          return makeGroupData(8, value, limit, isTouched: i == touchedIndex);
+          return makeGroupData(
+            8,
+            value,
+            limit,
+            isTouched: i == touchedIndex,
+            width: widget.scope != DateScope.year ? 22 : 16,
+          );
         case 9:
-          return makeGroupData(9, value, limit, isTouched: i == touchedIndex);
+          return makeGroupData(
+            9,
+            value,
+            limit,
+            isTouched: i == touchedIndex,
+            width: widget.scope != DateScope.year ? 22 : 16,
+          );
         case 10:
-          return makeGroupData(10, value, limit, isTouched: i == touchedIndex);
+          return makeGroupData(
+            10,
+            value,
+            limit,
+            isTouched: i == touchedIndex,
+            width: widget.scope != DateScope.year ? 22 : 16,
+          );
         case 11:
-          return makeGroupData(11, value, limit, isTouched: i == touchedIndex);
+          return makeGroupData(
+            11,
+            value,
+            limit,
+            isTouched: i == touchedIndex,
+            width: widget.scope != DateScope.year ? 22 : 16,
+          );
         case 12:
-          return makeGroupData(12, value, limit, isTouched: i == touchedIndex);
+          return makeGroupData(
+            12,
+            value,
+            limit,
+            isTouched: i == touchedIndex,
+            width: widget.scope != DateScope.year ? 22 : 16,
+          );
         default:
           return throw Error();
       }
