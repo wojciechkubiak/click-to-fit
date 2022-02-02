@@ -6,6 +6,8 @@ import 'package:star_metter/config/colors.dart';
 import 'package:star_metter/lang/keys.dart';
 import 'package:star_metter/models/models.dart';
 import 'package:star_metter/services/stars.dart';
+import 'package:star_metter/widgets/date_navigation.dart';
+import 'package:star_metter/widgets/dropdown.dart';
 import 'package:star_metter/widgets/navigation_button.dart';
 import 'package:star_metter/widgets/widgets.dart';
 
@@ -44,17 +46,7 @@ class _StarsState extends State<Stars> {
     _availableDays = widget.stars;
   }
 
-  String getText(DateScope scope) {
-    Map<DateScope, String> temp = {
-      DateScope.week: translate(Keys.datesRangeWeek),
-      DateScope.month: translate(Keys.datesRangeMonth),
-      DateScope.year: translate(Keys.datesRangeYear),
-    };
-
-    return temp[scope]!;
-  }
-
-  void handleOffset({
+  Future<void> handleOffset({
     required OffsetChange direction,
     required int offset,
     DateScope scope = DateScope.week,
@@ -120,6 +112,7 @@ class _StarsState extends State<Stars> {
             style: Theme.of(context).textTheme.bodyText1!.copyWith(
                   fontSize: 22,
                   fontWeight: FontWeight.w400,
+                  color: CustomColor.primaryAccent,
                 ),
           ),
           ElevatedButton(
@@ -215,142 +208,49 @@ class _StarsState extends State<Stars> {
     );
   }
 
-  Widget dropdown() {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 24.0),
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: CustomColor.primaryAccentLight,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black26,
-            offset: Offset(0.0, 3), //(x,y)
-            blurRadius: 3.0,
-          ),
-        ],
-      ),
-      child: DropdownButton<DateScope>(
-        elevation: 10,
-        value: _scope,
-        dropdownColor: CustomColor.primaryAccentLight,
-        icon: const Icon(
-          Icons.arrow_downward,
-          color: CustomColor.primaryAccentSemiLight,
-        ),
-        underline: Container(
-          height: 2,
-          color: CustomColor.primaryAccentLight,
-        ),
-        items: <DateScope>[DateScope.week, DateScope.month, DateScope.year]
-            .map<DropdownMenuItem<DateScope>>((DateScope scope) {
-          return DropdownMenuItem<DateScope>(
-            value: scope,
-            child: Center(
-              child: Text(
-                getText(scope),
-                style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                      fontSize: 22,
-                      color: CustomColor.primaryAccent,
-                    ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          );
-        }).toList(),
-        onChanged: (DateScope? dateScope) async {
-          if (dateScope is DateScope) {
-            setState(() => _scope = dateScope);
+  Future<void>? handleDropdown(DateScope? dateScope) async {
+    if (dateScope is DateScope) {
+      setState(() => _scope = dateScope);
 
-            if (dateScope == DateScope.week) {
-              List<Star> _stars = await starsService.getStars(
-                id: _weekStars.first.userId,
-                scope: DateScope.week,
-                offset: 0,
-              );
+      if (dateScope == DateScope.week) {
+        List<Star> _stars = await starsService.getStars(
+          id: _weekStars.first.userId,
+          scope: DateScope.week,
+          offset: 0,
+        );
 
-              setState(() {
-                _chartStars = _stars;
-                _offset = 0;
-              });
-            }
+        setState(() {
+          _chartStars = _stars;
+          _offset = 0;
+        });
+      }
 
-            if (dateScope == DateScope.month) {
-              List<Star> _stars = await starsService.getStars(
-                id: _weekStars.first.userId,
-                scope: DateScope.month,
-                offset: 0,
-              );
+      if (dateScope == DateScope.month) {
+        List<Star> _stars = await starsService.getStars(
+          id: _weekStars.first.userId,
+          scope: DateScope.month,
+          offset: 0,
+        );
 
-              setState(() {
-                _chartStars = _stars;
-                _offset = 0;
-              });
-            }
+        setState(() {
+          _chartStars = _stars;
+          _offset = 0;
+        });
+      }
 
-            if (dateScope == DateScope.year) {
-              List<Star> _stars = await starsService.getStars(
-                id: _weekStars.first.userId,
-                scope: DateScope.year,
-                offset: 0,
-              );
+      if (dateScope == DateScope.year) {
+        List<Star> _stars = await starsService.getStars(
+          id: _weekStars.first.userId,
+          scope: DateScope.year,
+          offset: 0,
+        );
 
-              setState(() {
-                _chartStars = _stars;
-                _offset = 0;
-              });
-            }
-          }
-        },
-      ),
-    );
-  }
-
-  Widget navigation() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        NavigationButton(
-          onPressed: () async => handleOffset(
-            direction: OffsetChange.backward,
-            offset: _offset,
-            scope: _scope,
-          ),
-          isIcon: true,
-          icon: Icons.arrow_back,
-          isDisabled: _isLoading,
-        ),
-        SizedBox(
-          width: 150,
-          child: Text(
-            _scope == DateScope.year
-                ? parseDate(_chartStars.first.date, DateScope.year)
-                : _scope == DateScope.week
-                    ? '${parseDate(_chartStars.first.date, DateScope.week)} - ${parseDate(_chartStars.last.date, DateScope.week)}'
-                    : parseDate(
-                        _chartStars.first.date,
-                        DateScope.month,
-                      ),
-            style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                  color: CustomColor.primaryAccent,
-                  fontWeight: FontWeight.w400,
-                ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        NavigationButton(
-          onPressed: () async => handleOffset(
-            direction: OffsetChange.forward,
-            offset: _offset,
-            scope: _scope,
-          ),
-          isIcon: true,
-          isDisabled: _offset == 0 || _isLoading,
-          icon: Icons.arrow_forward,
-        ),
-      ],
-    );
+        setState(() {
+          _chartStars = _stars;
+          _offset = 0;
+        });
+      }
+    }
   }
 
   @override
@@ -410,7 +310,10 @@ class _StarsState extends State<Stars> {
               ),
               child: Column(
                 children: [
-                  dropdown(),
+                  Dropdown(
+                    onChanged: handleDropdown,
+                    current: _scope,
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Chart(
@@ -430,7 +333,22 @@ class _StarsState extends State<Stars> {
                           padding: const EdgeInsets.symmetric(
                             vertical: 24,
                           ),
-                          child: navigation(),
+                          child: DateNavigation(
+                            text: _scope == DateScope.year
+                                ? parseDate(
+                                    _chartStars.first.date, DateScope.year)
+                                : _scope == DateScope.week
+                                    ? '${parseDate(_chartStars.first.date, DateScope.week)} - ${parseDate(_chartStars.last.date, DateScope.week)}'
+                                    : parseDate(
+                                        _chartStars.first.date,
+                                        DateScope.month,
+                                      ),
+                            isDisabled: _isLoading,
+                            isNextDisabled: _offset == 0 || _isLoading,
+                            offset: _offset,
+                            scope: _scope,
+                            handleOffset: handleOffset,
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(
@@ -463,10 +381,11 @@ class _StarsState extends State<Stars> {
                           ),
                         ),
                         Card(
-                          color: CustomColor.primaryAccentSemiLight,
+                          color: CustomColor.primaryAccentLight,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16.0),
                           ),
+                          elevation: 0,
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Column(

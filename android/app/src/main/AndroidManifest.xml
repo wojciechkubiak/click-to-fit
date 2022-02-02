@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.star_metter">
+    package="com.woku.star_metter">
    <application
-        android:label="Star Metter"
+        android:label="Lazy and Fit"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

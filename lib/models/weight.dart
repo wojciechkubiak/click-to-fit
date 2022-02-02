@@ -37,3 +37,34 @@ class Weight {
         userId,
       ];
 }
+
+class SortedWeight {
+  String date;
+  double weight;
+  int dayOfWeek;
+
+  SortedWeight({
+    required this.date,
+    required this.weight,
+    required this.dayOfWeek,
+  });
+
+  factory SortedWeight.fromJson(Map<String, dynamic> json) {
+    SortedWeight weight = SortedWeight(
+      date: json['date'],
+      weight: json['weight'],
+      dayOfWeek: json['dayOfWeek'],
+    );
+    return weight;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['date'] = date;
+    data['weight'] = weight;
+    data['dayOfWeek'] = dayOfWeek;
+    return data;
+  }
+
+  List<dynamic> get props => [date, weight, dayOfWeek];
+}

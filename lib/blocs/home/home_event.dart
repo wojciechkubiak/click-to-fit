@@ -45,4 +45,10 @@ class HomeLoadSettings extends HomeEvent {}
 
 class HomeLoadStars extends HomeEvent {}
 
-class HomeLoadMeasures extends HomeEvent {}
+class HomeLoadMeasures extends HomeEvent {
+  final User? user;
+
+  HomeLoadMeasures({required this.user});
+
+  List<Object?> get props => [user];
+}

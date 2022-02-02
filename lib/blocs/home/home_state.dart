@@ -42,7 +42,19 @@ class HomeStars extends HomeState {
   List<Object> get props => [stars];
 }
 
-class HomeMeasures extends HomeState {}
+class HomeMeasures extends HomeState {
+  final User user;
+  final List<Weight> weights;
+  final List<Weight> allWeights;
+
+  HomeMeasures({
+    required this.user,
+    required this.weights,
+    required this.allWeights,
+  });
+
+  List<Object> get props => [user, weights, allWeights];
+}
 
 class HomePage extends HomeState {
   final User user;

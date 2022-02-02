@@ -302,6 +302,9 @@ class _MyHomePageState extends State<MyHomePage> {
         if (state is HomeMeasures) {
           return Measures(
             handlePage: _setDefaultPage,
+            weights: state.weights,
+            allWeights: state.allWeights,
+            user: state.user,
           );
         }
         return const Loading();

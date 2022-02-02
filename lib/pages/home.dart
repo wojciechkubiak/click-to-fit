@@ -505,8 +505,9 @@ class _HomeState extends State<Home> {
                     ),
                     child: NavigationButton(
                       onPressed: () {
-                        BlocProvider.of<HomeBloc>(context)
-                            .add(HomeLoadMeasures());
+                        BlocProvider.of<HomeBloc>(context).add(HomeLoadMeasures(
+                          user: user,
+                        ));
                       },
                       text: translate(Keys.globalMore),
                     ),

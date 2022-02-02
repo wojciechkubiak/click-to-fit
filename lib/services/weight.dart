@@ -9,7 +9,12 @@ abstract class DataWeightService {
     required int id,
   });
   Future<Weight?> getPreviousWeight({required int id});
-  Future<List<Weight>?> getWeights({required int id});
+  Future<List<Weight>?> getScopeWeights({
+    required int id,
+    DateScope scope = DateScope.week,
+    int offset = 0,
+  });
+  Future<List<Weight>?> getAllWeights({required int id});
   Future<Weight?> getLastWeight({required int id});
   Future<bool> updateWeight({
     required int recordId,
@@ -111,7 +116,11 @@ class WeightService extends DataWeightService {
   }
 
   @override
-  Future<List<Weight>?> getWeights({required int id}) async {
+  Future<List<Weight>?> getScopeWeights({
+    required int id,
+    DateScope scope = DateScope.week,
+    int offset = 0,
+  }) async {
     StorageService storageService = StorageService();
 
     try {
@@ -124,10 +133,96 @@ class WeightService extends DataWeightService {
         where: 'userId = $id',
       );
 
+      List<String> dates = [];
+      DateTime now = DateTime.now();
+      List<Weight> result = [];
+
+      if (scope == DateScope.week) {
+        DateTime monday = now.add(Duration(days: -(now.weekday - 1)));
+
+        for (int i = 0; i <= 6; i++) {
+          dates.add(
+            DateParser(date: monday.add(Duration(days: i - (7 * offset))))
+                .getDateWithoutTime(),
+          );
+        }
+      }
       print('ALL WEIGHTS $weightList');
 
-      for (var element in weightList) {
-        weights.add(Weight.fromJson(element));
+      if (weightList.isNotEmpty) {
+        List<Weight> weightsFound = [];
+
+        for (var element in weightList) {
+          weightsFound.add(Weight.fromJson(element));
+        }
+
+        for (var date in dates) {
+          Weight? _weight = weightsFound.firstWhere(
+            (element) => element.date == date,
+            orElse: () {
+              return Weight(
+                date: date,
+                userId: weightsFound.last.userId,
+                weight: 0,
+              );
+            },
+          );
+          result.add(_weight);
+        }
+      }
+
+      return result;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  @override
+  Future<List<Weight>?> getAllWeights({required int id}) async {
+    try {
+      StorageService storageService = StorageService();
+
+      List<Map<String, dynamic>> weightList = [];
+      List<Weight> weights = [];
+
+      final db = await storageService.getDatabase();
+      weightList = await db.query(
+        'weights',
+        where: 'userId = $id',
+      );
+
+      if (weightList.isNotEmpty) {
+        List<Weight> weightsFound = [];
+
+        for (var element in weightList) {
+          weightsFound.add(Weight.fromJson(element));
+        }
+
+        weightsFound.sort((a, b) {
+          List<String> v1 = a.date.split('-');
+          List<String> v2 = b.date.split('-');
+
+          DateTime date1 = DateTime.utc(
+            int.parse(v1[2]),
+            int.parse(v1[1]),
+            int.parse(v1[0]),
+          );
+
+          DateTime date2 = DateTime.utc(
+            int.parse(v2[2]),
+            int.parse(v2[1]),
+            int.parse(v2[0]),
+          );
+
+          if (v1.length == 3 && v2.length == 3) {
+            return date1.isBefore(date2) ? 1 : 0;
+          } else {
+            return -1;
+          }
+        });
+
+        weights = weightsFound;
       }
 
       return weights;

@@ -1,4 +1,4 @@
-package com.example.star_metter
+package com.woku.star_metter
 
 import io.flutter.embedding.android.FlutterActivity
 

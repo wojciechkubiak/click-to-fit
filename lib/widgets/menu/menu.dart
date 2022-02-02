@@ -90,7 +90,8 @@ class _MenuState extends State<Menu> {
           icon: Icons.book,
           onClick: () {
             widget.onClick(CurrentPage.SETTINGS);
-            BlocProvider.of<HomeBloc>(context).add(HomeLoadMeasures());
+            BlocProvider.of<HomeBloc>(context)
+                .add(HomeLoadMeasures(user: widget.user));
           },
         ),
         MenuButton(
