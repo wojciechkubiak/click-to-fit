@@ -372,7 +372,7 @@ class _HomeState extends State<Home> {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Text(
-                                  '${progress.weight?.weight ?? translate(Keys.globalNA)} ${progress.weight?.weight is double ? user.unit == 'imperial' ? 'lb' : 'kg' : ''}',
+                                  '${progress.weight!.weight} ${user.unit == 'imperial' ? 'lb' : 'kg'}',
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline2!
@@ -384,9 +384,7 @@ class _HomeState extends State<Home> {
                                   textAlign: TextAlign.center,
                                 ),
                                 Text(
-                                  DateParser(date: DateTime.now())
-                                      .getDateWithoutTime()
-                                      .replaceAll("-", "/"),
+                                  progress.weight!.date,
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyText1!

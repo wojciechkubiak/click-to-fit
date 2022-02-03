@@ -1,7 +1,9 @@
+enum MeasuresDetailedOption { create, edit, delete }
+
 class Measure {
-  final int? id;
   final int userId;
-  final int weightId;
+  int? id;
+  int? weightId;
   String date;
   double neck;
   double abdomen;
@@ -14,8 +16,8 @@ class Measure {
 
   Measure({
     this.id,
+    this.weightId,
     required this.userId,
-    required this.weightId,
     required this.date,
     required this.neck,
     required this.abdomen,

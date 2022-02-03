@@ -42,12 +42,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       User? user = await _homeService.getUser(event.userId);
 
       if (user is User) {
-        Weight? weight = await _weightService.getTodayWeight(
-            initialWeight: user.initWeight, id: user.id!);
-        Weight? previousWeight =
-            await _weightService.getPreviousWeight(id: user.id!);
-        List<Weight>? weightHistory =
-            await _weightService.getScopeWeights(id: user.id!);
+        List<Weight> weightsList =
+            await _weightService.getAllWeights(id: user.id!) ?? [];
+
+        Weight? weight = weightsList.first;
+
+        Weight? previousWeight = weightsList.length > 1 ? weightsList[1] : null;
 
         Star? star = await _starsService.getTodayStars(
           id: user.id!,
@@ -64,7 +64,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           star: star!,
           weight: weight,
           prevWeight: previousWeight,
-          weightProgress: weightHistory,
+          weightProgress: weightsList,
         );
         if (progress is Progress) {
           event.handlePage();
@@ -197,7 +197,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   void _mapHomeLoadMeasures(HomeEvent event, Emitter<HomeState> emit) async {
     emit(HomeLoading());
+
     if (event is HomeLoadMeasures) {
+      if (event.isDelayed) {
+        await Future.delayed(const Duration(milliseconds: 1500));
+      }
+
       if (event.user is User) {
         WeightService weightService = WeightService();
 

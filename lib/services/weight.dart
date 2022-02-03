@@ -20,9 +20,13 @@ abstract class DataWeightService {
     required int recordId,
     required double weight,
   });
+  Future<bool> removeWeight({
+    required int recordId,
+  });
   Future<Weight?> insertNewRecord({
     required int userId,
     required double weight,
+    String? date,
     int? id,
   });
   Future<int?>? getFirstWeightID({required int id});
@@ -256,9 +260,28 @@ class WeightService extends DataWeightService {
   }
 
   @override
+  Future<bool> removeWeight({
+    required int recordId,
+  }) async {
+    StorageService storageService = StorageService();
+    try {
+      final db = await storageService.getDatabase();
+
+      int count =
+          await db.rawDelete('DELETE FROM weights WHERE pk = ?', [recordId]);
+
+      return count > 0;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  @override
   Future<Weight?> insertNewRecord({
     required int userId,
     required double weight,
+    String? date,
     int? id,
   }) async {
     StorageService storageService = StorageService();
@@ -267,11 +290,11 @@ class WeightService extends DataWeightService {
       final db = await storageService.getDatabase();
 
       DateTime now = DateTime.now();
-      DateParser date = DateParser(date: now);
-      String parsedDate = date.getDateWithoutTime();
+      DateParser nDate = DateParser(date: now);
+      String parsedDate = nDate.getDateWithoutTime();
 
       Weight _emptyWeight = Weight(
-        date: parsedDate,
+        date: date is String ? date : parsedDate,
         userId: userId,
         weight: weight,
         id: id,

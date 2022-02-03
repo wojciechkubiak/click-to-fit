@@ -30,8 +30,6 @@ class _CustomLineChartState extends State<CustomLineChart> {
     const Color(0xFF88769b),
   ];
 
-  bool showTarget = false;
-
   List<FlSpot> generateSpots(List<Weight> weights) {
     List<FlSpot> spots = [];
 
@@ -70,27 +68,20 @@ class _CustomLineChartState extends State<CustomLineChart> {
             ),
           ),
         ),
-        Align(
-          alignment: Alignment.topRight,
-          child: SizedBox(
-            width: 60,
-            height: 34,
-            child: TextButton(
-              onPressed: () {
-                setState(() {
-                  showTarget = !showTarget;
-                });
-              },
-              child: const Text(
-                'target',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: CustomColor.primaryAccentSemiLight,
-                ),
+        if (generateSpots(weights).isEmpty)
+          Align(
+            alignment: Alignment.center,
+            child: Container(
+              padding: const EdgeInsets.only(top: 52.0),
+              child: Text(
+                "Brak danych",
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      color: CustomColor.primaryAccentSemiLight,
+                      fontWeight: FontWeight.w600,
+                    ),
               ),
             ),
           ),
-        ),
       ],
     );
   }
@@ -178,21 +169,25 @@ class _CustomLineChartState extends State<CustomLineChart> {
       ),
       minX: 0,
       maxX: widget.weights.length - 1,
-      minY: showTarget ? widget.target - 20 : widget.target - 10,
-      maxY: showTarget ? widget.init + 30 : widget.init + 10,
+      minY: widget.target - 10,
+      maxY: widget.init + 10,
       lineBarsData: [
-        if (showTarget)
-          LineChartBarData(
-            spots: [
-              FlSpot(0, widget.target),
-              FlSpot(widget.weights.length - 1, widget.target),
-            ],
-            isCurved: true,
-            colors: [Nord.auroraGreen],
-            barWidth: 2,
-            isStrokeCapRound: true,
-            dotData: FlDotData(show: false),
-          ),
+        LineChartBarData(
+          spots: [
+            FlSpot(0, widget.target),
+            FlSpot(1, widget.target),
+            FlSpot(2, widget.target),
+            FlSpot(3, widget.target),
+            FlSpot(4, widget.target),
+            FlSpot(5, widget.target),
+            FlSpot(widget.weights.length - 1, widget.target),
+          ],
+          isCurved: true,
+          colors: [Nord.auroraGreen],
+          barWidth: 2,
+          isStrokeCapRound: true,
+          dotData: FlDotData(show: false),
+        ),
         LineChartBarData(
           spots: generateSpots(weights),
           isCurved: true,

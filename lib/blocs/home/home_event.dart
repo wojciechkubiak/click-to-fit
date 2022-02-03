@@ -47,8 +47,12 @@ class HomeLoadStars extends HomeEvent {}
 
 class HomeLoadMeasures extends HomeEvent {
   final User? user;
+  final bool isDelayed;
 
-  HomeLoadMeasures({required this.user});
+  HomeLoadMeasures({
+    required this.user,
+    this.isDelayed = false,
+  });
 
   List<Object?> get props => [user];
 }

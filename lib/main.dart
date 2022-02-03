@@ -3,10 +3,11 @@ import 'dart:io' show Platform;
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
-import 'package:star_metter/pages/measures.dart';
+import 'package:star_metter/pages/measures/measures.dart';
 import 'package:star_metter/pages/stars.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_translate/flutter_translate.dart';
+import 'package:star_metter/services/measures.dart';
 
 import './widgets/widgets.dart';
 import './blocs/home/home_bloc.dart';
@@ -112,6 +113,11 @@ class _MyHomePageState extends State<MyHomePage> {
             return SettingsService();
           },
         ),
+        RepositoryProvider<MeasuresService>(
+          create: (context) {
+            return MeasuresService();
+          },
+        ),
       ],
       child: _multiBlocProvider(),
     );
@@ -149,7 +155,12 @@ class _MyHomePageState extends State<MyHomePage> {
         create: (context) {
           final settingsService =
               RepositoryProvider.of<SettingsService>(context);
-          return MeasuresBloc(settingsService)..add(MeasuresLoadInit());
+          final weightService = RepositoryProvider.of<WeightService>(context);
+          final measuresService =
+              RepositoryProvider.of<MeasuresService>(context);
+
+          return MeasuresBloc(settingsService, weightService, measuresService)
+            ..add(const MeasuresLoadInit());
         },
       ),
     ], child: _main());

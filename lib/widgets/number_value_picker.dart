@@ -7,6 +7,9 @@ class NumberValuePicker extends StatelessWidget {
   final int min;
   final int max;
   final Function(int) onChanged;
+  final Color color;
+  final Color textColor;
+  final Color selectedTextColor;
   final Axis axis;
 
   const NumberValuePicker({
@@ -15,6 +18,9 @@ class NumberValuePicker extends StatelessWidget {
     required this.min,
     required this.max,
     required this.onChanged,
+    this.color = Colors.white,
+    this.textColor = CustomColor.primaryAccent,
+    this.selectedTextColor = CustomColor.primaryAccentDark,
     this.axis = Axis.vertical,
   }) : super(key: key);
 
@@ -23,7 +29,7 @@ class NumberValuePicker extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: color,
         borderRadius: BorderRadius.circular(20),
       ),
       child: NumberPicker(
@@ -34,12 +40,12 @@ class NumberValuePicker extends StatelessWidget {
         itemHeight: axis == Axis.horizontal ? 36 : 32,
         axis: axis,
         onChanged: onChanged,
-        textStyle: const TextStyle(
-          color: CustomColor.primaryAccent,
+        textStyle: TextStyle(
+          color: textColor,
           fontSize: 18,
         ),
         selectedTextStyle: TextStyle(
-          color: CustomColor.primaryAccentDark,
+          color: selectedTextColor,
           fontSize: axis == Axis.horizontal ? 34 : 24,
         ),
       ),
