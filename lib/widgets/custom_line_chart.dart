@@ -90,7 +90,38 @@ class _CustomLineChartState extends State<CustomLineChart> {
     return LineChartData(
       lineTouchData: LineTouchData(
         touchTooltipData: LineTouchTooltipData(
-          tooltipBgColor: Colors.white,
+          tooltipBgColor: Colors.transparent,
+          tooltipMargin: 20,
+          getTooltipItems: (touchedSpots) {
+            return List<LineTooltipItem>.from(
+              touchedSpots.map(
+                (e) {
+                  int dataLength = generateSpots(weights).length;
+
+                  return LineTooltipItem(
+                    '',
+                    const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: (e.y - 1).toStringAsFixed(1),
+                        style: TextStyle(
+                          color: e.spotIndex <= dataLength - 1
+                              ? CustomColor.primaryAccent
+                              : Nord.auroraGreen,
+                          fontSize: e.spotIndex <= dataLength - 1 ? 24 : 20,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            );
+          },
         ),
       ),
       titlesData: FlTitlesData(
