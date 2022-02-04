@@ -25,6 +25,7 @@ class Measures extends StatefulWidget {
   final Function() handlePage;
   final List<Weight> weights;
   final List<Weight> allWeights;
+  final List<Measure> allMeasures;
   final User user;
 
   const Measures({
@@ -32,6 +33,7 @@ class Measures extends StatefulWidget {
     required this.handlePage,
     required this.weights,
     required this.allWeights,
+    required this.allMeasures,
     required this.user,
   }) : super(key: key);
 
@@ -51,6 +53,8 @@ class _MeasuresState extends State<Measures> {
   List<Weight> _weights = [];
   List<Weight> _allWeights = [];
   List<Weight> _expandedWeights = [];
+  Measure? firstMeasure;
+  Measure? lastMeasure;
   DateScope _scope = DateScope.week;
 
   @override
@@ -60,6 +64,15 @@ class _MeasuresState extends State<Measures> {
     _weights = widget.weights;
     _allWeights = widget.allWeights;
     _user = widget.user;
+
+    if (widget.allMeasures.length > 1) {
+      firstMeasure = widget.allMeasures.last;
+      lastMeasure = widget.allMeasures.first;
+    }
+
+    if (widget.allMeasures.length == 1) {
+      firstMeasure = widget.allMeasures.first;
+    }
 
     List<Weight> temp = [];
 
@@ -158,6 +171,105 @@ class _MeasuresState extends State<Measures> {
         }
       });
     }
+  }
+
+  Widget measureListElement({
+    required String text,
+    required double prev,
+    required double curr,
+    int? prevId,
+    int? nextId,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.2,
+            child: Text(
+              '$text',
+              style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                    color: CustomColor.primaryAccent,
+                    fontWeight: FontWeight.w400,
+                  ),
+            ),
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.2,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                elevation: 10,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                primary: CustomColor.primaryAccentSemiLight,
+              ),
+              child: Text(
+                '$prev',
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      color: CustomColor.primaryAccentLight,
+                    ),
+                textAlign: TextAlign.center,
+              ),
+              onPressed: () {
+                if (prevId is int) {
+                  Weight? weightFound = _allWeights
+                      .firstWhereOrNull((element) => element.id == prevId);
+
+                  if (weightFound is Weight) {
+                    BlocProvider.of<MeasuresBloc>(context).add(
+                      MeasuresLoadDetailed(
+                        weights: _allWeights,
+                        weight: weightFound,
+                        option: MeasuresDetailedOption.edit,
+                        isNotFirst: weightFound.date != _allWeights.last.date,
+                      ),
+                    );
+                  }
+                }
+              },
+            ),
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.2,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                elevation: 10,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                primary: CustomColor.primaryAccent,
+              ),
+              child: Text(
+                '$curr',
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      color: CustomColor.primaryAccentLight,
+                    ),
+                textAlign: TextAlign.center,
+              ),
+              onPressed: () {
+                if (nextId is int) {
+                  Weight? weightFound = _allWeights
+                      .firstWhereOrNull((element) => element.id == nextId);
+
+                  if (weightFound is Weight) {
+                    BlocProvider.of<MeasuresBloc>(context).add(
+                      MeasuresLoadDetailed(
+                        weights: _allWeights,
+                        weight: weightFound,
+                        option: MeasuresDetailedOption.edit,
+                        isNotFirst: weightFound.date != _allWeights.last.date,
+                      ),
+                    );
+                  }
+                }
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget listElement({required Weight weight, required int idx}) {
@@ -466,6 +578,163 @@ class _MeasuresState extends State<Measures> {
                           ],
                         ),
                       ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 12,
+                          bottom: 12,
+                        ),
+                        child: Text(
+                          'Pomiary:',
+                          style:
+                              Theme.of(context).textTheme.headline2!.copyWith(
+                                    color: CustomColor.primaryAccentDark,
+                                    fontSize: 52,
+                                  ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 42,
+                          right: 42,
+                          top: 12,
+                          bottom: 28,
+                        ),
+                        child: Text(
+                          "Kliknij na wagę po prawej stronie daty w celu edytowania pomiarów.",
+                          style:
+                              Theme.of(context).textTheme.bodyText1!.copyWith(
+                                    color: CustomColor.primaryAccentSemiLight,
+                                  ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 48.0),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 16.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.2,
+                                  ),
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.2,
+                                    child: Text(
+                                      "Pocz.",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .copyWith(
+                                            color:
+                                                CustomColor.primaryAccentDark,
+                                          ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.2,
+                                    child: Text(
+                                      "Akt.",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .copyWith(
+                                            color:
+                                                CustomColor.primaryAccentDark,
+                                          ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            measureListElement(
+                              text: "Kark",
+                              prev: firstMeasure?.neck ?? 0,
+                              curr:
+                                  lastMeasure?.neck ?? firstMeasure?.neck ?? 0,
+                              prevId: firstMeasure?.weightId,
+                              nextId: lastMeasure?.weightId ??
+                                  firstMeasure?.weightId,
+                            ),
+                            measureListElement(
+                              text: "Klatka piersiowa",
+                              prev: firstMeasure?.chest ?? 0,
+                              curr: lastMeasure?.chest ??
+                                  firstMeasure?.chest ??
+                                  0,
+                              prevId: firstMeasure?.weightId,
+                              nextId: lastMeasure?.weightId ??
+                                  firstMeasure?.weightId,
+                            ),
+                            measureListElement(
+                              text: "Brzuch",
+                              prev: firstMeasure?.abdomen ?? 0,
+                              curr: lastMeasure?.abdomen ??
+                                  firstMeasure?.abdomen ??
+                                  0,
+                              prevId: firstMeasure?.weightId,
+                              nextId: lastMeasure?.weightId ??
+                                  firstMeasure?.weightId,
+                            ),
+                            measureListElement(
+                              text: "Talia",
+                              prev: firstMeasure?.waist ?? 0,
+                              curr:
+                                  lastMeasure?.waist ?? firstMeasure?.calf ?? 0,
+                              prevId: firstMeasure?.weightId,
+                              nextId: lastMeasure?.weightId ??
+                                  firstMeasure?.weightId,
+                            ),
+                            measureListElement(
+                              text: "Biodra",
+                              prev: firstMeasure?.hips ?? 0,
+                              curr:
+                                  lastMeasure?.hips ?? firstMeasure?.hips ?? 0,
+                              prevId: firstMeasure?.weightId,
+                              nextId: lastMeasure?.weightId ??
+                                  firstMeasure?.weightId,
+                            ),
+                            measureListElement(
+                              text: "Biceps",
+                              prev: firstMeasure?.bicep ?? 0,
+                              curr: lastMeasure?.bicep ??
+                                  firstMeasure?.bicep ??
+                                  0,
+                              prevId: firstMeasure?.weightId,
+                              nextId: lastMeasure?.weightId ??
+                                  firstMeasure?.weightId,
+                            ),
+                            measureListElement(
+                              text: "Udo",
+                              prev: firstMeasure?.thigh ?? 0,
+                              curr: lastMeasure?.thigh ??
+                                  firstMeasure?.thigh ??
+                                  0,
+                              prevId: firstMeasure?.weightId,
+                              nextId: lastMeasure?.weightId ??
+                                  firstMeasure?.weightId,
+                            ),
+                            measureListElement(
+                              text: "Łydka",
+                              prev: firstMeasure?.calf ?? 0,
+                              curr:
+                                  lastMeasure?.calf ?? firstMeasure?.calf ?? 0,
+                              prevId: firstMeasure?.weightId,
+                              nextId: lastMeasure?.weightId ??
+                                  firstMeasure?.weightId,
+                            ),
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 )

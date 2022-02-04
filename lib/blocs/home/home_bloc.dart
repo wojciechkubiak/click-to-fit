@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:star_metter/models/intro.dart';
+import 'package:star_metter/models/measure.dart';
+import 'package:star_metter/services/measures.dart';
 import '../../models/progress.dart';
 import '../../models/star.dart';
 import '../../models/user.dart';
@@ -15,14 +17,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final HomeService _homeService;
   final WeightService _weightService;
   final StarsService _starsService;
+  final MeasuresService _measuresService;
 
   HomeBloc(
     HomeService homeService,
     WeightService weightService,
     StarsService starsService,
+    MeasuresService measuresService,
   )   : _homeService = homeService,
         _weightService = weightService,
         _starsService = starsService,
+        _measuresService = measuresService,
         super(HomeInitial()) {
     on<HomeLoadInit>(_mapHomeInit);
     on<HomeLoadSplash>(_mapHomeLoadSplash);
@@ -204,19 +209,25 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       }
 
       if (event.user is User) {
-        WeightService weightService = WeightService();
-
         List<Weight>? weights =
-            await weightService.getScopeWeights(id: event.user!.id!);
+            await _weightService.getScopeWeights(id: event.user!.id!);
 
         List<Weight>? allWeights =
-            await weightService.getAllWeights(id: event.user!.id!);
+            await _weightService.getAllWeights(id: event.user!.id!);
+
+        List<Measure> allMeasures =
+            await _measuresService.getAllMeasures(userId: event.user!.id!);
+
+        for (var measure in allMeasures) {
+          print(measure.toJson());
+        }
 
         if (weights is List<Weight> && allWeights is List<Weight>) {
           emit(HomeMeasures(
             user: event.user!,
             weights: weights,
             allWeights: allWeights,
+            allMeasures: allMeasures,
           ));
         }
       }

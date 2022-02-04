@@ -31,6 +31,13 @@ class NumberValuePicker extends StatelessWidget {
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(20),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black38,
+            offset: Offset(0.0, 1.0), //(x,y)
+            blurRadius: 6.0,
+          ),
+        ],
       ),
       child: NumberPicker(
         value: value,

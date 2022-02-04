@@ -130,10 +130,13 @@ class _MyHomePageState extends State<MyHomePage> {
           final homeService = RepositoryProvider.of<HomeService>(context);
           final weightService = RepositoryProvider.of<WeightService>(context);
           final starsService = RepositoryProvider.of<StarsService>(context);
+          final measuresService =
+              RepositoryProvider.of<MeasuresService>(context);
           return HomeBloc(
             homeService,
             weightService,
             starsService,
+            measuresService,
           )..add(HomeLoadInit(isInit: true, handlePage: _setDefaultPage));
         },
       ),
@@ -315,6 +318,7 @@ class _MyHomePageState extends State<MyHomePage> {
             handlePage: _setDefaultPage,
             weights: state.weights,
             allWeights: state.allWeights,
+            allMeasures: state.allMeasures,
             user: state.user,
           );
         }

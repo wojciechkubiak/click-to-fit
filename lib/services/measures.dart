@@ -6,6 +6,7 @@ import 'package:star_metter/services/services.dart';
 import '../models/user.dart';
 
 abstract class DataMeasuresService {
+  Future<List<Measure>> getAllMeasures({required int userId});
   Future<Measure?> getMeasure({required int id});
   Future<Measure?> getMeasureByWeightId({required int weightId});
   Future<Measure?> addMeasure({required Measure measure});
@@ -14,6 +15,55 @@ abstract class DataMeasuresService {
 }
 
 class MeasuresService extends DataMeasuresService {
+  @override
+  Future<List<Measure>> getAllMeasures({required int userId}) async {
+    StorageService storageService = StorageService();
+    try {
+      final db = await storageService.getDatabase();
+
+      List<Map<String, dynamic>> measuresList = [];
+
+      measuresList =
+          await db.rawQuery("SELECT * FROM measures WHERE userId = $userId");
+
+      List<Measure> result = [];
+
+      if (measuresList.isNotEmpty) {
+        result =
+            List.from(measuresList.map((value) => Measure.fromJson(value)));
+      }
+
+      result.sort((a, b) {
+        List<String> v1 = a.date.split('-');
+        List<String> v2 = b.date.split('-');
+
+        DateTime date1 = DateTime.utc(
+          int.parse(v1[2]),
+          int.parse(v1[1]),
+          int.parse(v1[0]),
+        );
+
+        DateTime date2 = DateTime.utc(
+          int.parse(v2[2]),
+          int.parse(v2[1]),
+          int.parse(v2[0]),
+        );
+
+        if (v1.length == 3 && v2.length == 3) {
+          return date1.isBefore(date2) ? 1 : 0;
+        } else {
+          return -1;
+        }
+      });
+
+      return result;
+    } catch (e) {
+      print(e);
+
+      return [];
+    }
+  }
+
   @override
   Future<Measure?> getMeasure({required int id}) async {
     StorageService storageService = StorageService();

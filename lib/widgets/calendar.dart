@@ -74,10 +74,10 @@ class _CalendarState extends State<Calendar> {
   @override
   Widget build(BuildContext context) {
     String? locale = LocalizationCode(context: context).getLocale();
-    print(locale);
 
     return TableCalendar(
       locale: locale,
+      availableGestures: AvailableGestures.horizontalSwipe,
       startingDayOfWeek: StartingDayOfWeek.monday,
       firstDay: getFirstDay(),
       lastDay: getLastDay(),
