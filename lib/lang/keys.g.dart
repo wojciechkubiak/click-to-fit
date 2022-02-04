@@ -209,4 +209,52 @@ class Keys {
   static const String introSummaryReminder = "intro.summary.reminder";
 
   static const String introWeek = "intro.week";
+
+  static const String measuresHeader = "measures.header";
+
+  static const String measuresDayHeader = "measures.dayHeader";
+
+  static const String measuresHistoryHeader = "measures.historyHeader";
+
+  static const String measuresHistorySubheader = "measures.historySubheader";
+
+  static const String measuresMeasuresHeader = "measures.measuresHeader";
+
+  static const String measuresMeasuresSubheader = "measures.measuresSubheader";
+
+  static const String measuresMeasuresStart = "measures.measuresStart";
+
+  static const String measuresMeasuresEnd = "measures.measuresEnd";
+
+  static const String measuresAddBtn = "measures.addBtn";
+
+  static const String measuresSubmitBtn = "measures.submitBtn";
+
+  static const String measuresDeleteBtn = "measures.deleteBtn";
+
+  static const String measuresNeck = "measures.neck";
+
+  static const String measuresChest = "measures.chest";
+
+  static const String measuresAbdomen = "measures.abdomen";
+
+  static const String measuresWaist = "measures.waist";
+
+  static const String measuresHips = "measures.hips";
+
+  static const String measuresBicep = "measures.bicep";
+
+  static const String measuresThigh = "measures.thigh";
+
+  static const String measuresCalf = "measures.calf";
+
+  static const String measuresExists = "measures.exists";
+
+  static const String measuresDialogHeader = "measures.dialogHeader";
+
+  static const String measuresDialogBody = "measures.dialogBody";
+
+  static const String measuresDialogConfirm = "measures.dialogConfirm";
+
+  static const String measuresDialogDecline = "measures.dialogDecline";
 }

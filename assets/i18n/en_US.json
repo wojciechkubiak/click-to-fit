@@ -142,5 +142,31 @@
             "reminder": "Reminder: Each star equals to 100 kcal. Remember about your health! Do not rush - diet should not be a suffering!"
         },
         "week": "week"
+    },
+    "measures": {
+        "header": "Weight", 
+        "dayHeader": "Day",
+        "historyHeader": "Weight history",
+        "historySubheader": "Click on the weight to the right of the date to edit the measurements", 
+        "measuresHeader": "Measures", 
+        "measuresSubheader": "Your measures are a better indicator of your progress. If you want to keep track of how you are doing, write them down regularly.",
+        "measuresStart": "Start", 
+        "measuresEnd": "End",
+        "addBtn": "Add measure",
+        "submitBtn": "Submit changes",
+        "deleteBtn": "Delete measure",
+        "neck": "Neck", 
+        "chest": "Chest", 
+        "abdomen": "Abdomen",
+        "waist": "Waist", 
+        "hips": "Hips", 
+        "bicep": "Bicep", 
+        "thigh": "Thigh",
+        "calf": "Calf",
+        "exists": "Date already in use", 
+        "dialogHeader": "Delete", 
+        "dialogBody": "This operation cannot be undone, but you still will be able to add new record with same date",
+        "dialogConfirm": "Confirm",
+        "dialogDecline": "Cancel"
     }
 }

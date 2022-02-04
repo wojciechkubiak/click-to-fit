@@ -172,7 +172,7 @@ class _MyHomePageState extends State<MyHomePage> {
               RepositoryProvider.of<MeasuresService>(context);
 
           return MeasuresBloc(settingsService, weightService, measuresService)
-            ..add(const MeasuresLoadInit());
+            ..add(MeasuresLoadInit());
         },
       ),
     ], child: _main());

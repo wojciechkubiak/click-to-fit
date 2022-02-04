@@ -1,7 +1,7 @@
 enum MeasuresDetailedOption { create, edit, delete }
 
 class Measure {
-  final int userId;
+  int userId;
   int? id;
   int? weightId;
   String date;

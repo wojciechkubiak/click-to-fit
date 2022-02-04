@@ -12,7 +12,7 @@ abstract class DataMeasuresService {
   Future<Measure?> getMeasureByWeightId({required int weightId});
   Future<Measure?> addMeasure({required Measure measure});
   Future<bool> updateMeasure({required Measure measure});
-  Future<bool> removeMeasure({required int measureId});
+  Future<bool> removeMeasure({required int weightId});
 }
 
 class MeasuresService extends DataMeasuresService {
@@ -197,14 +197,14 @@ class MeasuresService extends DataMeasuresService {
   }
 
   @override
-  Future<bool> removeMeasure({required int measureId}) async {
+  Future<bool> removeMeasure({required int weightId}) async {
     StorageService storageService = StorageService();
 
     try {
       final db = await storageService.getDatabase();
 
-      int count =
-          await db.rawDelete('DELETE FROM measures WHERE pk = ?', [measureId]);
+      int count = await db
+          .rawDelete('DELETE FROM measures WHERE weightId = ?', [weightId]);
 
       return count > 0;
     } catch (exception, stackTrace) {

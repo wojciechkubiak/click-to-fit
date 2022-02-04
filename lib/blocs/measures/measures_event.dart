@@ -4,25 +4,7 @@ abstract class MeasuresEvent {
   const MeasuresEvent();
 }
 
-class MeasuresLoadInit extends MeasuresEvent {
-  final MeasuresDetailedOption? option;
-  final Weight? weight;
-  final int? weightId;
-  final Measure? measure;
-  final int? measureId;
-  final User? user;
-
-  const MeasuresLoadInit({
-    this.option,
-    this.weight,
-    this.weightId,
-    this.measure,
-    this.measureId,
-    this.user,
-  });
-
-  List<Object?> get props => [option];
-}
+class MeasuresLoadInit extends MeasuresEvent {}
 
 class MeasuresLoadDetailed extends MeasuresEvent {
   final List<Weight> weights;
@@ -38,4 +20,30 @@ class MeasuresLoadDetailed extends MeasuresEvent {
   });
 
   List<Object?> get props => [weights];
+}
+
+class MeasureUpdate extends MeasuresEvent {
+  final Weight weight;
+  final Measure measure;
+
+  const MeasureUpdate({required this.weight, required this.measure});
+
+  List<Object?> get props => [weight, measure];
+}
+
+class MeasureCreate extends MeasuresEvent {
+  final Weight weight;
+  final Measure measure;
+
+  const MeasureCreate({required this.weight, required this.measure});
+
+  List<Object?> get props => [weight, measure];
+}
+
+class MeasureDelete extends MeasuresEvent {
+  final int weightId;
+
+  const MeasureDelete({required this.weightId});
+
+  List<Object?> get props => [weightId];
 }

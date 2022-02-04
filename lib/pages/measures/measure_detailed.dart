@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:star_metter/blocs/home/home_bloc.dart';
 import 'package:star_metter/blocs/measures/measures_bloc.dart';
 import 'package:star_metter/config/colors.dart';
+import 'package:star_metter/lang/keys.dart';
 import 'package:star_metter/models/measure.dart';
 import 'package:star_metter/models/models.dart';
 import 'package:star_metter/services/weight.dart';
@@ -84,6 +86,8 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
       weightV2 = int.parse(_tempWeight.last);
     }
 
+    print('MEASURE ${widget.measure}');
+
     if (widget.measure is Measure) {
       List<String> _tempNeck = widget.measure!.neck.toString().split('.');
       neckV1 = int.parse(_tempNeck.first);
@@ -120,6 +124,44 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
   }
 
   void handleDate({required DateTime dt}) => setState(() => date = dt);
+
+  Measure getMeasure({
+    required String date,
+    Measure? measure,
+    int? weightId,
+  }) {
+    if (measure is Measure) {
+      Measure _measure = measure;
+      _measure.userId = widget.user.id!;
+      _measure.weightId = weightId;
+      _measure.date = date;
+      _measure.neck = double.parse('$neckV1.$neckV2');
+      _measure.abdomen = double.parse('$abdomenV1.$abdomenV2');
+      _measure.chest = double.parse('$chestV1.$chestV2');
+      _measure.hips = double.parse('$hipsV1.$hipsV2');
+      _measure.bicep = double.parse('$bicepV1.$bicepV2');
+      _measure.thigh = double.parse('$thighV1.$thighV2');
+      _measure.waist = double.parse('$waistV1.$waistV2');
+      _measure.calf = double.parse('$calfV1.$calfV2');
+      return _measure;
+    } else {
+      Measure _measure = Measure(
+        userId: widget.user.id!,
+        weightId: weightId,
+        date: date,
+        neck: double.parse('$neckV1.$neckV2'),
+        abdomen: double.parse('$abdomenV1.$abdomenV2'),
+        chest: double.parse('$chestV1.$chestV2'),
+        hips: double.parse('$hipsV1.$hipsV2'),
+        bicep: double.parse('$bicepV1.$bicepV2'),
+        thigh: double.parse('$thighV1.$thighV2'),
+        waist: double.parse('$waistV1.$waistV2'),
+        calf: double.parse('$calfV1.$calfV2'),
+      );
+
+      return _measure;
+    }
+  }
 
   Widget picker({
     required Unit unit,
@@ -196,14 +238,14 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
       backgroundColor: CustomColor.primaryAccent,
       isDarkIcon: false,
       onBack: () {
-        BlocProvider.of<MeasuresBloc>(context).add(const MeasuresLoadInit());
+        BlocProvider.of<MeasuresBloc>(context).add(MeasuresLoadInit());
       },
       isBack: true,
       page: Center(
         child: Column(
           children: [
             Text(
-              'Dzień:',
+              '${translate(Keys.measuresDayHeader)}:',
               style: Theme.of(context).textTheme.headline2,
               textAlign: TextAlign.center,
             ),
@@ -263,7 +305,7 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
                       bottom: 12,
                     ),
                     child: Text(
-                      'Pomiary:',
+                      '${translate(Keys.measuresMeasuresHeader)}:',
                       style: Theme.of(context).textTheme.headline2!.copyWith(
                             color: CustomColor.primaryAccentDark,
                             fontSize: 52,
@@ -278,7 +320,7 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
                       top: 12,
                     ),
                     child: Text(
-                      "Kliknij na wagę po prawej stronie daty w celu edytowania pomiarów.",
+                      translate(Keys.measuresMeasuresSubheader),
                       style: Theme.of(context).textTheme.bodyText1!.copyWith(
                             color: CustomColor.primaryAccentSemiLight,
                           ),
@@ -288,7 +330,7 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
                     padding: const EdgeInsets.only(top: 32.0),
                     child: picker(
                       header:
-                          'Waga (${widget.user.unit.toLowerCase() == "metric" ? "kg" : "lb"}):',
+                          '${translate(Keys.measuresHeader)} (${widget.user.unit.toLowerCase() == "metric" ? "kg" : "lb"}):',
                       unit: widget.user.unit.toLowerCase() == "metric"
                           ? Unit.metric
                           : Unit.imperial,
@@ -304,7 +346,7 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
                   ),
                   picker(
                     header:
-                        'Kark (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "inch"}):',
+                        '${translate(Keys.measuresNeck)} (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "inch"}):',
                     unit: widget.user.unit.toLowerCase() == "metric"
                         ? Unit.metric
                         : Unit.imperial,
@@ -317,7 +359,7 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
                   ),
                   picker(
                     header:
-                        'Klatka piersiowa (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "inch"}):',
+                        '${translate(Keys.measuresChest)} (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "inch"}):',
                     unit: widget.user.unit.toLowerCase() == "metric"
                         ? Unit.metric
                         : Unit.imperial,
@@ -330,7 +372,7 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
                   ),
                   picker(
                     header:
-                        'Brzuch (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "inch"}):',
+                        '${translate(Keys.measuresAbdomen)} (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "inch"}):',
                     unit: widget.user.unit.toLowerCase() == "metric"
                         ? Unit.metric
                         : Unit.imperial,
@@ -343,7 +385,7 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
                   ),
                   picker(
                     header:
-                        'Talia (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "inch"}):',
+                        '${translate(Keys.measuresWaist)} (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "inch"}):',
                     unit: widget.user.unit.toLowerCase() == "metric"
                         ? Unit.metric
                         : Unit.imperial,
@@ -356,7 +398,7 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
                   ),
                   picker(
                     header:
-                        'Biodra (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "inch"}):',
+                        '${translate(Keys.measuresHips)} (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "inch"}):',
                     unit: widget.user.unit.toLowerCase() == "metric"
                         ? Unit.metric
                         : Unit.imperial,
@@ -369,7 +411,7 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
                   ),
                   picker(
                     header:
-                        'Biceps (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "inch"}):',
+                        '${translate(Keys.measuresBicep)} (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "inch"}):',
                     unit: widget.user.unit.toLowerCase() == "metric"
                         ? Unit.metric
                         : Unit.imperial,
@@ -382,7 +424,7 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
                   ),
                   picker(
                     header:
-                        'Udo (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "inch"}):',
+                        '${translate(Keys.measuresThigh)} (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "inch"}):',
                     unit: widget.user.unit.toLowerCase() == "metric"
                         ? Unit.metric
                         : Unit.imperial,
@@ -395,7 +437,7 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
                   ),
                   picker(
                     header:
-                        'Łydka (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "inch"}):',
+                        '${translate(Keys.measuresCalf)} (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "inch"}):',
                     unit: widget.user.unit.toLowerCase() == "metric"
                         ? Unit.metric
                         : Unit.imperial,
@@ -433,41 +475,31 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
                             weight: double.parse('$weightV1.$weightV2'),
                           );
 
-                          Measure? newMeasure = widget.measure;
+                          Measure? newMeasure = getMeasure(
+                            date: _date,
+                            weightId: newWeight.id,
+                            measure: widget.measure,
+                          );
 
-                          if (newMeasure is Measure) {
-                            newMeasure.neck = double.parse('$neckV1.$neckV2');
-                            newMeasure.abdomen =
-                                double.parse('$abdomenV1.$abdomenV2');
-                            newMeasure.chest =
-                                double.parse('$chestV1.$chestV2');
-                            newMeasure.hips = double.parse('$hipsV1.$hipsV2');
-                            newMeasure.bicep =
-                                double.parse('$bicepV1.$bicepV2');
-                            newMeasure.thigh =
-                                double.parse('$thighV1.$thighV2');
-                            newMeasure.waist =
-                                double.parse('$waistV1.$waistV2');
-                            newMeasure.calf = double.parse('$calfV1.$calfV2');
-                          } else {
-                            newMeasure = Measure(
-                              userId: widget.user.id!,
-                              date: _date,
-                              neck: double.parse('$neckV1.$neckV2'),
-                              abdomen: double.parse('$abdomenV1.$abdomenV2'),
-                              chest: double.parse('$chestV1.$chestV2'),
-                              hips: double.parse('$hipsV1.$hipsV2'),
-                              bicep: double.parse('$bicepV1.$bicepV2'),
-                              thigh: double.parse('$thighV1.$thighV2'),
-                              waist: double.parse('$waistV1.$waistV2'),
-                              calf: double.parse('$calfV1.$calfV2'),
+                          if (widget.weight is Weight &&
+                              widget.measure is! Measure) {
+                            BlocProvider.of<MeasuresBloc>(context)
+                                .add(MeasureCreate(
+                              weight: newWeight,
+                              measure: newMeasure,
+                            ));
+                            BlocProvider.of<HomeBloc>(context).add(
+                              HomeLoadMeasures(
+                                user: widget.user,
+                                isDelayed: true,
+                              ),
                             );
                           }
 
-                          if (widget.weight is Weight) {
+                          if (widget.weight is Weight &&
+                              widget.measure is Measure) {
                             BlocProvider.of<MeasuresBloc>(context).add(
-                              MeasuresLoadInit(
-                                option: MeasuresDetailedOption.edit,
+                              MeasureUpdate(
                                 weight: newWeight,
                                 measure: newMeasure,
                               ),
@@ -478,14 +510,15 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
                                 isDelayed: true,
                               ),
                             );
-                          } else {
-                            BlocProvider.of<MeasuresBloc>(context).add(
-                              MeasuresLoadInit(
-                                option: MeasuresDetailedOption.create,
-                                weight: newWeight,
-                                measure: newMeasure,
-                              ),
-                            );
+                          }
+
+                          if (widget.weight is! Weight &&
+                              widget.measure is! Measure) {
+                            BlocProvider.of<MeasuresBloc>(context)
+                                .add(MeasureCreate(
+                              weight: newWeight,
+                              measure: newMeasure,
+                            ));
                             BlocProvider.of<HomeBloc>(context).add(
                               HomeLoadMeasures(
                                 user: widget.user,
@@ -496,8 +529,8 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
                         }
                       },
                       text: widget.option == MeasuresDetailedOption.create
-                          ? "Dodaj"
-                          : "Zatwierdź zmiany",
+                          ? translate(Keys.measuresAddBtn)
+                          : translate(Keys.measuresSubmitBtn),
                       padding: const EdgeInsets.symmetric(
                         vertical: 15,
                         horizontal: 52,
@@ -507,9 +540,9 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
                   SizedBox(
                     height: 24,
                     child: isError
-                        ? const Text(
-                            'Istnieje już wpis z podaną datą',
-                            style: TextStyle(
+                        ? Text(
+                            translate(Keys.measuresExists),
+                            style: const TextStyle(
                               color: Nord.auroraRed,
                             ),
                           )
@@ -523,32 +556,31 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
                         onPressed: () async {
                           bool? result = await CustomDialog().showBaseDialog(
                             context: context,
-                            header: "Usuń:",
-                            dialogBody:
-                                "Tej operacji nie da się cofnąć, jednak nadal będziesz mógł dodać wpis danego dnia",
-                            confirmText: "Tak",
-                            declineText: "Nie",
+                            header: "${translate(Keys.measuresDialogHeader)}:",
+                            dialogBody: translate(Keys.measuresDialogBody),
+                            confirmText: translate(Keys.measuresDialogConfirm),
+                            declineText: translate(Keys.measuresDialogDecline),
                           );
 
                           if (result is bool) {
                             if (result) {
-                              BlocProvider.of<MeasuresBloc>(context).add(
-                                MeasuresLoadInit(
-                                  option: MeasuresDetailedOption.delete,
-                                  weightId: widget.weight!.id,
-                                  measureId: widget.measure?.id,
-                                ),
-                              );
-                              BlocProvider.of<HomeBloc>(context).add(
-                                HomeLoadMeasures(
-                                  user: widget.user,
-                                  isDelayed: true,
-                                ),
-                              );
+                              if (widget.weight?.id is int) {
+                                BlocProvider.of<MeasuresBloc>(context).add(
+                                  MeasureDelete(
+                                    weightId: widget.weight!.id!,
+                                  ),
+                                );
+                                BlocProvider.of<HomeBloc>(context).add(
+                                  HomeLoadMeasures(
+                                    user: widget.user,
+                                    isDelayed: true,
+                                  ),
+                                );
+                              }
                             }
                           }
                         },
-                        text: "Usuń wpis",
+                        text: translate(Keys.measuresDeleteBtn),
                         padding: const EdgeInsets.symmetric(
                           vertical: 15,
                           horizontal: 52,

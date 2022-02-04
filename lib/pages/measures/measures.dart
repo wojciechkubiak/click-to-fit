@@ -187,9 +187,9 @@ class _MeasuresState extends State<Measures> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           SizedBox(
-            width: MediaQuery.of(context).size.width * 0.2,
+            width: MediaQuery.of(context).size.width * 0.3,
             child: Text(
-              '$text',
+              text,
               style: Theme.of(context).textTheme.bodyText1!.copyWith(
                     color: CustomColor.primaryAccent,
                     fontWeight: FontWeight.w400,
@@ -358,7 +358,7 @@ class _MeasuresState extends State<Measures> {
             child: Column(
               children: [
                 Text(
-                  'Waga:',
+                  '${translate(Keys.measuresHeader)}:',
                   style: Theme.of(context).textTheme.headline2,
                   textAlign: TextAlign.center,
                 ),
@@ -458,7 +458,7 @@ class _MeasuresState extends State<Measures> {
                           bottom: 12,
                         ),
                         child: Text(
-                          'Historia wagi:',
+                          '${translate(Keys.measuresHistoryHeader)}:',
                           style:
                               Theme.of(context).textTheme.headline2!.copyWith(
                                     color: CustomColor.primaryAccentDark,
@@ -475,7 +475,7 @@ class _MeasuresState extends State<Measures> {
                           bottom: 48,
                         ),
                         child: Text(
-                          "Kliknij na wagę po prawej stronie daty w celu edytowania pomiarów.",
+                          translate(Keys.measuresHistorySubheader),
                           style:
                               Theme.of(context).textTheme.bodyText1!.copyWith(
                                     color: CustomColor.primaryAccentSemiLight,
@@ -510,7 +510,7 @@ class _MeasuresState extends State<Measures> {
                           left: 16,
                           right: 16,
                           top: 12,
-                          bottom: 62,
+                          bottom: 24,
                         ),
                         child: Wrap(
                           alignment: WrapAlignment.spaceBetween,
@@ -555,27 +555,6 @@ class _MeasuresState extends State<Measures> {
                                 isDisabled: !_allowExpand,
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 8.0,
-                                horizontal: 4,
-                              ),
-                              child: NavigationButton(
-                                onPressed: () {
-                                  BlocProvider.of<MeasuresBloc>(context).add(
-                                    MeasuresLoadDetailed(
-                                      weights: _allWeights,
-                                      option: MeasuresDetailedOption.create,
-                                    ),
-                                  );
-                                },
-                                text: "Dodaj pomiar",
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 15,
-                                  horizontal: 42,
-                                ),
-                              ),
-                            ),
                           ],
                         ),
                       ),
@@ -585,7 +564,7 @@ class _MeasuresState extends State<Measures> {
                           bottom: 12,
                         ),
                         child: Text(
-                          'Pomiary:',
+                          '${translate(Keys.measuresMeasuresHeader)}:',
                           style:
                               Theme.of(context).textTheme.headline2!.copyWith(
                                     color: CustomColor.primaryAccentDark,
@@ -602,140 +581,166 @@ class _MeasuresState extends State<Measures> {
                           bottom: 28,
                         ),
                         child: Text(
-                          "Kliknij na wagę po prawej stronie daty w celu edytowania pomiarów.",
+                          translate(Keys.measuresMeasuresSubheader),
                           style:
                               Theme.of(context).textTheme.bodyText1!.copyWith(
                                     color: CustomColor.primaryAccentSemiLight,
                                   ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 48.0),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 16.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.2,
-                                  ),
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.2,
-                                    child: Text(
-                                      "Pocz.",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1!
-                                          .copyWith(
-                                            color:
-                                                CustomColor.primaryAccentDark,
-                                          ),
-                                      textAlign: TextAlign.center,
+                      if (widget.allMeasures.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 48.0),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.3,
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.2,
-                                    child: Text(
-                                      "Akt.",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1!
-                                          .copyWith(
-                                            color:
-                                                CustomColor.primaryAccentDark,
-                                          ),
-                                      textAlign: TextAlign.center,
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.3,
+                                      child: Text(
+                                        translate(Keys.measuresMeasuresStart),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .copyWith(
+                                              color:
+                                                  CustomColor.primaryAccentDark,
+                                            ),
+                                        textAlign: TextAlign.center,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.2,
+                                      child: Text(
+                                        translate(Keys.measuresMeasuresEnd),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .copyWith(
+                                              color:
+                                                  CustomColor.primaryAccentDark,
+                                            ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            measureListElement(
-                              text: "Kark",
-                              prev: firstMeasure?.neck ?? 0,
-                              curr:
-                                  lastMeasure?.neck ?? firstMeasure?.neck ?? 0,
-                              prevId: firstMeasure?.weightId,
-                              nextId: lastMeasure?.weightId ??
-                                  firstMeasure?.weightId,
-                            ),
-                            measureListElement(
-                              text: "Klatka piersiowa",
-                              prev: firstMeasure?.chest ?? 0,
-                              curr: lastMeasure?.chest ??
-                                  firstMeasure?.chest ??
-                                  0,
-                              prevId: firstMeasure?.weightId,
-                              nextId: lastMeasure?.weightId ??
-                                  firstMeasure?.weightId,
-                            ),
-                            measureListElement(
-                              text: "Brzuch",
-                              prev: firstMeasure?.abdomen ?? 0,
-                              curr: lastMeasure?.abdomen ??
-                                  firstMeasure?.abdomen ??
-                                  0,
-                              prevId: firstMeasure?.weightId,
-                              nextId: lastMeasure?.weightId ??
-                                  firstMeasure?.weightId,
-                            ),
-                            measureListElement(
-                              text: "Talia",
-                              prev: firstMeasure?.waist ?? 0,
-                              curr:
-                                  lastMeasure?.waist ?? firstMeasure?.calf ?? 0,
-                              prevId: firstMeasure?.weightId,
-                              nextId: lastMeasure?.weightId ??
-                                  firstMeasure?.weightId,
-                            ),
-                            measureListElement(
-                              text: "Biodra",
-                              prev: firstMeasure?.hips ?? 0,
-                              curr:
-                                  lastMeasure?.hips ?? firstMeasure?.hips ?? 0,
-                              prevId: firstMeasure?.weightId,
-                              nextId: lastMeasure?.weightId ??
-                                  firstMeasure?.weightId,
-                            ),
-                            measureListElement(
-                              text: "Biceps",
-                              prev: firstMeasure?.bicep ?? 0,
-                              curr: lastMeasure?.bicep ??
-                                  firstMeasure?.bicep ??
-                                  0,
-                              prevId: firstMeasure?.weightId,
-                              nextId: lastMeasure?.weightId ??
-                                  firstMeasure?.weightId,
-                            ),
-                            measureListElement(
-                              text: "Udo",
-                              prev: firstMeasure?.thigh ?? 0,
-                              curr: lastMeasure?.thigh ??
-                                  firstMeasure?.thigh ??
-                                  0,
-                              prevId: firstMeasure?.weightId,
-                              nextId: lastMeasure?.weightId ??
-                                  firstMeasure?.weightId,
-                            ),
-                            measureListElement(
-                              text: "Łydka",
-                              prev: firstMeasure?.calf ?? 0,
-                              curr:
-                                  lastMeasure?.calf ?? firstMeasure?.calf ?? 0,
-                              prevId: firstMeasure?.weightId,
-                              nextId: lastMeasure?.weightId ??
-                                  firstMeasure?.weightId,
-                            ),
-                          ],
+                              measureListElement(
+                                text: translate(Keys.measuresNeck),
+                                prev: firstMeasure?.neck ?? 0,
+                                curr: lastMeasure?.neck ??
+                                    firstMeasure?.neck ??
+                                    0,
+                                prevId: firstMeasure?.weightId,
+                                nextId: lastMeasure?.weightId ??
+                                    firstMeasure?.weightId,
+                              ),
+                              measureListElement(
+                                text: translate(Keys.measuresChest),
+                                prev: firstMeasure?.chest ?? 0,
+                                curr: lastMeasure?.chest ??
+                                    firstMeasure?.chest ??
+                                    0,
+                                prevId: firstMeasure?.weightId,
+                                nextId: lastMeasure?.weightId ??
+                                    firstMeasure?.weightId,
+                              ),
+                              measureListElement(
+                                text: translate(Keys.measuresAbdomen),
+                                prev: firstMeasure?.abdomen ?? 0,
+                                curr: lastMeasure?.abdomen ??
+                                    firstMeasure?.abdomen ??
+                                    0,
+                                prevId: firstMeasure?.weightId,
+                                nextId: lastMeasure?.weightId ??
+                                    firstMeasure?.weightId,
+                              ),
+                              measureListElement(
+                                text: translate(Keys.measuresWaist),
+                                prev: firstMeasure?.waist ?? 0,
+                                curr: lastMeasure?.waist ??
+                                    firstMeasure?.calf ??
+                                    0,
+                                prevId: firstMeasure?.weightId,
+                                nextId: lastMeasure?.weightId ??
+                                    firstMeasure?.weightId,
+                              ),
+                              measureListElement(
+                                text: translate(Keys.measuresHips),
+                                prev: firstMeasure?.hips ?? 0,
+                                curr: lastMeasure?.hips ??
+                                    firstMeasure?.hips ??
+                                    0,
+                                prevId: firstMeasure?.weightId,
+                                nextId: lastMeasure?.weightId ??
+                                    firstMeasure?.weightId,
+                              ),
+                              measureListElement(
+                                text: translate(Keys.measuresBicep),
+                                prev: firstMeasure?.bicep ?? 0,
+                                curr: lastMeasure?.bicep ??
+                                    firstMeasure?.bicep ??
+                                    0,
+                                prevId: firstMeasure?.weightId,
+                                nextId: lastMeasure?.weightId ??
+                                    firstMeasure?.weightId,
+                              ),
+                              measureListElement(
+                                text: translate(Keys.measuresThigh),
+                                prev: firstMeasure?.thigh ?? 0,
+                                curr: lastMeasure?.thigh ??
+                                    firstMeasure?.thigh ??
+                                    0,
+                                prevId: firstMeasure?.weightId,
+                                nextId: lastMeasure?.weightId ??
+                                    firstMeasure?.weightId,
+                              ),
+                              measureListElement(
+                                text: translate(Keys.measuresCalf),
+                                prev: firstMeasure?.calf ?? 0,
+                                curr: lastMeasure?.calf ??
+                                    firstMeasure?.calf ??
+                                    0,
+                                prevId: firstMeasure?.weightId,
+                                nextId: lastMeasure?.weightId ??
+                                    firstMeasure?.weightId,
+                              ),
+                            ],
+                          ),
                         ),
-                      )
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 4.0,
+                          horizontal: 4,
+                        ),
+                        child: NavigationButton(
+                          onPressed: () {
+                            BlocProvider.of<MeasuresBloc>(context).add(
+                              MeasuresLoadDetailed(
+                                weights: _allWeights,
+                                option: MeasuresDetailedOption.create,
+                              ),
+                            );
+                          },
+                          text: translate(Keys.measuresAddBtn),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 15,
+                            horizontal: 42,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 )

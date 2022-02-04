@@ -24,6 +24,9 @@ class MeasuresBloc extends Bloc<MeasuresEvent, MeasuresState> {
         super(MeasuresInitial()) {
     on<MeasuresLoadInit>(_mapMeasuresMainPage);
     on<MeasuresLoadDetailed>(_mapMeasuresDetailed);
+    on<MeasureUpdate>(_mapMeasuresUpdate);
+    on<MeasureCreate>(_mapMeasuresCreate);
+    on<MeasureDelete>(_mapMeasuresDelete);
   }
 
   void _mapMeasuresMainPage(
@@ -33,43 +36,6 @@ class MeasuresBloc extends Bloc<MeasuresEvent, MeasuresState> {
     emit(MeasuresSplash());
 
     if (event is MeasuresLoadInit) {
-      if (event.option is MeasuresDetailedOption) {
-        if (event.option == MeasuresDetailedOption.delete) {
-          if (event.weightId is int) {
-            await _weightService.removeWeight(recordId: event.weightId!);
-          }
-
-          if (event.measureId is int) {
-            await _measuresService.removeMeasure(measureId: event.measureId!);
-          }
-        } else if (event.option == MeasuresDetailedOption.edit &&
-            event.weight is Weight) {
-          await _weightService.updateWeight(
-            recordId: event.weight!.id!,
-            weight: event.weight!.weight,
-          );
-
-          if (event.measure is Measure) {
-            await _measuresService.updateMeasure(measure: event.measure!);
-          }
-        } else if (event.option == MeasuresDetailedOption.create &&
-            event.weight is Weight) {
-          Weight? weight = await _weightService.insertNewRecord(
-            userId: event.weight!.userId,
-            weight: event.weight!.weight,
-            date: event.weight!.date,
-          );
-          Measure? measure = event.measure;
-
-          if (event.measure is Measure && weight is Weight) {
-            measure!.weightId = weight.id;
-            await _measuresService.addMeasure(measure: event.measure!);
-          }
-        }
-
-        emit(MeasuresInitial());
-      }
-
       emit(MeasuresInitial());
     } else {
       emit(MeasuresError());
@@ -105,6 +71,75 @@ class MeasuresBloc extends Bloc<MeasuresEvent, MeasuresState> {
           isNotFirst: event.isNotFirst,
         ),
       );
+    } else {
+      emit(MeasuresError());
+    }
+  }
+
+  void _mapMeasuresUpdate(
+    MeasuresEvent event,
+    Emitter<MeasuresState> state,
+  ) async {
+    emit(MeasuresSplash());
+
+    if (event is MeasureUpdate) {
+      await _weightService.updateWeight(
+        recordId: event.weight.id!,
+        weight: event.weight.weight,
+      );
+
+      if (event.measure.weightId is int) {
+        await _measuresService.updateMeasure(measure: event.measure);
+      } else {
+        event.measure.weightId = event.weight.id;
+        await _measuresService.addMeasure(measure: event.measure);
+      }
+
+      emit(MeasuresInitial());
+    } else {
+      emit(MeasuresError());
+    }
+  }
+
+  void _mapMeasuresCreate(
+    MeasuresEvent event,
+    Emitter<MeasuresState> state,
+  ) async {
+    emit(MeasuresSplash());
+
+    if (event is MeasureCreate) {
+      Weight? weight;
+
+      if (event.weight.id is! int) {
+        weight = await _weightService.insertNewRecord(
+          userId: event.weight.userId,
+          weight: event.weight.weight,
+          date: event.weight.date,
+        );
+      }
+
+      Measure measure = event.measure;
+      measure.weightId = weight is! Weight ? event.weight.id : weight.id;
+      await _measuresService.addMeasure(measure: event.measure);
+
+      emit(MeasuresInitial());
+    } else {
+      emit(MeasuresError());
+    }
+  }
+
+  void _mapMeasuresDelete(
+    MeasuresEvent event,
+    Emitter<MeasuresState> state,
+  ) async {
+    emit(MeasuresSplash());
+
+    if (event is MeasureDelete) {
+      await _weightService.removeWeight(recordId: event.weightId);
+
+      await _measuresService.removeMeasure(weightId: event.weightId);
+
+      emit(MeasuresInitial());
     } else {
       emit(MeasuresError());
     }

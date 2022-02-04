@@ -142,5 +142,31 @@
             "reminder": "Przypomnienie: Każda gwiazdka jest równa 100kcal. Pamiętaj o swojej wadze! Nie zamęczaj się - dieta nie powinna być katorgą"
         },
         "week": "tydzień"
+    },
+    "measures": {
+        "header": "Waga", 
+        "dayHeader": "Dzień",
+        "historyHeader": "Historia wagi",
+        "historySubheader": "Kliknij na wagę po prawej stronie daty w celu edytowania pomiarów", 
+        "measuresHeader": "Pomiary", 
+        "measuresSubheader": "Twoje wymiary są lepszym wyznacznikiem Twojego progresu. Jeśli chcesz śledzić jak ci idzie, zapisuj je regularnie.",
+        "measuresStart": "Pocz.", 
+        "measuresEnd": "Akt.",
+        "addBtn": "Dodaj pomiar",
+        "submitBtn": "Zatwierdź zmiany",
+        "deleteBtn": "Usuń wpis",
+        "neck": "Kark", 
+        "chest": "Klatka piersiowa", 
+        "abdomen": "Brzuch",
+        "waist": "Talia", 
+        "hips": "Biodra", 
+        "bicep": "Biceps", 
+        "thigh": "Udo",
+        "calf": "Łydka",
+        "exists": "Istnieje już wpis z podaną datą", 
+        "dialogHeader": "Usuń", 
+        "dialogBody": "Tej operacji nie da się cofnąć, jednak nadal będziesz mógł dodać wpis danego dnia",
+        "dialogConfirm": "Zatwierdź",
+        "dialogDecline": "Anuluj"
     }
 }
