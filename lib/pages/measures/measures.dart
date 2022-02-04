@@ -8,6 +8,7 @@ import 'package:star_metter/models/measure.dart';
 import 'package:star_metter/models/metric.dart';
 import 'package:star_metter/models/models.dart';
 import 'package:star_metter/models/star.dart';
+import 'package:star_metter/pages/error_page.dart';
 import 'package:star_metter/pages/measures/measure_detailed.dart';
 import 'package:star_metter/pages/pages.dart';
 import 'package:star_metter/pages/stars.dart';
@@ -753,6 +754,10 @@ class _MeasuresState extends State<Measures> {
           option: state.option,
           isNotFirst: state.isNotFirst,
         );
+      }
+
+      if (state is MeasuresError) {
+        return ErrorPage(handlePage: widget.handlePage);
       }
 
       return const Loading();

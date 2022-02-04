@@ -23,3 +23,5 @@ class MeasuresDetailed extends MeasuresState {
 
   List<Object?> get props => [lockedDates];
 }
+
+class MeasuresError extends MeasuresState {}

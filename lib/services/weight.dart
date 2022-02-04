@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:sentry_flutter/sentry_flutter.dart';
+
 import '../models/models.dart';
 import './storage.dart';
 
@@ -61,8 +63,11 @@ class WeightService extends DataWeightService {
       }
 
       return null;
-    } catch (e) {
-      print(e);
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
       return null;
     }
   }
@@ -90,8 +95,11 @@ class WeightService extends DataWeightService {
       } else {
         return null;
       }
-    } catch (e) {
-      print(e);
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
       return null;
     }
   }
@@ -113,8 +121,11 @@ class WeightService extends DataWeightService {
       } else {
         return null;
       }
-    } catch (e) {
-      print(e);
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
       return null;
     }
   }
@@ -176,8 +187,11 @@ class WeightService extends DataWeightService {
       }
 
       return result;
-    } catch (e) {
-      print(e);
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
       return null;
     }
   }
@@ -230,8 +244,11 @@ class WeightService extends DataWeightService {
       }
 
       return weights;
-    } catch (e) {
-      print(e);
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
       return null;
     }
   }
@@ -253,8 +270,11 @@ class WeightService extends DataWeightService {
 
       print('UPDATED WEIGHTS: id $recordId count $count');
       return count > 0;
-    } catch (e) {
-      print(e);
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
       return false;
     }
   }
@@ -271,8 +291,11 @@ class WeightService extends DataWeightService {
           await db.rawDelete('DELETE FROM weights WHERE pk = ?', [recordId]);
 
       return count > 0;
-    } catch (e) {
-      print(e);
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
       return false;
     }
   }
@@ -321,8 +344,11 @@ class WeightService extends DataWeightService {
       );
 
       return _resultWeight;
-    } catch (e) {
-      print(e);
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
       return null;
     }
   }
@@ -347,8 +373,11 @@ class WeightService extends DataWeightService {
       } else {
         return null;
       }
-    } catch (e) {
-      print(e);
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
       return null;
     }
   }
@@ -363,8 +392,11 @@ class WeightService extends DataWeightService {
           await db.rawQuery("SELECT * FROM weights WHERE pk = $id");
 
       return weightList.isNotEmpty;
-    } catch (e) {
-      print(e);
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
       return false;
     }
   }

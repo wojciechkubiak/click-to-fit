@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sql.dart';
+import 'package:sentry/sentry.dart';
 
 import '../../models/models.dart';
 import './storage.dart';
@@ -44,7 +45,11 @@ class HomeService extends DataHomeService {
 
       print('NEW USER ${user.toJson()} -> id: $userId');
       return userId;
-    } catch (e) {
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
       return null;
     }
   }
@@ -82,8 +87,11 @@ class HomeService extends DataHomeService {
       } else {
         return null;
       }
-    } catch (e) {
-      print(e);
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
       return null;
     }
   }
@@ -113,9 +121,11 @@ class HomeService extends DataHomeService {
       );
 
       return progress;
-    } catch (e, stackTrace) {
-      print(e);
-      print(stackTrace);
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
       return null;
     }
   }
@@ -124,14 +134,22 @@ class HomeService extends DataHomeService {
   Future<List<User>> getUsers() async {
     StorageService storageService = StorageService();
 
-    final db = await storageService.getDatabase();
-    List<Map<String, dynamic>> userList = await db.query(
-      'users',
-    );
     List<User> users = [];
 
-    for (var element in userList) {
-      users.add(User.fromJson(element));
+    try {
+      final db = await storageService.getDatabase();
+      List<Map<String, dynamic>> userList = await db.query(
+        'users',
+      );
+
+      for (var element in userList) {
+        users.add(User.fromJson(element));
+      }
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
     }
 
     return users;
@@ -157,8 +175,11 @@ class HomeService extends DataHomeService {
         [weight, userId],
       );
       print('UPDATED WEIGHTS: id $userId count $count');
-    } catch (e) {
-      print(e);
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
     }
   }
 

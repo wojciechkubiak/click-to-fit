@@ -3,6 +3,8 @@ import 'dart:io' show Platform;
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:star_metter/pages/error_page.dart';
 import 'package:star_metter/pages/measures/measures.dart';
 import 'package:star_metter/pages/stars.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -21,7 +23,7 @@ import 'pages/pages.dart';
 
 enum CurrentPage { INTRO, LOADING, HOME, ARTICLES, ABOUT, SETTINGS }
 
-void main() async {
+Future<void> main() async {
   var delegate = await LocalizationDelegate.create(
     basePath: 'assets/i18n/',
     fallbackLocale: 'en_US',
@@ -34,7 +36,14 @@ void main() async {
 
   storageService.getDatabase();
 
-  runApp(LocalizedApp(delegate, const MyApp()));
+  await SentryFlutter.init(
+    (options) {
+      options.dsn =
+          'https://112f1589f17c4850b93b8a6ffbeeccaf@o1135321.ingest.sentry.io/6184128';
+      options.tracesSampleRate = 1.0;
+    },
+    appRunner: () => runApp(LocalizedApp(delegate, const MyApp())),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -320,6 +329,11 @@ class _MyHomePageState extends State<MyHomePage> {
             allWeights: state.allWeights,
             allMeasures: state.allMeasures,
             user: state.user,
+          );
+        }
+        if (state is HomeError) {
+          return ErrorPage(
+            handlePage: _setDefaultPage,
           );
         }
         return const Loading();

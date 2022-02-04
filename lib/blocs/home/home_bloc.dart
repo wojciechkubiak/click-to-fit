@@ -74,12 +74,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         if (progress is Progress) {
           event.handlePage();
           emit(HomePage(user: user, progress: progress));
+        } else {
+          emit(HomeError());
         }
       } else {
         emit(HomeIntro(introMode: IntroMode.init));
       }
     } else {
-      emit(HomeSplash());
+      emit(HomeError());
     }
   }
 
@@ -90,6 +92,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   void _mapHomeLoadIntro(HomeEvent event, Emitter<HomeState> emit) async {
     if (event is HomeLoadIntro) {
       emit(HomeIntro(introMode: event.introMode, user: event.user));
+    } else {
+      emit(HomeError());
     }
   }
 
@@ -169,6 +173,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           }
         }
       }
+    } else {
+      emit(HomeError());
     }
   }
 
@@ -183,6 +189,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         users: users,
         currentUser: currentUser,
       ));
+    } else {
+      emit(HomeError());
     }
   }
 
@@ -197,6 +205,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         isNullStarIncluded: false,
       );
       emit(HomeStars(stars: stars));
+    } else {
+      emit(HomeError());
     }
   }
 
@@ -229,7 +239,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             allWeights: allWeights,
             allMeasures: allMeasures,
           ));
+        } else {
+          emit(HomeError());
         }
+      } else {
+        emit(HomeError());
       }
     }
   }

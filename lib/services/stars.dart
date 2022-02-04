@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:quiver/time.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import '../../models/models.dart';
 import '../../services/services.dart';
@@ -258,8 +259,11 @@ class StarsService extends DataStarsService {
       }
 
       return result;
-    } catch (e) {
-      print(e);
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
     }
     return stars;
   }
@@ -315,8 +319,11 @@ class StarsService extends DataStarsService {
         Star star = Star.fromJson(starsList.last);
         return star;
       }
-    } catch (e) {
-      print(e);
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
       return null;
     }
   }
@@ -338,8 +345,11 @@ class StarsService extends DataStarsService {
 
       print('UPDATED STARS: id $recordId count $count');
       return count > 0;
-    } catch (e) {
-      print(e);
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
       return false;
     }
   }
@@ -371,8 +381,11 @@ class StarsService extends DataStarsService {
       }
 
       return false;
-    } catch (e) {
-      print(e);
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
       return false;
     }
   }
@@ -395,8 +408,11 @@ class StarsService extends DataStarsService {
       });
 
       return id;
-    } catch (e) {
-      print(e);
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
       return 0;
     }
   }
@@ -419,8 +435,11 @@ class StarsService extends DataStarsService {
 
       print('UPDATED STARS: id $recordId count $count');
       return count > 0;
-    } catch (e) {
-      print(e);
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
       return false;
     }
   }
@@ -463,8 +482,12 @@ class StarsService extends DataStarsService {
       );
 
       return _resultStar;
-    } catch (e) {
-      print(e);
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
+      return null;
     }
   }
 }

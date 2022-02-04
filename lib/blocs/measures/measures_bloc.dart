@@ -71,6 +71,8 @@ class MeasuresBloc extends Bloc<MeasuresEvent, MeasuresState> {
       }
 
       emit(MeasuresInitial());
+    } else {
+      emit(MeasuresError());
     }
   }
 
@@ -103,6 +105,8 @@ class MeasuresBloc extends Bloc<MeasuresEvent, MeasuresState> {
           isNotFirst: event.isNotFirst,
         ),
       );
+    } else {
+      emit(MeasuresError());
     }
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:star_metter/models/measure.dart';
 import 'package:star_metter/services/services.dart';
 
@@ -57,8 +58,11 @@ class MeasuresService extends DataMeasuresService {
       });
 
       return result;
-    } catch (e) {
-      print(e);
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
 
       return [];
     }
@@ -82,8 +86,11 @@ class MeasuresService extends DataMeasuresService {
       }
 
       return null;
-    } catch (e) {
-      print(e);
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
       return null;
     }
   }
@@ -107,8 +114,11 @@ class MeasuresService extends DataMeasuresService {
       }
 
       return null;
-    } catch (e) {
-      print(e);
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
       return null;
     }
   }
@@ -136,9 +146,11 @@ class MeasuresService extends DataMeasuresService {
       );
 
       return _resultMeasure;
-    } catch (e) {
-      print(e);
-
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
       return null;
     }
   }
@@ -175,8 +187,11 @@ class MeasuresService extends DataMeasuresService {
 
       print('UPDATED MEASURES: id ${measure.id} count $count');
       return count > 0;
-    } catch (e) {
-      print(e);
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
       return false;
     }
   }
@@ -192,8 +207,11 @@ class MeasuresService extends DataMeasuresService {
           await db.rawDelete('DELETE FROM measures WHERE pk = ?', [measureId]);
 
       return count > 0;
-    } catch (e) {
-      print(e);
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
       return false;
     }
   }
