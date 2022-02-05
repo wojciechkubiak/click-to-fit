@@ -1,4 +1,8 @@
 {
+    "global": {
+        "error": "Coś poszło nie tak", 
+        "noData": "Brak danych"
+    },
     "app_desc": "Strać wagę w kilka kliknięć",
     "home": {
         "today": "Dzisiaj",

@@ -3,6 +3,10 @@ part of 'keys.dart';
 class Keys {
   static const String appDesc = 'app_desc';
 
+  static const String globalError = 'global.error';
+
+  static const String globalNoData = 'global.noData';
+
   static const String globalToday = 'home.today';
 
   static const String globalMore = 'home.more';

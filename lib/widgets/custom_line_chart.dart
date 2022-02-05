@@ -25,6 +25,7 @@ class CustomLineChart extends StatefulWidget {
 }
 
 class _CustomLineChartState extends State<CustomLineChart> {
+  double? maxValue;
   List<Color> gradientColors = [
     const Color(0xFF624a7b),
     const Color(0xFF88769b),
@@ -74,7 +75,7 @@ class _CustomLineChartState extends State<CustomLineChart> {
             child: Container(
               padding: const EdgeInsets.only(top: 52.0),
               child: Text(
-                "Brak danych",
+                translate(Keys.globalNoData),
                 style: Theme.of(context).textTheme.bodyText1!.copyWith(
                       color: CustomColor.primaryAccentSemiLight,
                       fontWeight: FontWeight.w600,

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:lottie/lottie.dart';
 import 'package:star_metter/blocs/home/home_bloc.dart';
+import 'package:star_metter/lang/keys.dart';
 
 import '../config/colors.dart';
 import './../widgets/widgets.dart';
@@ -38,7 +40,7 @@ class _ErrorPageState extends State<ErrorPage> {
               height: MediaQuery.of(context).size.width * 0.9,
             ),
             Text(
-              'Something went wrong',
+              translate(Keys.globalError),
               style: Theme.of(context).textTheme.headline2!.copyWith(
                     fontSize: 32,
                   ),

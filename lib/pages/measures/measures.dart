@@ -111,6 +111,18 @@ class _MeasuresState extends State<Measures> {
     _expandedWeights = temp;
   }
 
+  double maxValue(List<Weight> weights) {
+    double _max = widget.user.initWeight;
+
+    for (Weight weight in weights) {
+      if (weight.weight > _max) {
+        _max = weight.weight;
+      }
+    }
+
+    return _max;
+  }
+
   String getBMI() {
     if (_user.unit == 'imperial') {
       Metric metric = Metric(
@@ -197,7 +209,7 @@ class _MeasuresState extends State<Measures> {
             ),
           ),
           SizedBox(
-            width: MediaQuery.of(context).size.width * 0.2,
+            width: MediaQuery.of(context).size.width * 0.25,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 elevation: 10,
@@ -205,6 +217,7 @@ class _MeasuresState extends State<Measures> {
                   borderRadius: BorderRadius.circular(16),
                 ),
                 primary: CustomColor.primaryAccentSemiLight,
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
               ),
               child: Text(
                 '$prev',
@@ -233,7 +246,7 @@ class _MeasuresState extends State<Measures> {
             ),
           ),
           SizedBox(
-            width: MediaQuery.of(context).size.width * 0.2,
+            width: MediaQuery.of(context).size.width * 0.25,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 elevation: 10,
@@ -241,6 +254,7 @@ class _MeasuresState extends State<Measures> {
                   borderRadius: BorderRadius.circular(16),
                 ),
                 primary: CustomColor.primaryAccent,
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
               ),
               child: Text(
                 '$curr',
@@ -285,7 +299,7 @@ class _MeasuresState extends State<Measures> {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -426,7 +440,7 @@ class _MeasuresState extends State<Measures> {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 24.0),
                         child: CustomLineChart(
-                          init: _user.initWeight,
+                          init: maxValue(_weights),
                           target: _user.targetWeight,
                           scope: _scope,
                           weights: _weights,
@@ -489,7 +503,7 @@ class _MeasuresState extends State<Measures> {
                         ),
                         elevation: 0,
                         child: Padding(
-                          padding: const EdgeInsets.all(16.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -606,7 +620,7 @@ class _MeasuresState extends State<Measures> {
                                     ),
                                     SizedBox(
                                       width: MediaQuery.of(context).size.width *
-                                          0.3,
+                                          0.25,
                                       child: Text(
                                         translate(Keys.measuresMeasuresStart),
                                         style: Theme.of(context)
@@ -621,7 +635,7 @@ class _MeasuresState extends State<Measures> {
                                     ),
                                     SizedBox(
                                       width: MediaQuery.of(context).size.width *
-                                          0.2,
+                                          0.25,
                                       child: Text(
                                         translate(Keys.measuresMeasuresEnd),
                                         style: Theme.of(context)

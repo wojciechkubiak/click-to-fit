@@ -1,4 +1,8 @@
 {
+    "global": {
+        "error": "Something went wrong", 
+        "noData": "No data"
+    },
     "app_desc": "Lose weight with a few clicks",
     "home": {
         "today": "Today",
