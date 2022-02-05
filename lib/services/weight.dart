@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:quiver/time.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 import '../models/models.dart';
@@ -161,29 +162,176 @@ class WeightService extends DataWeightService {
                 .getDateWithoutTime(),
           );
         }
+      } else if (scope == DateScope.month) {
+        int year = now.year;
+        int month = now.month;
+
+        if (offset > 0) {
+          if (offset % 12 == 0) {
+            int yearOffset = offset ~/ 12;
+            year = year - yearOffset;
+          } else if (offset < 12) {
+            if (month - offset < 0) {
+              year = year - 1;
+              month = 12 + month - offset;
+            } else if (month - offset == 0) {
+              year = year - 1;
+              month = 12;
+            } else {
+              month = month - offset;
+            }
+          } else {
+            year = year - (offset / 12).floor();
+            int rest = (offset % 12);
+
+            if (month - rest < 0) {
+              year = year - 1;
+              month = 12 + month - rest;
+            } else if (month - rest == 0) {
+              year = year - 1;
+              month = 12;
+            } else {
+              month = month - rest;
+            }
+          }
+        }
+
+        int days = daysInMonth(
+          year,
+          month,
+        );
+
+        for (int i = 1; i <= days; i++) {
+          dates.add(
+            '${i < 10 ? '0$i' : i}-${month < 10 ? '0$month' : month}-$year',
+          );
+        }
+      } else {
+        DateTime now = DateTime.now();
+        int year = now.year - offset;
+
+        Map<String, YearWeight> yearDates = {
+          '01-$year': YearWeight(value: 0, found: 0),
+          '02-$year': YearWeight(value: 0, found: 0),
+          '03-$year': YearWeight(value: 0, found: 0),
+          '04-$year': YearWeight(value: 0, found: 0),
+          '05-$year': YearWeight(value: 0, found: 0),
+          '06-$year': YearWeight(value: 0, found: 0),
+          '07-$year': YearWeight(value: 0, found: 0),
+          '08-$year': YearWeight(value: 0, found: 0),
+          '09-$year': YearWeight(value: 0, found: 0),
+          '10-$year': YearWeight(value: 0, found: 0),
+          '11-$year': YearWeight(value: 0, found: 0),
+          '12-$year': YearWeight(value: 0, found: 0),
+        };
+
+        if (weightList.isNotEmpty) {
+          List<Weight> weightFound = [];
+
+          for (var weight in weightList) {
+            weightFound.add(Weight.fromJson(weight));
+          }
+
+          for (Weight weight in weightFound) {
+            String weightKey = weight.date.substring(3, 10);
+            if (yearDates.containsKey(weightKey)) {
+              yearDates[weightKey]!.value =
+                  yearDates[weightKey]!.value + weight.weight;
+              yearDates[weightKey]!.found = yearDates[weightKey]!.found + 1;
+            }
+          }
+
+          for (var yr in yearDates.entries) {
+            weights.add(Weight(
+              date: '01-${yr.key}',
+              weight: yr.value.found > 0 ? yr.value.value / yr.value.found : 0,
+              userId: id,
+            ));
+          }
+        } else {
+          for (var yr in yearDates.entries) {
+            weights.add(Weight(
+              date: '01-${yr.key}',
+              weight: 0,
+              userId: id,
+            ));
+          }
+        }
       }
+
       print('ALL WEIGHTS $weightList');
 
-      if (weightList.isNotEmpty) {
-        List<Weight> weightsFound = [];
+      if (scope != DateScope.year) {
+        if (weightList.isNotEmpty) {
+          List<Weight> weightsFound = [];
 
-        for (var element in weightList) {
-          weightsFound.add(Weight.fromJson(element));
+          for (var element in weightList) {
+            weightsFound.add(Weight.fromJson(element));
+          }
+
+          for (var date in dates) {
+            Weight? _weight = weightsFound.firstWhere(
+              (element) => element.date == date,
+              orElse: () {
+                return Weight(
+                  date: date,
+                  userId: weightsFound.last.userId,
+                  weight: 0,
+                );
+              },
+            );
+            result.add(_weight);
+          }
         }
 
-        for (var date in dates) {
-          Weight? _weight = weightsFound.firstWhere(
-            (element) => element.date == date,
-            orElse: () {
-              return Weight(
-                date: date,
-                userId: weightsFound.last.userId,
-                weight: 0,
+        if (scope == DateScope.month) {
+          List<List<Weight>> weekList = [];
+          List<Weight> sortedWeights = [];
+          int chunkSize = 7;
+
+          for (int i = 0; i < result.length; i += chunkSize) {
+            weekList.add(
+              result.sublist(
+                i,
+                i + chunkSize > result.length ? result.length : i + chunkSize,
+              ),
+            );
+          }
+
+          for (var list in weekList) {
+            double value = 0;
+            double records = 0;
+
+            for (var weight in list) {
+              value += weight.weight;
+              if (weight.weight != 0) {
+                records += 1;
+              }
+            }
+
+            if (value > 0) {
+              sortedWeights.add(
+                Weight(
+                  date: list.first.date,
+                  weight: records != 0 ? value / records : 0,
+                  userId: list.first.userId,
+                ),
               );
-            },
-          );
-          result.add(_weight);
+            } else {
+              sortedWeights.add(
+                Weight(
+                  date: list.first.date,
+                  weight: 0,
+                  userId: list.first.userId,
+                ),
+              );
+            }
+
+            result = sortedWeights;
+          }
         }
+      } else {
+        return weights;
       }
 
       return result;

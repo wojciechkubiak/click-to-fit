@@ -42,7 +42,7 @@
     },
     "settings": {
         "header": "Settings",
-        "subheader": "Be careful, some changes cannot be undone.",
+        "subheader": "Add new users or change your initial data.",
         "add": "Add New User",
         "update": "Update Initial Data",
         "showUsers": "Show list of users",
@@ -172,5 +172,9 @@
         "dialogBody": "This operation cannot be undone, but you still will be able to add new record with same date",
         "dialogConfirm": "Confirm",
         "dialogDecline": "Cancel"
+    },
+    "chart": {
+        "aprox": "The values ​​shown are the average for a given period"
     }
+    
 }

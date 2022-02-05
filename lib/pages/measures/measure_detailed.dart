@@ -346,7 +346,7 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
                   ),
                   picker(
                     header:
-                        '${translate(Keys.measuresNeck)} (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "inch"}):',
+                        '${translate(Keys.measuresNeck)} (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "in"}):',
                     unit: widget.user.unit.toLowerCase() == "metric"
                         ? Unit.metric
                         : Unit.imperial,
@@ -359,7 +359,7 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
                   ),
                   picker(
                     header:
-                        '${translate(Keys.measuresChest)} (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "inch"}):',
+                        '${translate(Keys.measuresChest)} (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "in"}):',
                     unit: widget.user.unit.toLowerCase() == "metric"
                         ? Unit.metric
                         : Unit.imperial,
@@ -372,7 +372,7 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
                   ),
                   picker(
                     header:
-                        '${translate(Keys.measuresAbdomen)} (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "inch"}):',
+                        '${translate(Keys.measuresAbdomen)} (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "in"}):',
                     unit: widget.user.unit.toLowerCase() == "metric"
                         ? Unit.metric
                         : Unit.imperial,
@@ -385,7 +385,7 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
                   ),
                   picker(
                     header:
-                        '${translate(Keys.measuresWaist)} (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "inch"}):',
+                        '${translate(Keys.measuresWaist)} (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "in"}):',
                     unit: widget.user.unit.toLowerCase() == "metric"
                         ? Unit.metric
                         : Unit.imperial,
@@ -398,7 +398,7 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
                   ),
                   picker(
                     header:
-                        '${translate(Keys.measuresHips)} (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "inch"}):',
+                        '${translate(Keys.measuresHips)} (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "in"}):',
                     unit: widget.user.unit.toLowerCase() == "metric"
                         ? Unit.metric
                         : Unit.imperial,
@@ -411,7 +411,7 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
                   ),
                   picker(
                     header:
-                        '${translate(Keys.measuresBicep)} (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "inch"}):',
+                        '${translate(Keys.measuresBicep)} (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "in"}):',
                     unit: widget.user.unit.toLowerCase() == "metric"
                         ? Unit.metric
                         : Unit.imperial,
@@ -424,7 +424,7 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
                   ),
                   picker(
                     header:
-                        '${translate(Keys.measuresThigh)} (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "inch"}):',
+                        '${translate(Keys.measuresThigh)} (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "in"}):',
                     unit: widget.user.unit.toLowerCase() == "metric"
                         ? Unit.metric
                         : Unit.imperial,
@@ -437,7 +437,7 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
                   ),
                   picker(
                     header:
-                        '${translate(Keys.measuresCalf)} (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "inch"}):',
+                        '${translate(Keys.measuresCalf)} (${widget.user.unit.toLowerCase() == "metric" ? "cm" : "in"}):',
                     unit: widget.user.unit.toLowerCase() == "metric"
                         ? Unit.metric
                         : Unit.imperial,
@@ -514,10 +514,33 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
 
                           if (widget.weight is! Weight &&
                               widget.measure is! Measure) {
+                            bool isLast = false;
+
+                            for (String locked in widget.lockedDates) {
+                              List<String> v1 = locked.split('-');
+
+                              DateTime dt = DateTime.utc(
+                                int.parse(v1[2]),
+                                int.parse(v1[1]),
+                                int.parse(v1[0]),
+                              );
+
+                              DateTime dt2 = DateTime.utc(
+                                date.year,
+                                date.month,
+                                date.day,
+                              );
+
+                              if (dt2.isBefore(dt)) {
+                                isLast = true;
+                              }
+                            }
+
                             BlocProvider.of<MeasuresBloc>(context)
                                 .add(MeasureCreate(
                               weight: newWeight,
                               measure: newMeasure,
+                              isLast: isLast,
                             ));
                             BlocProvider.of<HomeBloc>(context).add(
                               HomeLoadMeasures(

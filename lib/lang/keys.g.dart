@@ -261,4 +261,6 @@ class Keys {
   static const String measuresDialogConfirm = "measures.dialogConfirm";
 
   static const String measuresDialogDecline = "measures.dialogDecline";
+
+  static const String chartAprox = "chart.aprox";
 }

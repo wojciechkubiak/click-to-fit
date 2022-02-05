@@ -68,3 +68,33 @@ class SortedWeight {
 
   List<dynamic> get props => [date, weight, dayOfWeek];
 }
+
+class YearWeight {
+  double value;
+  int found;
+
+  YearWeight({
+    required this.value,
+    required this.found,
+  });
+
+  factory YearWeight.fromJson(Map<String, dynamic> json) {
+    YearWeight weights = YearWeight(
+      value: json['value'],
+      found: json['found'],
+    );
+    return weights;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['value'] = value;
+    data['found'] = found;
+    return data;
+  }
+
+  List<dynamic> get props => [
+        value,
+        found,
+      ];
+}

@@ -212,44 +212,16 @@ class _StarsState extends State<Stars> {
     if (dateScope is DateScope) {
       setState(() => _scope = dateScope);
 
-      if (dateScope == DateScope.week) {
-        List<Star> _stars = await starsService.getStars(
-          id: _weekStars.first.userId,
-          scope: DateScope.week,
-          offset: 0,
-        );
+      List<Star> _stars = await starsService.getStars(
+        id: _weekStars.first.userId,
+        scope: dateScope,
+        offset: 0,
+      );
 
-        setState(() {
-          _chartStars = _stars;
-          _offset = 0;
-        });
-      }
-
-      if (dateScope == DateScope.month) {
-        List<Star> _stars = await starsService.getStars(
-          id: _weekStars.first.userId,
-          scope: DateScope.month,
-          offset: 0,
-        );
-
-        setState(() {
-          _chartStars = _stars;
-          _offset = 0;
-        });
-      }
-
-      if (dateScope == DateScope.year) {
-        List<Star> _stars = await starsService.getStars(
-          id: _weekStars.first.userId,
-          scope: DateScope.year,
-          offset: 0,
-        );
-
-        setState(() {
-          _chartStars = _stars;
-          _offset = 0;
-        });
-      }
+      setState(() {
+        _chartStars = _stars;
+        _offset = 0;
+      });
     }
   }
 
@@ -314,6 +286,14 @@ class _StarsState extends State<Stars> {
                     onChanged: handleDropdown,
                     current: _scope,
                   ),
+                  if (_scope != DateScope.week)
+                    Text(
+                      translate(Keys.chartAprox),
+                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                            fontSize: 12,
+                            color: CustomColor.primaryAccentSemiLight,
+                          ),
+                    ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Chart(

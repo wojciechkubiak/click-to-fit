@@ -42,7 +42,7 @@
     },
     "settings": {
         "header": "Ustawienia",
-        "subheader": "Ostrożnie, niektórych zmian nie można cofnąć.",
+        "subheader": "Dodaj kolejnych użytkowników lub zmień ustawienia bieżącego.",
         "add": "Dodaj Użytkownika",
         "update": "Zmień Dane Początkowe",
         "showUsers": "Pokaż listę użytkowników",
@@ -172,5 +172,8 @@
         "dialogBody": "Tej operacji nie da się cofnąć, jednak nadal będziesz mógł dodać wpis danego dnia",
         "dialogConfirm": "Zatwierdź",
         "dialogDecline": "Anuluj"
+    },
+    "chart": {
+        "aprox": "Pokazane wartości stanowią średnią dla danego okresu"
     }
 }

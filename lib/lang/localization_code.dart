@@ -8,7 +8,7 @@ class LocalizationCode {
 
   static const Map<String, String> value = {
     "pl": "pl_PL",
-    "en": "en_GB",
+    "en": "en_US",
   };
 
   String? getLocale() {

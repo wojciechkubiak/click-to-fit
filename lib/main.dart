@@ -31,6 +31,7 @@ Future<void> main() async {
     supportedLocales: ['en_US', 'pl_PL'],
   );
 
+  print(delegate.currentLocale);
   WidgetsFlutterBinding.ensureInitialized();
   StorageService storageService = StorageService();
 
@@ -51,6 +52,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
     var localizationDelegate = LocalizedApp.of(context).delegate;
 
     return LocalizationProvider(
@@ -165,13 +171,12 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       BlocProvider<MeasuresBloc>(
         create: (context) {
-          final settingsService =
-              RepositoryProvider.of<SettingsService>(context);
+          final homeService = RepositoryProvider.of<HomeService>(context);
           final weightService = RepositoryProvider.of<WeightService>(context);
           final measuresService =
               RepositoryProvider.of<MeasuresService>(context);
 
-          return MeasuresBloc(settingsService, weightService, measuresService)
+          return MeasuresBloc(homeService, weightService, measuresService)
             ..add(MeasuresLoadInit());
         },
       ),

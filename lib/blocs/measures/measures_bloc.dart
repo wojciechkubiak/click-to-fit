@@ -10,15 +10,15 @@ part 'measures_event.dart';
 part 'measures_state.dart';
 
 class MeasuresBloc extends Bloc<MeasuresEvent, MeasuresState> {
-  final SettingsService _settingsService;
+  final HomeService _homeService;
   final WeightService _weightService;
   final MeasuresService _measuresService;
 
   MeasuresBloc(
-    SettingsService settingsService,
+    HomeService homeService,
     WeightService weightService,
     MeasuresService measuresService,
-  )   : _settingsService = settingsService,
+  )   : _homeService = homeService,
         _weightService = weightService,
         _measuresService = measuresService,
         super(MeasuresInitial()) {
@@ -122,6 +122,9 @@ class MeasuresBloc extends Bloc<MeasuresEvent, MeasuresState> {
       measure.weightId = weight is! Weight ? event.weight.id : weight.id;
       await _measuresService.addMeasure(measure: event.measure);
 
+      if (weight is Weight && event.isLast) {
+        await _homeService.updateUserWeight(weight.userId, weight.weight);
+      }
       emit(MeasuresInitial());
     } else {
       emit(MeasuresError());

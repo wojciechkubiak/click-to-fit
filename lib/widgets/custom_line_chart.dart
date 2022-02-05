@@ -26,16 +26,22 @@ class CustomLineChart extends StatefulWidget {
 
 class _CustomLineChartState extends State<CustomLineChart> {
   double? maxValue;
+  List<Weight> weights = [];
+
   List<Color> gradientColors = [
     const Color(0xFF624a7b),
     const Color(0xFF88769b),
   ];
 
+  List<FlSpot> generateTarget(double target, int len) {
+    return List.generate(len, (index) => FlSpot(index.toDouble(), target));
+  }
+
   List<FlSpot> generateSpots(List<Weight> weights) {
     List<FlSpot> spots = [];
 
     weights.asMap().forEach((key, value) {
-      if (value.id != null) {
+      if (value.weight != 0) {
         spots.add(FlSpot(key.toDouble(), value.weight));
       }
     });
@@ -45,7 +51,7 @@ class _CustomLineChartState extends State<CustomLineChart> {
 
   @override
   Widget build(BuildContext context) {
-    List<Weight> weights = widget.weights;
+    weights = widget.weights;
 
     return Stack(
       children: <Widget>[
@@ -108,9 +114,9 @@ class _CustomLineChartState extends State<CustomLineChart> {
                     ),
                     children: <TextSpan>[
                       TextSpan(
-                        text: (e.y - 1).toStringAsFixed(1),
+                        text: (e.y).toStringAsFixed(1),
                         style: TextStyle(
-                          color: e.spotIndex <= dataLength - 1
+                          color: e.barIndex != 0
                               ? CustomColor.primaryAccent
                               : Nord.auroraGreen,
                           fontSize: e.spotIndex <= dataLength - 1 ? 24 : 20,
@@ -138,6 +144,7 @@ class _CustomLineChartState extends State<CustomLineChart> {
             fontWeight: FontWeight.bold,
             fontSize: 16,
           ),
+          rotateAngle: widget.scope != DateScope.week ? 85 : 0,
           getTitles: (value) {
             switch (value.toInt()) {
               case 0:
@@ -183,6 +190,18 @@ class _CustomLineChartState extends State<CustomLineChart> {
                 return widget.scope == DateScope.year
                     ? translate(Keys.monthsShortJuly)
                     : translate(Keys.daysShortSunday);
+              case 7:
+                return translate(Keys.monthsShortAugust);
+              case 8:
+                return translate(Keys.monthsShortSeptember);
+              case 9:
+                return translate(Keys.monthsShortOctober);
+              case 10:
+                return translate(Keys.monthsShortNovember);
+              case 11:
+                return translate(Keys.monthsShortDecember);
+              default:
+                return '';
             }
             return '';
           },
@@ -200,20 +219,12 @@ class _CustomLineChartState extends State<CustomLineChart> {
         ),
       ),
       minX: 0,
-      maxX: widget.weights.length - 1,
+      maxX: weights.length - 1,
       minY: widget.target - 10,
       maxY: widget.init + 10,
       lineBarsData: [
         LineChartBarData(
-          spots: [
-            FlSpot(0, widget.target),
-            FlSpot(1, widget.target),
-            FlSpot(2, widget.target),
-            FlSpot(3, widget.target),
-            FlSpot(4, widget.target),
-            FlSpot(5, widget.target),
-            FlSpot(widget.weights.length - 1, widget.target),
-          ],
+          spots: generateTarget(widget.target, weights.length),
           isCurved: true,
           colors: [Nord.auroraGreen],
           barWidth: 2,

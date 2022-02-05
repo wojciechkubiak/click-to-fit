@@ -5,9 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class TranslatePreferences implements ITranslatePreferences {
   static const String _selectedLocaleKey = 'selected_lang';
   static const String fallbackLocale = 'pl';
-  static const List<String> supportedLocales = [
-    'pl',
-  ];
+  static const List<String> supportedLocales = ['pl', 'en'];
 
   @override
   Future<Locale?> getPreferredLocale() async {

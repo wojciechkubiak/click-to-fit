@@ -34,8 +34,13 @@ class MeasureUpdate extends MeasuresEvent {
 class MeasureCreate extends MeasuresEvent {
   final Weight weight;
   final Measure measure;
+  final bool isLast;
 
-  const MeasureCreate({required this.weight, required this.measure});
+  const MeasureCreate({
+    required this.weight,
+    required this.measure,
+    this.isLast = false,
+  });
 
   List<Object?> get props => [weight, measure];
 }

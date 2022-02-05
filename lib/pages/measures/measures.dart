@@ -174,6 +174,7 @@ class _MeasuresState extends State<Measures> {
         offset: newOffset,
       );
 
+      print(weights);
       Future.delayed(const Duration(milliseconds: 300), () {
         if (mounted) {
           setState(() {
@@ -182,6 +183,26 @@ class _MeasuresState extends State<Measures> {
             _isLoading = false;
           });
         }
+      });
+    }
+  }
+
+  Future<void>? handleDropdown(DateScope? dateScope) async {
+    if (dateScope is DateScope) {
+      setState(() => _scope = dateScope);
+
+      List<Weight> weights = await weightService.getScopeWeights(
+            id: widget.user.id!,
+            scope: dateScope,
+            offset: 0,
+          ) ??
+          [];
+
+      print(weights);
+
+      setState(() {
+        _weights = weights;
+        _offset = 0;
       });
     }
   }
@@ -434,9 +455,18 @@ class _MeasuresState extends State<Measures> {
                   child: Column(
                     children: [
                       Dropdown(
-                        onChanged: (DateScope? scope) async {},
-                        current: DateScope.week,
+                        onChanged: handleDropdown,
+                        current: _scope,
                       ),
+                      if (_scope != DateScope.week)
+                        Text(
+                          translate(Keys.chartAprox),
+                          style:
+                              Theme.of(context).textTheme.bodyText1!.copyWith(
+                                    fontSize: 12,
+                                    color: CustomColor.primaryAccentSemiLight,
+                                  ),
+                        ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 24.0),
                         child: CustomLineChart(
@@ -460,7 +490,7 @@ class _MeasuresState extends State<Measures> {
                                       DateScope.month,
                                     ),
                           isDisabled: _isLoading,
-                          isNextDisabled: _isLoading,
+                          isNextDisabled: _isLoading || _offset == 0,
                           offset: _offset,
                           scope: _scope,
                           handleOffset: handleOffset,
