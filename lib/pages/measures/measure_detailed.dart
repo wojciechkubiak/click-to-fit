@@ -86,8 +86,6 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
       weightV2 = int.parse(_tempWeight.last);
     }
 
-    print('MEASURE ${widget.measure}');
-
     if (widget.measure is Measure) {
       List<String> _tempNeck = widget.measure!.neck.toString().split('.');
       neckV1 = int.parse(_tempNeck.first);

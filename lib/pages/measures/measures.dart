@@ -174,7 +174,6 @@ class _MeasuresState extends State<Measures> {
         offset: newOffset,
       );
 
-      print(weights);
       Future.delayed(const Duration(milliseconds: 300), () {
         if (mounted) {
           setState(() {
@@ -197,8 +196,6 @@ class _MeasuresState extends State<Measures> {
             offset: 0,
           ) ??
           [];
-
-      print(weights);
 
       setState(() {
         _weights = weights;
