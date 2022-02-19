@@ -175,6 +175,18 @@
     },
     "chart": {
         "aprox": "The values ​​shown are the average for a given period"
+    },
+    "validators": {
+        "name": "Enter your name",
+        "nameTooLong": "Name too long (max. 20)",
+        "nameTooShort": "Name too short (min. 2)",
+        "age": "Enter your age",
+        "ageTooYoung": "You must be at least 18 years old", 
+        "ageTooOld": "Are you sure you are that old?",
+        "height": "Enter your height",
+        "heightProper": "Enter proper height",
+        "weight": "Enter weight",
+        "weightProper": "Enter proper weight"
     }
     
 }

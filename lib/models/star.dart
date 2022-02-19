@@ -4,8 +4,8 @@ class Star {
   final int? id;
   final String date;
   final int userId;
-  int stars;
-  int progressLimit;
+  double stars;
+  double progressLimit;
 
   Star({
     this.id,
@@ -59,8 +59,8 @@ class Star {
 }
 
 class ChartStar {
-  int value;
-  int limit;
+  double value;
+  double limit;
   String date;
 
   ChartStar({
@@ -94,8 +94,8 @@ class ChartStar {
 }
 
 class YearStar {
-  int value;
-  int limit;
+  double value;
+  double limit;
   int found;
 
   YearStar({

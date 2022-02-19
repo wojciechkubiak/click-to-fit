@@ -123,8 +123,8 @@ class _StarsState extends State<Stars> {
               ),
               textStyle: Theme.of(context).textTheme.bodyText1,
               primary: getColor(
-                stars: star.stars.toDouble(),
-                limit: star.progressLimit.toDouble(),
+                stars: star.stars,
+                limit: star.progressLimit,
               ),
             ),
             onPressed: () async {
@@ -134,9 +134,10 @@ class _StarsState extends State<Stars> {
                 confirmText: translate(Keys.starsDialogConfirm),
                 declineText: translate(Keys.starsDialogDecline),
                 divider: "/",
-                initValue: '${star.stars}.${star.progressLimit}',
+                initValue:
+                    '${star.stars.toStringAsFixed(0)}.${star.progressLimit.toStringAsFixed(0)}',
                 minleft: 0,
-                maxLeft: 50,
+                maxLeft: int.parse(star.progressLimit.toStringAsFixed(0)) + 20,
                 minRight: 0,
                 maxRight: 50,
               );
@@ -145,8 +146,8 @@ class _StarsState extends State<Stars> {
                 List<String> parsed = result.split('.');
                 await starsService.updateStarsLimit(
                   recordId: star.id!,
-                  stars: int.parse(parsed.first),
-                  limit: int.parse(parsed.last),
+                  stars: double.parse(parsed.first),
+                  limit: double.parse(parsed.last),
                 );
 
                 _weekStars[_weekStars
@@ -154,8 +155,8 @@ class _StarsState extends State<Stars> {
                   id: star.id,
                   date: star.date,
                   userId: star.userId,
-                  stars: int.parse(parsed.first),
-                  progressLimit: int.parse(parsed.last),
+                  stars: double.parse(parsed.first),
+                  progressLimit: double.parse(parsed.last),
                 );
 
                 _availableDays[_availableDays
@@ -163,8 +164,8 @@ class _StarsState extends State<Stars> {
                   id: star.id,
                   date: star.date,
                   userId: star.userId,
-                  stars: int.parse(parsed.first),
-                  progressLimit: int.parse(parsed.last),
+                  stars: double.parse(parsed.first),
+                  progressLimit: double.parse(parsed.last),
                 );
 
                 int idx =
@@ -176,8 +177,8 @@ class _StarsState extends State<Stars> {
                       id: star.id,
                       date: star.date,
                       userId: star.userId,
-                      stars: int.parse(parsed.first),
-                      progressLimit: int.parse(parsed.last),
+                      stars: double.parse(parsed.first),
+                      progressLimit: double.parse(parsed.last),
                     );
                   }
                 });
@@ -194,7 +195,7 @@ class _StarsState extends State<Stars> {
               }
             },
             child: Text(
-              '${star.stars}/${star.progressLimit}',
+              '${star.stars.toStringAsFixed(0)}/${star.progressLimit.toStringAsFixed(0)}',
               style: Theme.of(context).textTheme.bodyText1!.copyWith(
                     fontSize: 22,
                     letterSpacing: 1,
@@ -404,7 +405,8 @@ class _StarsState extends State<Stars> {
                                 confirmText: translate(Keys.starsDialogConfirm),
                                 declineText: translate(Keys.starsDialogDecline),
                                 divider: "/",
-                                initValue: '0.${_stars.last.progressLimit}',
+                                initValue:
+                                    '0.${_stars.last.progressLimit.toStringAsFixed(0)}',
                                 allowedStars: days,
                                 minleft: 0,
                                 maxLeft: 50,
@@ -414,8 +416,8 @@ class _StarsState extends State<Stars> {
 
                               if (result != null) {
                                 List<String> collectedData = result.split('.');
-                                int stars = int.parse(collectedData[0]);
-                                int limit = int.parse(collectedData[1]);
+                                double stars = double.parse(collectedData[0]);
+                                double limit = double.parse(collectedData[1]);
 
                                 Star? newStar = await starsService.insertStar(
                                   userId: _chartStars.first.userId,

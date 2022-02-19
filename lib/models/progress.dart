@@ -4,8 +4,8 @@ import 'star.dart';
 class Progress {
   final int? id;
   final String date;
-  final int stars;
-  final int progressLimit;
+  final double stars;
+  final double progressLimit;
   final List<Star> starProgress;
   Star star;
   double? currentWeight;

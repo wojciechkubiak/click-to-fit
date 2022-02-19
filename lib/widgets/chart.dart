@@ -11,7 +11,7 @@ import '../models/models.dart';
 
 class Chart extends StatefulWidget {
   final List<Star> stars;
-  final int initialLimit;
+  final double initialLimit;
   final DateScope scope;
 
   const Chart({
@@ -72,9 +72,9 @@ class ChartState extends State<Chart> {
         BarChartRodData(
           y: y > 0 ? y + 1 : 0,
           colors: [
-            y >= limit + 3
+            y >= limit + 2
                 ? Nord.auroraRed
-                : y > limit - 3
+                : y > limit - 2
                     ? Nord.auroraGreen
                     : CustomColor.primaryAccent,
           ],
@@ -93,7 +93,6 @@ class ChartState extends State<Chart> {
   List<BarChartGroupData> showingGroups({
     required List<Star> list,
   }) {
-    DateTime now = DateTime.now();
     List<ChartStar> result = [];
 
     for (var star in list) {

@@ -84,6 +84,49 @@ class _HomeState extends State<Home> {
     }
   }
 
+  void decreaseStars(Star stars) async {
+    if (stars.stars > 0) {
+      bool update = await starsService.updateStars(
+          recordId: stars.id!, stars: stars.stars - 1);
+      if (update) {
+        setState(() {
+          if (progress.starProgress.isNotEmpty) {
+            current.stars = stars.stars - 1;
+          }
+          stars.stars = stars.stars - 1;
+        });
+      }
+    }
+  }
+
+  void increaseStars(Star stars) async {
+    if (stars.stars < 99) {
+      bool update = await starsService.updateStars(
+          recordId: stars.id!, stars: stars.stars + 1);
+      if (update) {
+        setState(() {
+          if (progress.starProgress.isNotEmpty) {
+            current.stars = stars.stars + 1;
+          }
+          stars.stars = stars.stars + 1;
+        });
+      }
+    }
+  }
+
+  Future<void>? handleStars(Star stars, double value) async {
+    bool update =
+        await starsService.updateStars(recordId: stars.id!, stars: value);
+    if (update) {
+      setState(() {
+        if (progress.starProgress.isNotEmpty) {
+          current.stars = value;
+        }
+        stars.stars = value;
+      });
+    }
+  }
+
   Widget starCounter() {
     Star stars = progress.star;
 
@@ -93,20 +136,7 @@ class _HomeState extends State<Home> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           CounterButton(
-            onClick: () async {
-              if (stars.stars > 0) {
-                bool update = await starsService.updateStars(
-                    recordId: stars.id!, stars: stars.stars - 1);
-                if (update) {
-                  setState(() {
-                    if (progress.starProgress.isNotEmpty) {
-                      current.stars = stars.stars - 1;
-                    }
-                    stars.stars = stars.stars - 1;
-                  });
-                }
-              }
-            },
+            onClick: () => decreaseStars(stars),
             icon: Icons.remove,
             isDisabled: stars.stars == 0,
           ),
@@ -146,7 +176,7 @@ class _HomeState extends State<Home> {
                           height: 60,
                           width: 60,
                           child: Text(
-                            '${stars.stars < 10 ? "0" : ""}${stars.stars}',
+                            '${stars.stars < 10 ? "0" : ""}${stars.stars.toStringAsFixed(0)}',
                             style:
                                 Theme.of(context).textTheme.headline3!.copyWith(
                                       color: CustomColor.primaryAccent,
@@ -159,7 +189,7 @@ class _HomeState extends State<Home> {
                           height: 40,
                           width: 40,
                           child: Text(
-                            '/${stars.progressLimit}',
+                            '/${stars.progressLimit.toStringAsFixed(0)}',
                             style:
                                 Theme.of(context).textTheme.headline3!.copyWith(
                                       color: CustomColor.primaryAccent,
@@ -179,28 +209,21 @@ class _HomeState extends State<Home> {
                   minHeight: MediaQuery.of(context).size.width * 0.6,
                   maxHeight: MediaQuery.of(context).size.width * 0.6,
                 ),
-                child: Gauge(
-                  currentValue: progress.star.stars.toDouble(),
-                  max: progress.star.progressLimit.toDouble(),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Gauge(
+                    currentValue: progress.star.stars.toDouble(),
+                    stars: stars,
+                    onChange: handleStars,
+                    // onChange: (double value) => setState(() => )
+                    max: progress.star.progressLimit.toDouble(),
+                  ),
                 ),
               ),
             ],
           ),
           CounterButton(
-            onClick: () async {
-              if (stars.stars < 99) {
-                bool update = await starsService.updateStars(
-                    recordId: stars.id!, stars: stars.stars + 1);
-                if (update) {
-                  setState(() {
-                    if (progress.starProgress.isNotEmpty) {
-                      current.stars = stars.stars + 1;
-                    }
-                    stars.stars = stars.stars + 1;
-                  });
-                }
-              }
-            },
+            onClick: () => increaseStars(stars),
             icon: Icons.add,
           ),
         ],

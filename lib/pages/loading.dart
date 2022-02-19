@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lottie/lottie.dart';
+import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
 import '../config/colors.dart';
 import './../widgets/widgets.dart';
@@ -32,11 +33,24 @@ class _LoadingState extends State<Loading> {
                   ),
                 ],
               ),
-            Lottie.asset(
-              'assets/lotties/loading.json',
-              width: MediaQuery.of(context).size.width * 0.9,
-              height: MediaQuery.of(context).size.width * 0.9,
-            ),
+            SleekCircularSlider(
+                appearance: CircularSliderAppearance(
+              customColors: CustomSliderColors(
+                  trackColor: CustomColor.primaryAccent,
+                  shadowColor: CustomColor.primaryAccentDark,
+                  dotColor: CustomColor.primaryAccent,
+                  progressBarColors: [
+                    CustomColor.primaryAccentLight,
+                    CustomColor.primaryAccentLightSaturated,
+                    CustomColor.primaryAccentSemiLight,
+                  ]),
+              spinnerMode: true,
+            )),
+            // Lottie.asset(
+            //   'assets/lotties/loading.json',
+            //   width: MediaQuery.of(context).size.width * 0.9,
+            //   height: MediaQuery.of(context).size.width * 0.9,
+            // ),
           ],
         ),
       ),

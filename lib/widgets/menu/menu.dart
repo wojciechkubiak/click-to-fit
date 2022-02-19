@@ -35,7 +35,7 @@ class _MenuState extends State<Menu> {
     } else if (userLen >= 8 && userLen < 10) {
       return 42;
     } else {
-      return 30;
+      return 32;
     }
   }
 
@@ -51,17 +51,20 @@ class _MenuState extends State<Menu> {
               Text(
                 '${translate(Keys.menuGreet)},',
                 style: TextStyle(
-                  fontSize: textSize(),
+                  fontSize: 48,
                   fontWeight: FontWeight.bold,
                   color: Colors.white70,
                 ),
               ),
-              Text(
-                '${widget.user.name}!',
-                style: TextStyle(
-                  fontSize: textSize(),
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+              Container(
+                width: MediaQuery.of(context).size.width * 0.5,
+                child: Text(
+                  '${widget.user.name}!',
+                  style: TextStyle(
+                    fontSize: textSize(),
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ],

@@ -263,4 +263,24 @@ class Keys {
   static const String measuresDialogDecline = "measures.dialogDecline";
 
   static const String chartAprox = "chart.aprox";
+
+  static const String validatorsName = "validators.name";
+
+  static const String validatorsNameTooLong = "validators.name";
+
+  static const String validatorsNameTooShort = "validators.name";
+
+  static const String validatorsAge = "validators.name";
+
+  static const String validatorsAgeTooYoung = "validators.name";
+
+  static const String validatorsAgeTooOld = "validators.name";
+
+  static const String validatorsHeight = "validators.name";
+
+  static const String validatorsHeightProper = "validators.name";
+
+  static const String validatorsWeight = "validators.name";
+
+  static const String validatorsWeightProper = "validators.name";
 }

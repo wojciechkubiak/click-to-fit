@@ -13,28 +13,28 @@ abstract class DataStarsService {
   });
   Future<Star?> getTodayStars({
     required int id,
-    required int progressLimit,
+    required double progressLimit,
   });
   Future<bool> updateStars({
     required int recordId,
-    required int stars,
+    required double stars,
   });
   Future<bool> updateLastUserStars({
     required int userId,
-    required int stars,
+    required double stars,
   });
   Future<int> insertStarsDay({
     required Star star,
   });
   Future<bool> updateStarsLimit({
     required int recordId,
-    required int stars,
-    required int limit,
+    required double stars,
+    required double limit,
   });
   Future<Star?> insertStar({
     required int userId,
-    required int stars,
-    required int limit,
+    required double stars,
+    required double limit,
     required String date,
   });
 }
@@ -167,11 +167,10 @@ class StarsService extends DataStarsService {
 
             stars.add(Star(
               date: '01-${yr.key}',
-              stars: (yr.value.value / days).ceil(),
+              stars: yr.value.value / days,
               progressLimit: user is User
                   ? ((yr.value.limit + (days - yr.value.found) * user.stars) /
-                          days)
-                      .ceil()
+                      days)
                   : yr.value.limit,
               userId: id,
             ));
@@ -227,8 +226,8 @@ class StarsService extends DataStarsService {
           }
 
           for (var list in weekList) {
-            int stars = 0;
-            int limit = 0;
+            double stars = 0;
+            double limit = 0;
 
             for (var star in list) {
               stars += star.stars;
@@ -271,7 +270,7 @@ class StarsService extends DataStarsService {
   @override
   Future<Star?> getTodayStars({
     required int id,
-    required int progressLimit,
+    required double progressLimit,
   }) async {
     StorageService storageService = StorageService();
 
@@ -331,7 +330,7 @@ class StarsService extends DataStarsService {
   @override
   Future<bool> updateStars({
     required int recordId,
-    required int stars,
+    required double stars,
   }) async {
     StorageService storageService = StorageService();
 
@@ -357,7 +356,7 @@ class StarsService extends DataStarsService {
   @override
   Future<bool> updateLastUserStars({
     required int userId,
-    required int stars,
+    required double stars,
   }) async {
     StorageService storageService = StorageService();
 
@@ -420,8 +419,8 @@ class StarsService extends DataStarsService {
   @override
   Future<bool> updateStarsLimit({
     required int recordId,
-    required int stars,
-    required int limit,
+    required double stars,
+    required double limit,
   }) async {
     StorageService storageService = StorageService();
 
@@ -447,8 +446,8 @@ class StarsService extends DataStarsService {
   @override
   Future<Star?> insertStar({
     required int userId,
-    required int stars,
-    required int limit,
+    required double stars,
+    required double limit,
     required String date,
   }) async {
     StorageService storageService = StorageService();

@@ -20,7 +20,7 @@ class StorageService extends DataStorageService {
               initWeight REAL, 
               targetWeight REAL, 
               unit TEXT, 
-              stars INTEGER, 
+              stars REAL, 
               gender STRING, 
               activityLevel INTEGER, 
               initDate TEXT
@@ -36,8 +36,8 @@ class StorageService extends DataStorageService {
               pk INTEGER PRIMARY KEY, 
               date TEXT, 
               userId INTEGER, 
-              stars INT, 
-              progressLimit INT
+              stars REAL, 
+              progressLimit REAL
               )''');
         await db.execute('''CREATE TABLE measures (
               pk INTEGER PRIMARY KEY, 

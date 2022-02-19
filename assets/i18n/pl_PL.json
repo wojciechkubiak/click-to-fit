@@ -175,5 +175,17 @@
     },
     "chart": {
         "aprox": "Pokazane wartości stanowią średnią dla danego okresu"
+    },
+    "validators": {
+        "name": "Podaj swoje imię",
+        "nameTooLong": "Imię za długie (max. 20)",
+        "nameTooShort": "Imię za krótkie (min. 2)",
+        "age": "Podaj wiek",
+        "ageTooYoung": "Musisz mieć conajmniej 18 lat", 
+        "ageTooOld": "Na pewno masz tyle lat?",
+        "height": "Wpisz swój wzrost",
+        "heightProper": "Wpisz poprawny wzrost",
+        "weight": "Wpisz wagę",
+        "weightProper": "Wpisz poprawną wagę"
     }
 }

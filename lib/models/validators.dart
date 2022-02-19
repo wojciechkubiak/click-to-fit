@@ -1,27 +1,29 @@
 import 'package:flutter/services.dart';
+import 'package:flutter_translate/flutter_translate.dart';
+import 'package:star_metter/lang/keys.dart';
 
 class Validator {
   String? nameValidation(String? name) {
     try {
       if (name != null) {
         if (name.isEmpty) {
-          return "Enter your name";
+          return translate(Keys.validatorsName);
         }
 
         if (name.length > 20) {
-          return "Name too long (max. 20)";
+          return translate(Keys.validatorsNameTooLong);
         }
 
         if (name.length < 2) {
-          return "Name too short (min. 2)";
+          return translate(Keys.validatorsNameTooShort);
         }
         return null;
       }
 
-      return "Enter your name";
+      return translate(Keys.validatorsName);
     } catch (e) {
       print(e);
-      return "Enter your name";
+      return translate(Keys.validatorsName);
     }
   }
 
@@ -29,23 +31,23 @@ class Validator {
     try {
       if (age != null) {
         if (age.isEmpty) {
-          return "Enter your age";
+          return translate(Keys.validatorsAge);
         }
         if (int.parse(age) < 18) {
-          return "You must be at least 18 years old";
+          return translate(Keys.validatorsAgeTooYoung);
         }
 
         if (int.parse(age) > 120) {
-          return "Are you sure you're that old?";
+          return translate(Keys.validatorsAgeTooOld);
         }
 
         return null;
       }
 
-      return "Enter your age";
+      return translate(Keys.validatorsAge);
     } catch (e) {
       print(e);
-      return "Enter your age";
+      return translate(Keys.validatorsAge);
     }
   }
 
@@ -53,18 +55,18 @@ class Validator {
     try {
       if (height != null) {
         if (height.isEmpty) {
-          return "Enter your height";
+          return translate(Keys.validatorsHeight);
         }
         if (double.parse(height) < 81 || double.parse(height) > 240) {
-          return "Enter proper height";
+          return translate(Keys.validatorsHeightProper);
         }
 
         return null;
       }
-      return "Enter your height";
+      return translate(Keys.validatorsHeight);
     } catch (e) {
       print(e);
-      return "Enter your height";
+      return translate(Keys.validatorsHeight);
     }
   }
 
@@ -72,20 +74,20 @@ class Validator {
     try {
       if (weight != null) {
         if (weight.isEmpty) {
-          return "Enter your weight";
+          return translate(Keys.validatorsWeight);
         }
         print('WEIGHT $weight');
         if (double.parse(weight) < 31 || double.parse(weight) > 400) {
-          return "Enter proper weight";
+          return translate(Keys.validatorsWeightProper);
         }
 
         return null;
       }
 
-      return "Enter your weight";
+      return translate(Keys.validatorsWeight);
     } catch (e) {
       print(e);
-      return "Enter your weight";
+      return translate(Keys.validatorsWeight);
     }
   }
 
@@ -113,9 +115,6 @@ class Validator {
       }
 
       return newValue;
-      // else {
-      // return const TextEditingValue(text: '0');
-      // }
     } catch (e) {
       print(e);
       return oldValue;

@@ -42,10 +42,10 @@ class _IntroState extends State<Intro> {
     translate(Keys.introActivityAbove),
     translate(Keys.introActivityHigh),
   ];
-  int result = 0;
+  double result = 0;
 
   late Sex? _sex;
-  late int stars;
+  late double stars;
   late int _age;
   late Unit _unit;
   late int _heightCm;
@@ -128,7 +128,7 @@ class _IntroState extends State<Intro> {
     }
   }
 
-  int? countStars() {
+  double? countStars() {
     double? _height = _unit == Unit.metric
         ? double.parse('$_heightCm.$_heightMm')
         : parseMetric(
@@ -156,7 +156,7 @@ class _IntroState extends State<Intro> {
           : [null, 1.15, 1.2, 1.4, 1.65, 1.9];
 
       double cpm = ppm * pal[_activity];
-      return (cpm / 100).ceil();
+      return cpm / 100;
     } else {
       return null;
     }
@@ -631,7 +631,7 @@ class _IntroState extends State<Intro> {
           Column(
             children: [
               Text(
-                '${translate(Keys.introHeightHeader)} (${_unit == Unit.metric ? 'm' : 'ft'}):',
+                '${translate(Keys.introHeightHeader)} (${_unit == Unit.metric ? 'cm' : 'ft'}):',
                 style: Theme.of(context).textTheme.headline2,
                 textAlign: TextAlign.center,
               ),
@@ -772,9 +772,9 @@ class _IntroState extends State<Intro> {
             text: translate(Keys.introBtnNext),
             isDisabled: false,
             onPressed: () {
-              int? _stars = countStars();
+              double? _stars = countStars();
 
-              if (_stars is int) {
+              if (_stars is double) {
                 setState(() {
                   stars = _stars;
                   result = _stars;
@@ -817,7 +817,7 @@ class _IntroState extends State<Intro> {
                         vertical: 12.0, horizontal: 52),
                     child: Text(
                       translate(Keys.introSummarySubheader, args: {
-                        "value": stars,
+                        "value": result.toStringAsFixed(0),
                       }),
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
@@ -833,7 +833,7 @@ class _IntroState extends State<Intro> {
                   color: CustomColor.primaryAccentLight,
                 ),
                 Text(
-                  result.toString(),
+                  result.toStringAsFixed(0),
                   style: Theme.of(context)
                       .textTheme
                       .headline2!
@@ -849,7 +849,7 @@ class _IntroState extends State<Intro> {
                     '${_unit == Unit.metric ? '${(result - stars) * 100}g' : '${((result - stars) * 100 * 0.035).toStringAsPrecision(1)}oz'}/${translate(Keys.introWeek)}',
                 onChanged: (double value) {
                   setState(() {
-                    result = value.toInt();
+                    result = value;
                   });
                 },
                 min: stars - 10,

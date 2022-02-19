@@ -10,7 +10,7 @@ class User {
   final String height;
   final double initWeight;
   final double targetWeight;
-  final int stars;
+  final double stars;
   final String gender;
   final int activityLevel;
   final String initDate;

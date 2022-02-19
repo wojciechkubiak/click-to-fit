@@ -7,7 +7,6 @@ import '../../models/progress.dart';
 import '../../models/star.dart';
 import '../../models/user.dart';
 import '../../models/weight.dart';
-import '../../services/weight.dart';
 import './../../services/services.dart';
 
 part 'home_event.dart';
@@ -227,10 +226,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
         List<Measure> allMeasures =
             await _measuresService.getAllMeasures(userId: event.user!.id!);
-
-        for (var measure in allMeasures) {
-          print(measure.toJson());
-        }
 
         if (weights is List<Weight> && allWeights is List<Weight>) {
           emit(HomeMeasures(
