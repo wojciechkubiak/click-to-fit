@@ -49,6 +49,7 @@ class _InputState extends State<Input> {
             .headline4!
             .copyWith(color: CustomColor.primaryAccentDark),
         decoration: InputDecoration(
+          errorStyle: const TextStyle(color: Nord.auroraRed, fontSize: 14),
           fillColor: CustomColor.primaryAccentLight,
           filled: true,
           contentPadding: const EdgeInsets.all(12),
