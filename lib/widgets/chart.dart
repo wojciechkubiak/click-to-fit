@@ -104,8 +104,8 @@ class ChartState extends State<Chart> {
     }
 
     return List.generate(result.length, (i) {
-      double value = result[i].value.toDouble();
-      double limit = result[i].limit.toDouble();
+      double value = result[i].value;
+      double limit = result[i].limit;
 
       switch (i) {
         case 0:

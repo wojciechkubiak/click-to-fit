@@ -212,11 +212,11 @@ class _HomeState extends State<Home> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Gauge(
-                    currentValue: progress.star.stars.toDouble(),
+                    currentValue: current.stars,
                     stars: stars,
                     onChange: handleStars,
                     // onChange: (double value) => setState(() => )
-                    max: progress.star.progressLimit.toDouble(),
+                    max: progress.star.progressLimit,
                   ),
                 ),
               ),

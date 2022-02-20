@@ -24,6 +24,7 @@ class Gauge extends StatefulWidget {
 class _GaugeState extends State<Gauge> {
   @override
   Widget build(BuildContext context) {
+    print(widget.currentValue);
     return SleekCircularSlider(
       innerWidget: (value) => const SizedBox(),
       onChangeEnd: (value) {
@@ -34,7 +35,7 @@ class _GaugeState extends State<Gauge> {
       initialValue:
           widget.currentValue > widget.max ? widget.max : widget.currentValue,
       appearance: CircularSliderAppearance(
-        animDurationMultiplier: 2,
+        animDurationMultiplier: 0,
         startAngle: 270,
         angleRange: 360,
         customColors: CustomSliderColors(

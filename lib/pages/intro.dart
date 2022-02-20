@@ -844,7 +844,7 @@ class _IntroState extends State<Intro> {
             Padding(
               padding: const EdgeInsets.all(24),
               child: CustomSlider(
-                value: result.toDouble(),
+                value: result,
                 header:
                     '${_unit == Unit.metric ? '${(result - stars) * 100}g' : '${((result - stars) * 100 * 0.035).toStringAsPrecision(1)}oz'}/${translate(Keys.introWeek)}',
                 onChanged: (double value) {
