@@ -21,6 +21,7 @@ class MeasureDetailed extends StatefulWidget {
   final Measure? measure;
   final MeasuresDetailedOption option;
   final bool? isNotFirst;
+  final double? initialWeight;
 
   const MeasureDetailed({
     Key? key,
@@ -29,6 +30,7 @@ class MeasureDetailed extends StatefulWidget {
     required this.lockedDates,
     this.weight,
     this.measure,
+    this.initialWeight,
     this.isNotFirst = true,
   }) : super(key: key);
 
@@ -75,8 +77,8 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
       );
     }
 
-    if (widget.weight is Weight) {
-      List<String> _tempWeight = widget.weight!.weight.toString().split('.');
+    if (widget.initialWeight is double) {
+      List<String> _tempWeight = widget.initialWeight.toString().split('.');
       weightV1 = int.parse(_tempWeight.first);
       weightV2 = int.parse(_tempWeight.last);
     } else {
@@ -447,7 +449,7 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
                     handleV2: (value) => setState(() => calfV2 = value),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 32.0),
+                    padding: const EdgeInsets.only(top: 20.0, bottom: 12),
                     child: NavigationButton(
                       isDisabled: isError,
                       onPressed: () {
@@ -553,21 +555,10 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
                           ? translate(Keys.measuresAddBtn)
                           : translate(Keys.measuresSubmitBtn),
                       padding: const EdgeInsets.symmetric(
-                        vertical: 15,
+                        vertical: 16,
                         horizontal: 52,
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 24,
-                    child: isError
-                        ? Text(
-                            translate(Keys.measuresExists),
-                            style: const TextStyle(
-                              color: Nord.auroraRed,
-                            ),
-                          )
-                        : null,
                   ),
                   if (widget.weight is Weight && widget.isNotFirst!)
                     Padding(
@@ -603,11 +594,22 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
                         },
                         text: translate(Keys.measuresDeleteBtn),
                         padding: const EdgeInsets.symmetric(
-                          vertical: 15,
+                          vertical: 16,
                           horizontal: 52,
                         ),
                       ),
                     ),
+                  SizedBox(
+                    height: 24,
+                    child: isError
+                        ? Text(
+                            translate(Keys.measuresExists),
+                            style: const TextStyle(
+                              color: Nord.auroraRed,
+                            ),
+                          )
+                        : null,
+                  ),
                 ],
               ),
             ),

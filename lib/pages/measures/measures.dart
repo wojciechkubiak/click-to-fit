@@ -455,7 +455,7 @@ class _MeasuresState extends State<Measures> {
                         onChanged: handleDropdown,
                         current: _scope,
                       ),
-                      if (_scope != DateScope.week)
+                      if (_scope == DateScope.year)
                         Text(
                           translate(Keys.chartAprox),
                           style:
@@ -797,6 +797,7 @@ class _MeasuresState extends State<Measures> {
           lockedDates: state.lockedDates,
           weight: state.weight,
           measure: state.measure,
+          initialWeight: state.initialWeight,
           option: state.option,
           isNotFirst: state.isNotFirst,
         );

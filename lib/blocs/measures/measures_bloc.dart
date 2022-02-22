@@ -56,16 +56,28 @@ class MeasuresBloc extends Bloc<MeasuresEvent, MeasuresState> {
 
       Measure? measure;
 
+      Weight? weight;
+
       if (event.weight is Weight && event.weight?.id is int) {
+        weight = event.weight;
         measure = await _measuresService.getMeasureByWeightId(
           weightId: event.weight!.id!,
         );
+      }
+
+      if (weight is! Weight) {
+        int? id = await _homeService.getCurrentUser();
+
+        if (id is int) {
+          weight = await _weightService.getLastWeight(id: id);
+        }
       }
 
       emit(
         MeasuresDetailed(
           lockedDates: lockedDates,
           weight: event.weight,
+          initialWeight: weight?.weight,
           measure: measure,
           option: event.option,
           isNotFirst: event.isNotFirst,

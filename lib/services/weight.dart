@@ -113,15 +113,40 @@ class WeightService extends DataWeightService {
       List<Map<String, dynamic>> weightList = [];
 
       final db = await storageService.getDatabase();
-      weightList = await db.rawQuery(
-          "SELECT * FROM weights WHERE userId = $id ORDER BY pk DESC LIMIT 1");
+      weightList =
+          await db.rawQuery("SELECT * FROM weights WHERE userId = $id");
+
+      Weight? weight;
 
       if (weightList.isNotEmpty) {
-        Weight weight = Weight.fromJson(weightList.last);
-        return weight;
-      } else {
-        return null;
+        for (var rec in weightList) {
+          if (weight is! Weight) {
+            weight = Weight.fromJson(rec);
+          } else {
+            Weight newWeight = Weight.fromJson(rec);
+            List<String> v1 = newWeight.date.split('-');
+            List<String> v2 = weight.date.split('-');
+
+            DateTime date1 = DateTime.utc(
+              int.parse(v1[2]),
+              int.parse(v1[1]),
+              int.parse(v1[0]),
+            );
+
+            DateTime date2 = DateTime.utc(
+              int.parse(v2[2]),
+              int.parse(v2[1]),
+              int.parse(v2[0]),
+            );
+
+            if (date1.isAfter(date2)) {
+              weight = newWeight;
+            }
+          }
+        }
       }
+
+      return weight;
     } catch (exception, stackTrace) {
       await Sentry.captureException(
         exception,
@@ -259,8 +284,6 @@ class WeightService extends DataWeightService {
         }
       }
 
-      print('ALL WEIGHTS $weightList');
-
       if (scope != DateScope.year) {
         if (weightList.isNotEmpty) {
           List<Weight> weightsFound = [];
@@ -284,57 +307,10 @@ class WeightService extends DataWeightService {
           }
         }
 
-        if (scope == DateScope.month) {
-          List<List<Weight>> weekList = [];
-          List<Weight> sortedWeights = [];
-          int chunkSize = 7;
-
-          for (int i = 0; i < result.length; i += chunkSize) {
-            weekList.add(
-              result.sublist(
-                i,
-                i + chunkSize > result.length ? result.length : i + chunkSize,
-              ),
-            );
-          }
-
-          for (var list in weekList) {
-            double value = 0;
-            double records = 0;
-
-            for (var weight in list) {
-              value += weight.weight;
-              if (weight.weight != 0) {
-                records += 1;
-              }
-            }
-
-            if (value > 0) {
-              sortedWeights.add(
-                Weight(
-                  date: list.first.date,
-                  weight: records != 0 ? value / records : 0,
-                  userId: list.first.userId,
-                ),
-              );
-            } else {
-              sortedWeights.add(
-                Weight(
-                  date: list.first.date,
-                  weight: 0,
-                  userId: list.first.userId,
-                ),
-              );
-            }
-
-            result = sortedWeights;
-          }
-        }
+        return result;
       } else {
         return weights;
       }
-
-      return result;
     } catch (exception, stackTrace) {
       await Sentry.captureException(
         exception,

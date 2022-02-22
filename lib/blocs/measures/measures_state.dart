@@ -12,12 +12,14 @@ class MeasuresDetailed extends MeasuresState {
   final Measure? measure;
   final bool? isNotFirst;
   final MeasuresDetailedOption option;
+  final double? initialWeight;
 
   MeasuresDetailed({
     required this.option,
     this.lockedDates = const [],
     this.weight,
     this.measure,
+    this.initialWeight,
     this.isNotFirst = true,
   });
 
