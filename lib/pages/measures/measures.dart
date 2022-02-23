@@ -230,7 +230,7 @@ class _MeasuresState extends State<Measures> {
             width: MediaQuery.of(context).size.width * 0.25,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                elevation: 10,
+                elevation: 3,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -267,7 +267,7 @@ class _MeasuresState extends State<Measures> {
             width: MediaQuery.of(context).size.width * 0.25,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                elevation: 10,
+                elevation: 3,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -681,82 +681,58 @@ class _MeasuresState extends State<Measures> {
                               measureListElement(
                                 text: translate(Keys.measuresNeck),
                                 prev: firstMeasure?.neck ?? 0,
-                                curr: lastMeasure?.neck ??
-                                    firstMeasure?.neck ??
-                                    0,
+                                curr: lastMeasure?.neck ?? 0,
                                 prevId: firstMeasure?.weightId,
-                                nextId: lastMeasure?.weightId ??
-                                    firstMeasure?.weightId,
+                                nextId: lastMeasure?.weightId,
                               ),
                               measureListElement(
                                 text: translate(Keys.measuresChest),
                                 prev: firstMeasure?.chest ?? 0,
-                                curr: lastMeasure?.chest ??
-                                    firstMeasure?.chest ??
-                                    0,
+                                curr: lastMeasure?.chest ?? 0,
                                 prevId: firstMeasure?.weightId,
-                                nextId: lastMeasure?.weightId ??
-                                    firstMeasure?.weightId,
+                                nextId: lastMeasure?.weightId,
                               ),
                               measureListElement(
                                 text: translate(Keys.measuresAbdomen),
                                 prev: firstMeasure?.abdomen ?? 0,
-                                curr: lastMeasure?.abdomen ??
-                                    firstMeasure?.abdomen ??
-                                    0,
+                                curr: lastMeasure?.abdomen ?? 0,
                                 prevId: firstMeasure?.weightId,
-                                nextId: lastMeasure?.weightId ??
-                                    firstMeasure?.weightId,
+                                nextId: lastMeasure?.weightId,
                               ),
                               measureListElement(
                                 text: translate(Keys.measuresWaist),
                                 prev: firstMeasure?.waist ?? 0,
-                                curr: lastMeasure?.waist ??
-                                    firstMeasure?.calf ??
-                                    0,
+                                curr: lastMeasure?.waist ?? 0,
                                 prevId: firstMeasure?.weightId,
-                                nextId: lastMeasure?.weightId ??
-                                    firstMeasure?.weightId,
+                                nextId: lastMeasure?.weightId,
                               ),
                               measureListElement(
                                 text: translate(Keys.measuresHips),
                                 prev: firstMeasure?.hips ?? 0,
-                                curr: lastMeasure?.hips ??
-                                    firstMeasure?.hips ??
-                                    0,
+                                curr: lastMeasure?.hips ?? 0,
                                 prevId: firstMeasure?.weightId,
-                                nextId: lastMeasure?.weightId ??
-                                    firstMeasure?.weightId,
+                                nextId: lastMeasure?.weightId,
                               ),
                               measureListElement(
                                 text: translate(Keys.measuresBicep),
                                 prev: firstMeasure?.bicep ?? 0,
-                                curr: lastMeasure?.bicep ??
-                                    firstMeasure?.bicep ??
-                                    0,
+                                curr: lastMeasure?.bicep ?? 0,
                                 prevId: firstMeasure?.weightId,
-                                nextId: lastMeasure?.weightId ??
-                                    firstMeasure?.weightId,
+                                nextId: lastMeasure?.weightId,
                               ),
                               measureListElement(
                                 text: translate(Keys.measuresThigh),
                                 prev: firstMeasure?.thigh ?? 0,
-                                curr: lastMeasure?.thigh ??
-                                    firstMeasure?.thigh ??
-                                    0,
+                                curr: lastMeasure?.thigh ?? 0,
                                 prevId: firstMeasure?.weightId,
-                                nextId: lastMeasure?.weightId ??
-                                    firstMeasure?.weightId,
+                                nextId: lastMeasure?.weightId,
                               ),
                               measureListElement(
                                 text: translate(Keys.measuresCalf),
                                 prev: firstMeasure?.calf ?? 0,
-                                curr: lastMeasure?.calf ??
-                                    firstMeasure?.calf ??
-                                    0,
+                                curr: lastMeasure?.calf ?? 0,
                                 prevId: firstMeasure?.weightId,
-                                nextId: lastMeasure?.weightId ??
-                                    firstMeasure?.weightId,
+                                nextId: lastMeasure?.weightId,
                               ),
                             ],
                           ),
