@@ -1,13 +1,8 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:star_metter/models/intro.dart';
-import 'package:star_metter/models/measure.dart';
-import 'package:star_metter/services/measures.dart';
-import '../../models/progress.dart';
-import '../../models/star.dart';
-import '../../models/user.dart';
-import '../../models/weight.dart';
-import './../../services/services.dart';
+
+import '../../models/models.dart';
+import '../../services/services.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
@@ -48,11 +43,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       if (user is User) {
         List<Weight> weightsList =
             await _weightService.getAllWeights(id: user.id!) ?? [];
-
         Weight? weight = weightsList.first;
-
         Weight? previousWeight = weightsList.length > 1 ? weightsList[1] : null;
-
         Star? star = await _starsService.getTodayStars(
           id: user.id!,
           progressLimit: user.stars,
@@ -61,7 +53,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           id: user.id!,
           scope: DateScope.week,
         );
-
         Progress? progress = await _homeService.getProgress(
           user: user,
           starProgress: starProgress,
@@ -70,6 +61,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           prevWeight: previousWeight,
           weightProgress: weightsList,
         );
+
         if (progress is Progress) {
           event.handlePage();
           emit(HomePage(user: user, progress: progress));
@@ -89,11 +81,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   void _mapHomeLoadIntro(HomeEvent event, Emitter<HomeState> emit) async {
-    if (event is HomeLoadIntro) {
-      emit(HomeIntro(introMode: event.introMode, user: event.user));
-    } else {
-      emit(HomeError());
-    }
+    event is HomeLoadIntro
+        ? emit(HomeIntro(introMode: event.introMode, user: event.user))
+        : emit(HomeError());
   }
 
   void _mapHomeLoadHomePage(HomeEvent event, Emitter<HomeState> emit) async {
@@ -147,7 +137,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
               await _weightService.getPreviousWeight(id: user.id!);
           List<Weight>? weightHistory =
               await _weightService.getScopeWeights(id: user.id!);
-
           Star? star = await _starsService.getTodayStars(
             id: user.id!,
             progressLimit: user.stars,
@@ -156,7 +145,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             id: user.id!,
             scope: DateScope.week,
           );
-
           Progress? progress = await _homeService.getProgress(
             user: user,
             starProgress: starProgress,
@@ -165,6 +153,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             prevWeight: previousWeight,
             weightProgress: weightHistory,
           );
+
           if (progress is Progress) {
             await Future.delayed(const Duration(seconds: 4));
 
@@ -183,14 +172,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     List<User> users = await _homeService.getUsers();
     User? currentUser = await _homeService.getUser(null);
 
-    if (currentUser is User) {
-      emit(HomeSettings(
-        users: users,
-        currentUser: currentUser,
-      ));
-    } else {
-      emit(HomeError());
-    }
+    currentUser is User
+        ? emit(HomeSettings(users: users, currentUser: currentUser))
+        : emit(HomeError());
   }
 
   void _mapHomeLoadStars(HomeEvent event, Emitter<HomeState> emit) async {
@@ -203,6 +187,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         scope: DateScope.week,
         isNullStarIncluded: false,
       );
+
       emit(HomeStars(stars: stars));
     } else {
       emit(HomeError());
@@ -220,10 +205,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       if (event.user is User) {
         List<Weight>? weights =
             await _weightService.getScopeWeights(id: event.user!.id!);
-
         List<Weight>? allWeights =
             await _weightService.getAllWeights(id: event.user!.id!);
-
         List<Measure> allMeasures =
             await _measuresService.getAllMeasures(userId: event.user!.id!);
 

@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:star_metter/blocs/home/home_bloc.dart';
-import 'package:star_metter/models/metric.dart';
-import 'package:star_metter/widgets/gauge.dart';
-import 'package:star_metter/widgets/navigation_button.dart';
 
+import '../blocs/home/home_bloc.dart';
+import '../config/colors.dart';
+import '../models/models.dart';
+import '../services/services.dart';
+import '../widgets/widgets.dart';
 import '../lang/keys.dart';
-import '../../config/colors.dart';
-import '../../models/models.dart';
-import '../../services/services.dart';
-import '../../widgets/widgets.dart';
 
 class Home extends StatefulWidget {
   final User user;

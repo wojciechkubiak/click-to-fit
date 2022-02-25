@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:star_metter/config/colors.dart';
-import 'package:star_metter/lang/keys.dart';
-import 'package:star_metter/lang/localization_code.dart';
-import 'package:star_metter/widgets/custom_icon_button.dart';
 
+import '../config/colors.dart';
+import '../lang/keys.dart';
+import '../widgets/custom_icon_button.dart';
 import '../models/models.dart';
 import '../blocs/home/home_bloc.dart';
 import '../widgets/widgets.dart';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:star_metter/config/colors.dart';
+
+import '../config/colors.dart';
 
 class CustomAppBar extends StatelessWidget {
   final Function? onBack;

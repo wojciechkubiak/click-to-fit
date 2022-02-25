@@ -1,10 +1,11 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:star_metter/config/colors.dart';
-import 'package:star_metter/lang/keys.dart';
-import 'package:star_metter/models/star.dart';
-import 'package:star_metter/models/weight.dart';
+
+import '../config/colors.dart';
+import '../lang/keys.dart';
+import '../models/star.dart';
+import '../models/weight.dart';
 
 class CustomLineChart extends StatefulWidget {
   final double init;

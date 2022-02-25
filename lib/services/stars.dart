@@ -2,9 +2,8 @@ import 'dart:async';
 import 'package:quiver/time.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
-import '../../models/models.dart';
-import '../../services/services.dart';
-import './storage.dart';
+import '../models/models.dart';
+import '../services/services.dart';
 
 abstract class DataStarsService {
   Future<List<Star>> getStars({

@@ -76,7 +76,7 @@ class Validator {
         if (weight.isEmpty) {
           return translate(Keys.validatorsWeight);
         }
-        print('WEIGHT $weight');
+
         if (double.parse(weight) < 31 || double.parse(weight) > 400) {
           return translate(Keys.validatorsWeightProper);
         }

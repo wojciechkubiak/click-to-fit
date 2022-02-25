@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:star_metter/lang/keys.dart';
 
+import '../lang/keys.dart';
 import '../config/colors.dart';
 
 class Header extends StatelessWidget {

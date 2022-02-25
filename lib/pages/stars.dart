@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:star_metter/blocs/home/home_bloc.dart';
-import 'package:star_metter/config/colors.dart';
-import 'package:star_metter/lang/keys.dart';
-import 'package:star_metter/models/models.dart';
-import 'package:star_metter/services/stars.dart';
-import 'package:star_metter/widgets/date_navigation.dart';
-import 'package:star_metter/widgets/dropdown.dart';
-import 'package:star_metter/widgets/navigation_button.dart';
-import 'package:star_metter/widgets/widgets.dart';
+
+import '../blocs/home/home_bloc.dart';
+import '../config/colors.dart';
+import '../lang/keys.dart';
+import '../models/models.dart';
+import '../services/stars.dart';
+import '../widgets/widgets.dart';
 
 enum OffsetChange { backward, forward }
 

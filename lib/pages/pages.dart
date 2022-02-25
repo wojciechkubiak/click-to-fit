@@ -1,4 +1,9 @@
-export 'loading.dart';
+export 'measures/measures.dart';
+export 'measures/measure_detailed.dart';
+export 'error_page.dart';
 export 'home.dart';
 export 'intro.dart';
+export 'loading.dart';
+export 'pages.dart';
 export 'settings.dart';
+export 'stars.dart';

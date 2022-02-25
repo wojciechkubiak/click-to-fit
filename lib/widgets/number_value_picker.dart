@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
-import 'package:star_metter/config/colors.dart';
+
+import '../config/colors.dart';
 
 class NumberValuePicker extends StatelessWidget {
   final int value;

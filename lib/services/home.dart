@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sql.dart';
 import 'package:sentry/sentry.dart';
 
-import '../../models/models.dart';
+import '../models/models.dart';
 import './storage.dart';
 
 abstract class DataHomeService {
@@ -31,7 +31,7 @@ class HomeService extends DataHomeService {
 
     try {
       final db = await storageService.getDatabase();
-      print(user.toJson());
+
       int userId = await db
           .insert(
             'users',

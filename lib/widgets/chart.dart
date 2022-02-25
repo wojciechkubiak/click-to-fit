@@ -1,13 +1,10 @@
-import 'dart:async';
-import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:star_metter/lang/keys.dart';
-import 'package:star_metter/widgets/shadow_wrapper.dart';
 
 import '../config/colors.dart';
 import '../models/models.dart';
+import '../lang/keys.dart';
 
 class Chart extends StatefulWidget {
   final List<Star> stars;

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:star_metter/lang/keys.dart';
 
 import '../../blocs/home/home_bloc.dart';
 import '../../models/models.dart';
@@ -9,6 +8,7 @@ import '../../config/colors.dart';
 import '../../main.dart';
 import '../header.dart';
 import './menu_button.dart';
+import '../../lang/keys.dart';
 
 class Menu extends StatefulWidget {
   final Function(CurrentPage) onClick;

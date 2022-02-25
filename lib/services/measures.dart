@@ -1,10 +1,9 @@
 import 'dart:async';
 
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:star_metter/models/measure.dart';
-import 'package:star_metter/services/services.dart';
 
-import '../models/user.dart';
+import '../models/models.dart';
+import '../services/services.dart';
 
 abstract class DataMeasuresService {
   Future<List<Measure>> getAllMeasures({required int userId});

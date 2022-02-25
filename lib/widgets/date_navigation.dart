@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:star_metter/config/colors.dart';
-import 'package:star_metter/models/star.dart';
-import 'package:star_metter/pages/stars.dart';
 
-import 'navigation_button.dart';
+import '../config/colors.dart';
+import '../models/star.dart';
+import '../pages/stars.dart';
+import './navigation_button.dart';
 
 class DateNavigation extends StatelessWidget {
   final Future<void> Function({

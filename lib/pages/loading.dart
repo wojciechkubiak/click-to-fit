@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:lottie/lottie.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
 import '../config/colors.dart';
-import './../widgets/widgets.dart';
+import '../widgets/widgets.dart';
 
 class Loading extends StatefulWidget {
   final bool isHeader;

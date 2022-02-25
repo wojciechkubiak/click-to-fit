@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import '../../services/settings.dart';
-import './../../services/services.dart';
+
+import '../../services/services.dart';
 
 part 'stars_event.dart';
 part 'stars_state.dart';

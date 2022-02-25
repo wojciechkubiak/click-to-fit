@@ -1,5 +1,3 @@
-import 'package:intl/intl.dart';
-
 class Metric {
   final String? height;
   final double? weight;

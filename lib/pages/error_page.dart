@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:lottie/lottie.dart';
-import 'package:star_metter/blocs/home/home_bloc.dart';
-import 'package:star_metter/lang/keys.dart';
 
+import '../blocs/home/home_bloc.dart';
+import '../lang/keys.dart';
 import '../config/colors.dart';
-import './../widgets/widgets.dart';
+import '../widgets/widgets.dart';
 
 class ErrorPage extends StatefulWidget {
   final Function() handlePage;

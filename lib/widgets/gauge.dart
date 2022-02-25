@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
-import 'package:star_metter/config/colors.dart';
-import 'package:star_metter/models/star.dart';
+
+import '../config/colors.dart';
+import '../models/star.dart';
 
 class Gauge extends StatefulWidget {
   final double currentValue;
@@ -24,7 +25,6 @@ class Gauge extends StatefulWidget {
 class _GaugeState extends State<Gauge> {
   @override
   Widget build(BuildContext context) {
-    print(widget.currentValue);
     return SleekCircularSlider(
       innerWidget: (value) => const SizedBox(),
       onChangeEnd: (value) {

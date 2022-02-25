@@ -1,24 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:star_metter/blocs/measures/measures_bloc.dart';
-import 'package:star_metter/config/colors.dart';
-import 'package:star_metter/lang/keys.dart';
-import 'package:star_metter/models/measure.dart';
-import 'package:star_metter/models/metric.dart';
-import 'package:star_metter/models/models.dart';
-import 'package:star_metter/models/star.dart';
-import 'package:star_metter/pages/error_page.dart';
-import 'package:star_metter/pages/measures/measure_detailed.dart';
-import 'package:star_metter/pages/pages.dart';
-import 'package:star_metter/pages/stars.dart';
-import 'package:star_metter/services/weight.dart';
-import 'package:star_metter/widgets/custom_line_chart.dart';
-import 'package:star_metter/widgets/date_navigation.dart';
-import 'package:star_metter/widgets/dropdown.dart';
-import 'package:star_metter/widgets/navigation_button.dart';
 import 'package:collection/collection.dart';
 
+import '../../blocs/measures/measures_bloc.dart';
+import '../../config/colors.dart';
+import '../../lang/keys.dart';
+import '../../models/models.dart';
+import '../../pages/pages.dart';
+import '../../services/weight.dart';
+import '../../widgets/custom_line_chart.dart';
 import '../../widgets/widgets.dart';
 import '../../blocs/home/home_bloc.dart';
 

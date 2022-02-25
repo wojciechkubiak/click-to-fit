@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:star_metter/config/colors.dart';
+import '../config/colors.dart';
 
 class CustomIconButton extends StatelessWidget {
   final String text;

@@ -1,10 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:star_metter/models/measure.dart';
-import 'package:star_metter/models/user.dart';
-import 'package:star_metter/models/weight.dart';
-import 'package:star_metter/services/measures.dart';
-import '../../services/settings.dart';
-import './../../services/services.dart';
+
+import '../../models/models.dart';
+import '../../services/services.dart';
 
 part 'measures_event.dart';
 part 'measures_state.dart';

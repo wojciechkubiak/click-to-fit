@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:star_metter/config/colors.dart';
-import 'package:star_metter/lang/keys.dart';
-import 'package:star_metter/models/star.dart';
+
+import '../config/colors.dart';
+import '../lang/keys.dart';
+import '../models/star.dart';
 
 class Dropdown extends StatelessWidget {
   final Future<void>? Function(DateScope?) onChanged;

@@ -1,17 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:lottie/lottie.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'package:numberpicker/numberpicker.dart';
-import 'package:star_metter/lang/keys.dart';
-import 'package:star_metter/widgets/number_value_picker.dart';
 
-import '../../blocs/home/home_bloc.dart';
-import '../../config/colors.dart';
-import '../../models/models.dart';
-import '../../pages/pages.dart';
-import '../../widgets/widgets.dart';
+import '../lang/keys.dart';
+import '../blocs/home/home_bloc.dart';
+import '../config/colors.dart';
+import '../models/models.dart';
+import '../pages/pages.dart';
+import '../widgets/widgets.dart';
 
 class Intro extends StatefulWidget {
   final Function() handlePage;
@@ -96,8 +93,6 @@ class _IntroState extends State<Intro> {
       _targetWeightKg = 75;
       _targetWeightDec = 5;
     }
-
-    print(widget.user?.toJson());
   }
 
   double ppmMale(double weight, double height, int age) {

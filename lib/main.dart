@@ -4,12 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:star_metter/pages/error_page.dart';
-import 'package:star_metter/pages/measures/measures.dart';
-import 'package:star_metter/pages/stars.dart';
+
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:star_metter/services/measures.dart';
 
 import './widgets/widgets.dart';
 import './blocs/home/home_bloc.dart';
@@ -31,7 +28,6 @@ Future<void> main() async {
     supportedLocales: ['en_US', 'pl_PL'],
   );
 
-  print(delegate.currentLocale);
   WidgetsFlutterBinding.ensureInitialized();
   StorageService storageService = StorageService();
 

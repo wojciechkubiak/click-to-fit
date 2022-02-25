@@ -1,11 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 import '../config/colors.dart';
-import '../models/models.dart';
-import '../widgets/widgets.dart';
-import 'number_value_picker.dart';
+import './number_value_picker.dart';
 
 class CustomDialogWrapper extends StatefulWidget {
   final String initValue;

@@ -20,7 +20,7 @@ class Star {
     int day = now.day;
     int month = now.month;
     int year = now.year;
-    print('$day $month $year');
+
     List<String> parsed = date.split('-');
 
     return day == int.parse(parsed[0]) &&

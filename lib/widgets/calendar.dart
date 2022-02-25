@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:star_metter/config/colors.dart';
-import 'package:star_metter/lang/localization_code.dart';
-import 'package:star_metter/models/measure.dart';
-import 'package:star_metter/models/models.dart';
 import 'package:table_calendar/table_calendar.dart';
+
+import '../config/colors.dart';
+import '../lang/localization_code.dart';
+import '../models/models.dart';
 
 class Calendar extends StatefulWidget {
   final List<DateTime> lockedDates;
