@@ -25,7 +25,6 @@ class CustomSlider extends StatelessWidget {
       data: const SliderThemeData(
         valueIndicatorTextStyle: TextStyle(
           color: CustomColor.primaryAccentDark,
-          letterSpacing: 1.0,
         ),
         valueIndicatorColor: CustomColor.primaryAccentLight,
       ),

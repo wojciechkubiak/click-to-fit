@@ -316,7 +316,7 @@ class _IntroState extends State<Intro> {
               NumberValuePicker(
                 value: _heightMm,
                 min: 0,
-                max: _unit == Unit.metric ? 10 : 11,
+                max: _unit == Unit.metric ? 9 : 11,
                 onChanged: (value) => setState(() => _heightMm = value),
               ),
             ],
@@ -390,7 +390,7 @@ class _IntroState extends State<Intro> {
           NumberValuePicker(
             value: _targetWeightDec,
             min: 0,
-            max: 10,
+            max: 9,
             onChanged: (value) => setState(() => _targetWeightDec = value),
           ),
         ],
@@ -812,7 +812,7 @@ class _IntroState extends State<Intro> {
                         vertical: 12.0, horizontal: 52),
                     child: Text(
                       translate(Keys.introSummarySubheader, args: {
-                        "value": result.toStringAsFixed(0),
+                        "value": stars.toStringAsFixed(0),
                       }),
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
@@ -841,7 +841,7 @@ class _IntroState extends State<Intro> {
               child: CustomSlider(
                 value: result,
                 header:
-                    '${_unit == Unit.metric ? '${(result - stars) * 100}g' : '${((result - stars) * 100 * 0.035).toStringAsPrecision(1)}oz'}/${translate(Keys.introWeek)}',
+                    '${_unit == Unit.metric ? '${((result - stars) * 100).toStringAsFixed(0)}g' : '${((result - stars) * 100 * 0.035).toStringAsFixed(0)}oz'}/${translate(Keys.introWeek)}',
                 onChanged: (double value) {
                   setState(() {
                     result = value;

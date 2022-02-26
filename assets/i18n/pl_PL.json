@@ -101,11 +101,11 @@
         "activity": {
             "header": "Aktywność",
             "subheader": "Dodamy kilka gwiazdek na podstawie Twego wyboru",
-            "sick": "Choroba / Leżakowanie", 
-            "low": "Mała / Praca biurowa",
-            "medium": "Średnia / 2-3 treningi tygodniowo",
-            "above": "Powyżej średniej / 3-4 treningi tygodniowo",
-            "high": "Wysoka / Pracownik fizyczny, profesjonalny sport"
+            "sick": "Choroba/Leżakowanie", 
+            "low": "Mała/Praca biurowa",
+            "medium": "Średnia/2-3 treningi tyg.",
+            "above": "Powyżej średniej/3-4 treningi tyg.",
+            "high": "Wysoka/np. Pracownik fizyczny"
         },
         "gender": {
             "header": "Płeć",

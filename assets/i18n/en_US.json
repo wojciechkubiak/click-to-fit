@@ -101,11 +101,11 @@
         "activity": {
             "header": "Activity",
             "subheader": "We are going to add some extra stars based on your choice",
-            "sick": "Sick / Mostly laying", 
-            "low": "Low / Office work",
-            "medium": "Medium / 2-3 trainings/week",
-            "above": "Above avarege / 3-4 trainings/week",
-            "high": "High / Physical worker / Proffesional"
+            "sick": "Sick/Mostly laying", 
+            "low": "Low/Office work",
+            "medium": "Medium/2-3 trainings/week",
+            "above": "Above avarege/3-4 trainings/week",
+            "high": "High/Physical worker etc."
         },
         "gender": {
             "header": "Gender",

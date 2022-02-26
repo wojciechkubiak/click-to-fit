@@ -84,13 +84,14 @@ class _HomeState extends State<Home> {
   void decreaseStars(Star stars) async {
     if (stars.stars > 0) {
       bool update = await starsService.updateStars(
-          recordId: stars.id!, stars: stars.stars - 1);
+          recordId: stars.id!,
+          stars: stars.stars - 1 < 0 ? 0 : stars.stars - 1);
       if (update) {
         setState(() {
           if (progress.starProgress.isNotEmpty) {
-            current.stars = stars.stars - 1;
+            current.stars = stars.stars - 1 < 0 ? 0 : stars.stars - 1;
           }
-          stars.stars = stars.stars - 1;
+          stars.stars = stars.stars - 1 < 0 ? 0 : stars.stars - 1;
         });
       }
     }
