@@ -251,7 +251,7 @@ class _IntroState extends State<Intro> {
         height: 120,
         decoration: BoxDecoration(
           color: isActive
-              ? CustomColor.primaryAccentDark
+              ? CustomColor.primaryAccentLight
               : CustomColor.primaryAccent,
           borderRadius: BorderRadius.circular(20),
         ),
@@ -260,23 +260,25 @@ class _IntroState extends State<Intro> {
           children: [
             Text(
               text,
-              style: Theme.of(context)
-                  .textTheme
-                  .headline3!
-                  .copyWith(color: Colors.white),
+              style: Theme.of(context).textTheme.headline3!.copyWith(
+                    color:
+                        isActive ? CustomColor.primaryAccentDark : Colors.white,
+                  ),
               textAlign: TextAlign.start,
             ),
             Text(
               textHeight,
               style: Theme.of(context).textTheme.headline3!.copyWith(
-                    color: Colors.white70,
+                    color:
+                        isActive ? CustomColor.primaryAccent : Colors.white70,
                     fontSize: 18,
                   ),
             ),
             Text(
               textWeight,
               style: Theme.of(context).textTheme.headline3!.copyWith(
-                    color: Colors.white70,
+                    color:
+                        isActive ? CustomColor.primaryAccent : Colors.white70,
                     fontSize: 18,
                   ),
             ),

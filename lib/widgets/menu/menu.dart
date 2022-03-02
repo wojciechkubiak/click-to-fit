@@ -29,13 +29,13 @@ class Menu extends StatefulWidget {
 class _MenuState extends State<Menu> {
   double textSize() {
     int userLen = widget.user.name.length;
-    double baseSize = 54;
+    double baseSize = 50;
     if (userLen < 8) {
       return baseSize;
     } else if (userLen >= 8 && userLen < 10) {
-      return 42;
+      return 40;
     } else {
-      return 32;
+      return 30;
     }
   }
 
@@ -50,13 +50,13 @@ class _MenuState extends State<Menu> {
             children: [
               Text(
                 '${translate(Keys.menuGreet)},',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 48,
                   fontWeight: FontWeight.bold,
                   color: Colors.white70,
                 ),
               ),
-              Container(
+              SizedBox(
                 width: MediaQuery.of(context).size.width * 0.5,
                 child: Text(
                   '${widget.user.name}!',

@@ -31,9 +31,10 @@ class _GaugeState extends State<Gauge> {
         widget.onChange(widget.stars, value);
       },
       min: 0,
-      max: widget.max,
-      initialValue:
-          widget.currentValue > widget.max ? widget.max : widget.currentValue,
+      max: widget.max.roundToDouble(),
+      initialValue: widget.currentValue > widget.max
+          ? widget.max.roundToDouble()
+          : widget.currentValue.roundToDouble(),
       appearance: CircularSliderAppearance(
         animDurationMultiplier: 0,
         startAngle: 270,

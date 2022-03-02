@@ -36,7 +36,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (event is HomeLoadInit) {
       event.isInit ? emit(HomeSplash()) : emit(HomeLoading());
 
-      if (event.isInit) await Future.delayed(const Duration(seconds: 5));
+      if (event.isInit) await Future.delayed(const Duration(seconds: 2));
 
       User? user = await _homeService.getUser(event.userId);
 
@@ -155,7 +155,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           );
 
           if (progress is Progress) {
-            await Future.delayed(const Duration(seconds: 4));
+            await Future.delayed(const Duration(seconds: 2));
 
             emit(HomePage(user: user, progress: progress));
           }

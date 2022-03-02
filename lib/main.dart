@@ -202,7 +202,7 @@ class _MyHomePageState extends State<MyHomePage> {
               letterSpacing: 2,
             ),
             headline2: TextStyle(
-              fontSize: 64,
+              fontSize: 58,
               fontWeight: FontWeight.w100,
               color: Colors.white,
               fontFamily: 'Roboto',

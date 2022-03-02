@@ -92,7 +92,7 @@ class ChartState extends State<Chart> {
   }) {
     List<ChartStar> result = [];
 
-    for (var star in list) {
+    for (Star star in list) {
       result.add(ChartStar(
         date: star.date,
         value: star.stars,
@@ -101,8 +101,8 @@ class ChartState extends State<Chart> {
     }
 
     return List.generate(result.length, (i) {
-      double value = result[i].value;
-      double limit = result[i].limit;
+      double value = result[i].value.roundToDouble();
+      double limit = result[i].limit.roundToDouble();
 
       switch (i) {
         case 0:
