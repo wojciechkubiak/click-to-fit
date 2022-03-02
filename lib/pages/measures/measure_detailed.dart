@@ -336,7 +336,7 @@ class _MeasureDetailedState extends State<MeasureDetailed> {
                           : (widget.user.targetWeight - 10).floor(),
                       max: 999,
                       handleV1: (value) => setState(() => weightV1 = value),
-                      handleV2: (value) => setState(() => weightV1 = value),
+                      handleV2: (value) => setState(() => weightV2 = value),
                     ),
                   ),
                   picker(
