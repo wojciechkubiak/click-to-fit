@@ -405,7 +405,7 @@ class _HomeState extends State<Home> {
                                   textAlign: TextAlign.center,
                                 ),
                                 Text(
-                                  progress.weight!.date,
+                                  progress.weight!.date.replaceAll('-', '/'),
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyText1!
